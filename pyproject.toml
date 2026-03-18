@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends.legacy:BuildBackend"
+
+[project]
+name = "my_data_platform"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    # Orchestration
+    "dagster>=1.9.0",
+    "dagster-webserver>=1.9.0",
+    "dagster-dbt>=0.25.0",
+    "dagster-embedded-elt>=0.25.0",
+    "dagster-duckdb>=0.25.0",
+
+    # Ingestion
+    "dlt[duckdb,filesystem]>=1.4.0",
+
+    # Transformation
+    "dbt-duckdb>=1.9.0",
+
+    # Analytics engine
+    "duckdb>=1.1.0",
+
+    # Azure – Parquet export to Blob Storage and DuckDB azure extension auth
+    "azure-storage-blob>=12.22.0",
+    "azure-identity>=1.18.0",
+
+    # Parquet serialisation
+    "pyarrow>=18.0.0",
+
+    # SFTP support for dlt filesystem source
+    "sshfs>=2024.6.0",
+
+    # HTTP for REST API sources
+    "requests>=2.32.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pipeline*"]
+
+# Tells `dagster dev` and `dagster-webserver` where to find the Definitions object
+[tool.dagster]
+module_name = "pipeline.definitions"

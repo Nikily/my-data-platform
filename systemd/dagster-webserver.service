@@ -1,0 +1,27 @@
+[Unit]
+Description=Dagster Webserver (Dagit UI)
+Documentation=https://docs.dagster.io
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Replace 'ubuntu' with the user that owns /opt/my_data_platform
+User=ubuntu
+Group=ubuntu
+
+WorkingDirectory=/opt/my_data_platform
+EnvironmentFile=/opt/my_data_platform/.env
+
+ExecStart=/opt/my_data_platform/.venv/bin/dagster-webserver \
+    --host 127.0.0.1 \
+    --port 3000
+
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=dagster-webserver
+
+[Install]
+WantedBy=multi-user.target

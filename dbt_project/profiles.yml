@@ -1,0 +1,17 @@
+# dbt connection profile.
+#
+# This file lives in the dbt_project/ directory.
+# Dagster's DbtCliResource is configured to look for profiles here
+# (profiles_dir is set in pipeline/definitions.py).
+#
+# DUCKDB_PATH is read from the environment — set it in your .env file.
+# All dbt models (staging + marts) are written into the same DuckDB file
+# that dlt uses for ingestion.
+
+my_data_platform:
+  target: prod
+  outputs:
+    prod:
+      type: duckdb
+      path: "{{ env_var('DUCKDB_PATH') }}"
+      threads: 4

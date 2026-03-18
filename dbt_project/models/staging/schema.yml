@@ -1,0 +1,37 @@
+version: 2
+
+sources:
+  # Raw tables written by the dlt REST API pipeline.
+  # The schema name matches the `dataset_name` in rest_api.py.
+  - name: raw_rest_api
+    schema: raw_rest_api
+    tables:
+      - name: orders
+        description: "Raw orders data loaded from the REST API."
+
+  # Raw tables written by the dlt local CSV pipeline.
+  - name: raw_csv_local
+    schema: raw_csv_local
+    tables: []  # add table entries as you ingest more CSV files
+
+  # Raw tables written by the dlt SFTP CSV pipeline.
+  - name: raw_csv_sftp
+    schema: raw_csv_sftp
+    tables: []
+
+  # Raw tables written by the ADLS / Dataverse Delta ingestion asset.
+  - name: raw_dataverse
+    schema: raw_dataverse
+    tables:
+      - name: entity
+        description: "Raw Dataverse entity data read from ADLS Gen2 Delta tables."
+
+models:
+  - name: stg_example
+    description: "Staging layer for REST API orders — cleaned and typed."
+    columns:
+      - name: order_id
+        description: "Primary key."
+        tests:
+          - unique
+          - not_null

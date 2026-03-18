@@ -1,0 +1,23 @@
+# Dagster instance configuration.
+# DAGSTER_HOME must be set in the environment (see .env.example).
+# Dagster will read this file from $DAGSTER_HOME/dagster.yaml.
+
+storage:
+  sqlite:
+    base_dir:
+      env: DAGSTER_HOME
+
+local_artifact_storage:
+  module: dagster.core.storage.local_compute_log_manager
+  class: LocalComputeLogManager
+  config:
+    base_dir:
+      env: DAGSTER_HOME
+
+run_launcher:
+  module: dagster.core.launcher
+  class: DefaultRunLauncher
+
+run_coordinator:
+  module: dagster.core.run_coordinator
+  class: DefaultRunCoordinator
