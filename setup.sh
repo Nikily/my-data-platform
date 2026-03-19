@@ -58,12 +58,19 @@ if [ -z "$PYTHON_BIN" ]; then
     PYTHON_BIN="python3.12"
 fi
 
-info "Installing remaining system packages (pip, git, curl)..."
-sudo apt-get update -qq
-sudo apt-get install -y -qq \
-    python3-pip \
-    git \
-    curl
+# Install pip, git, curl only if missing
+APT_MISSING=()
+command -v git  &>/dev/null || APT_MISSING+=(git)
+command -v curl &>/dev/null || APT_MISSING+=(curl)
+command -v pip3 &>/dev/null || APT_MISSING+=(python3-pip)
+
+if [ ${#APT_MISSING[@]} -gt 0 ]; then
+    info "Installing missing system packages: ${APT_MISSING[*]}"
+    sudo apt-get update -qq
+    sudo apt-get install -y -qq "${APT_MISSING[@]}"
+else
+    info "git, curl, and pip already installed — skipping apt."
+fi
 
 # ── 2. Virtual environment ────────────────────────────────────────────────────
 if [ ! -d "$VENV_DIR" ]; then
