@@ -7,7 +7,7 @@
 #   ./setup.sh
 #
 # What it does:
-#   1. Installs system packages (Python 3.12, pip, git)
+#   1. Detects or installs Python (>= 3.10), pip, git
 #   2. Creates a Python virtual environment
 #   3. Installs all Python dependencies
 #   4. Installs DuckDB extensions (azure, delta)
@@ -35,12 +35,32 @@ info()    { echo -e "${GREEN}[INFO]${NC}  $*"; }
 warning() { echo -e "${YELLOW}[WARN]${NC}  $*"; }
 
 # ── 1. System packages ────────────────────────────────────────────────────────
-info "Updating apt and installing system packages..."
+# Detect a suitable Python (>= 3.10) already on the system
+PYTHON_BIN=""
+for candidate in python3.13 python3.12 python3.11 python3.10 python3; do
+    if command -v "$candidate" &>/dev/null; then
+        if "$candidate" -c "import sys; sys.exit(0 if sys.version_info >= (3,10) else 1)" 2>/dev/null; then
+            version=$("$candidate" -c "import sys; print('.'.join(map(str,sys.version_info[:3])))")
+            info "Found suitable Python: $candidate ($version)"
+            PYTHON_BIN="$candidate"
+            break
+        fi
+    fi
+done
+
+if [ -z "$PYTHON_BIN" ]; then
+    info "No suitable Python found — installing python3.12 via apt..."
+    sudo apt-get update -qq
+    sudo apt-get install -y -qq \
+        python3.12 \
+        python3.12-venv \
+        python3.12-dev
+    PYTHON_BIN="python3.12"
+fi
+
+info "Installing remaining system packages (pip, git, curl)..."
 sudo apt-get update -qq
 sudo apt-get install -y -qq \
-    python3.12 \
-    python3.12-venv \
-    python3.12-dev \
     python3-pip \
     git \
     curl
@@ -48,7 +68,7 @@ sudo apt-get install -y -qq \
 # ── 2. Virtual environment ────────────────────────────────────────────────────
 if [ ! -d "$VENV_DIR" ]; then
     info "Creating Python virtual environment at $VENV_DIR ..."
-    python3.12 -m venv "$VENV_DIR"
+    "$PYTHON_BIN" -m venv "$VENV_DIR"
 else
     info "Virtual environment already exists, skipping creation."
 fi
