@@ -1,21 +1,53 @@
-● dagster-webserver.service - Dagster Webserver (Dagit UI)
-     Loaded: loaded (/etc/systemd/system/dagster-webserver.service; enabled; preset: enabled)
-     Active: active (running) since Wed 2026-03-25 15:02:04 CET; 1s ago
- Invocation: 45838ad900214781be6a03dc13b82b8c
-       Docs: https://docs.dagster.io
-   Main PID: 38055 (dagster-webserv)
-      Tasks: 1 (limit: 77121)
-     Memory: 102.5M (peak: 102.5M)
-        CPU: 1.133s
-     CGroup: /system.slice/dagster-webserver.service
-             └─38055 /opt/my_data_platform/.venv/bin/python3.13 /opt/my_data_platform/.venv/bin/dagster-webserver --host 127.0.0.1 --port 3000
-
-● dagster-daemon.service - Dagster Daemon (scheduler and sensor runner)
-     Loaded: loaded (/etc/systemd/system/dagster-daemon.service; enabled; preset: enabled)
-     Active: activating (auto-restart) (Result: exit-code) since Wed 2026-03-25 15:02:04 CET; 1s ago
- Invocation: 586ef9a33d2941888870dfb310dd510b
-       Docs: https://docs.dagster.io
-    Process: 38040 ExecStart=/opt/my_data_platform/.venv/bin/dagster-daemon run (code=exited, status=1/FAILURE)
-   Main PID: 38040 (code=exited, status=1/FAILURE)
-   Mem peak: 87.3M
-        CPU: 1.227s
+Hint: You are currently not seeing messages from other users and the system.
+      Users in groups 'adm', 'systemd-journal' can see all messages.
+      Pass -q to turn off this notice.
+Mar 25 15:36:17 CFG-DEW-DWH-01 dagster-webserver[43994]:     )
+Mar 25 15:36:17 CFG-DEW-DWH-01 dagster-webserver[43994]: dagster_shared.check.functions.CheckError: (<class 'dagster._core.storage.local_compute_log_manager.LocalComputeLogManager'>, 'class LocalComputeLogManager in module dagster._core.storage.local_compute_log_manager', <class 'dagster._serdes.config_class.ConfigurableClass'>)
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]: 2026-03-25 15:36:24 +0100 - dagster-webserver - INFO - Loaded environment variables from .env file: DAGSTER_HOME,DUCKDB_PATH,REST_API_BASE_URL,REST_API_TOKEN,SFTP_HOST,SFTP_PORT,SFTP_USERNAME,SFTP_PASSWORD,SFTP_PATH,AZURE_STORAGE_ACCOUNT_NAME,AZURE_STORAGE_ACCOUNT_KEY,ADLS_CONTAINER,ADLS_DELTA_PATH,EXPORT_CONTAINER,EXPORT_PATH
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]: Traceback (most recent call last):
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/opt/my_data_platform/.venv/bin/dagster-webserver", line 6, in <module>
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     sys.exit(main())
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:              ~~~~^^
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_webserver/cli.py", line 351, in main
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     cli(auto_envvar_prefix="DAGSTER_WEBSERVER")
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/click/core.py", line 1485, in __call__
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     return self.main(*args, **kwargs)
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:            ~~~~~~~~~^^^^^^^^^^^^^^^^^
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/click/core.py", line 1406, in main
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     rv = self.invoke(ctx)
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/click/core.py", line 1269, in invoke
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     return ctx.invoke(self.callback, **ctx.params)
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:            ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/click/core.py", line 824, in invoke
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     return callback(*args, **kwargs)
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_webserver/cli.py", line 244, in dagster_webserver
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     instance = stack.enter_context(
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:         get_possibly_temporary_instance_for_cli(
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     ...<3 lines>...
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:         )
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     )
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/usr/lib/python3.13/contextlib.py", line 530, in enter_context
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     result = _enter(cm)
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/usr/lib/python3.13/contextlib.py", line 141, in __enter__
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     return next(self.gen)
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_cli/utils.py", line 107, in get_possibly_temporary_instance_for_cli
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     with DagsterInstance.get() as instance:
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:          ~~~~~~~~~~~~~~~~~~~^^
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/instance/instance.py", line 275, in get
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     return create_instance_from_dagster_home()
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/instance/factory.py", line 98, in create_instance_from_dagster_home
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     return create_instance_from_config(dagster_home_path)
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/instance/factory.py", line 133, in create_instance_from_config
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     return create_instance_from_ref(instance_ref)
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/instance/factory.py", line 158, in create_instance_from_ref
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     local_artifact_storage=instance_ref.local_artifact_storage,
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/instance/ref.py", line 518, in local_artifact_storage
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     return self.local_artifact_storage_data.rehydrate(as_type=LocalArtifactStorage)
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_serdes/config_class.py", line 106, in rehydrate
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     raise check.CheckError(
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     ...<3 lines>...
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]:     )
+Mar 25 15:36:24 CFG-DEW-DWH-01 dagster-webserver[44001]: dagster_shared.check.functions.CheckError: (<class 'dagster._core.storage.local_compute_log_manager.LocalComputeLogManager'>, 'class LocalComputeLogManager in module dagster._core.storage.local_compute_log_manager', <class 'dagster._serdes.config_class.ConfigurableClass'>)
