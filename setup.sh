@@ -86,7 +86,7 @@ source "$VENV_DIR/bin/activate"
 
 # ── 3. Python dependencies ────────────────────────────────────────────────────
 info "Installing Python dependencies (this may take a few minutes)..."
-pip install --quiet --upgrade pip
+pip install --quiet --upgrade pip setuptools
 pip install --quiet -e "$APP_DIR"
 
 # ── 4. DuckDB extensions ──────────────────────────────────────────────────────
