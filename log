@@ -1,10 +1,5 @@
-W: OpenPGP signature verification failed: https://packages.microsoft.com/ubuntu/18.04/prod bionic InRelease: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY EB3E94ADBE1229CF
-E: The repository 'https://packages.microsoft.com/ubuntu/18.04/prod bionic InRelease' is not signed.
-E: The repository 'https://packages.microsoft.com/repos/azuredatastudio stable Release' does not have a Release file.
-
-
 [0;32m[INFO][0m  Found suitable Python: python3.13 (3.13.3)
-[0;32m[INFO][0m  Installing remaining system packages (pip, git, curl)...
+[0;32m[INFO][0m  git, curl, and pip already installed — skipping apt.
 [0;32m[INFO][0m  Virtual environment already exists, skipping creation.
 [0;32m[INFO][0m  Installing Python dependencies (this may take a few minutes)...
 ERROR: Exception:
