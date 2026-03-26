@@ -31,7 +31,7 @@ USERNAME   = os.environ.get("EIGHT_X_EIGHT_USERNAME", "")
 PASSWORD   = os.environ.get("EIGHT_X_EIGHT_PASSWORD", "")
 
 TOKEN_PATH = "/v1/oauth/token"
-CDR_PATH   = "/api/analytics/report/external/v2/call-records"
+CDR_PATH   = "/analytics/work/v2/call-records"
 PBX_CSV    = PROJECT_ROOT / "dbt_project" / "seeds" / "8x8" / "pbx_country_mapping.csv"
 
 _CET  = zoneinfo.ZoneInfo("Europe/Paris")
