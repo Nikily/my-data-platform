@@ -1,0 +1,21 @@
+version: 2
+
+seeds:
+  - name: pbx_country_mapping
+    description: >
+      Maps 8x8 PBX identifiers to their country.
+      This is the single source of truth for the PBX list — the ingestion
+      pipeline (eight_x_eight_cdr.py) also reads docs/8x8/pbx.csv for the
+      same list. Keep both files in sync when adding or removing a PBX.
+    config:
+      schema: seeds
+    columns:
+      - name: pbx_id
+        description: "8x8 PBX identifier, matches the pbxId field in the CDR API response."
+        tests:
+          - unique
+          - not_null
+      - name: country
+        description: "Country this PBX belongs to."
+        tests:
+          - not_null

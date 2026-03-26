@@ -4,6 +4,8 @@ sources:
   - name: raw_eight_x_eight
     description: >
       Raw 8x8 Work data loaded by dlt from the 8x8 Analytics API.
+      All PBXs (Spain, Hong Kong, United Kingdom, United States) share a
+      single table — pbx_id identifies the source PBX per row.
       Written to the `raw_eight_x_eight` schema in DuckDB.
       Column names are normalised from camelCase to snake_case by dlt
       (e.g. `callId` → `call_id`, `startTimeUTC` → `start_time_utc`).

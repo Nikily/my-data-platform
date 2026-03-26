@@ -28,3 +28,8 @@ models:
     marts:
       +materialized: table
       +schema: marts
+
+seeds:
+  my_data_platform:
+    8x8:
+      +schema: seeds
