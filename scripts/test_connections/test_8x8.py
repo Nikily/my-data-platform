@@ -109,6 +109,7 @@ def main():
         sys.exit(1)
 
     print(f"\nBase URL : {BASE_URL}")
+    print(f"Endpoint : {BASE_URL}{ENDPOINT}")
     print(f"API key  : {API_KEY[:6]}{'*' * (len(API_KEY) - 6)}")
 
     pbx_list = load_pbx_list()
