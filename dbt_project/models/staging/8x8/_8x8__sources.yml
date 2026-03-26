@@ -1,0 +1,35 @@
+version: 2
+
+sources:
+  - name: raw_eight_x_eight
+    description: >
+      Raw 8x8 Work data loaded by dlt from the 8x8 Analytics API.
+      Written to the `raw_eight_x_eight` schema in DuckDB.
+      Column names are normalised from camelCase to snake_case by dlt
+      (e.g. `callId` → `call_id`, `startTimeUTC` → `start_time_utc`).
+    schema: raw_eight_x_eight
+    tables:
+      - name: call_detail_records
+        description: >
+          One row per call leg as returned by GET /v2/call-records.
+          Loaded incrementally; deduplicated on `call_id`.
+        columns:
+          - name: call_id
+            description: "Unique identifier for the call (callId from API)."
+            tests:
+              - unique
+              - not_null
+          - name: start_time_utc
+            description: "Call start time as epoch milliseconds (UTC)."
+            tests:
+              - not_null
+          - name: pbx_id
+            description: "PBX identifier."
+          - name: direction
+            description: "Call direction: Incoming or Outgoing."
+          - name: missed
+            description: "Whether the call was missed."
+          - name: answered
+            description: "Whether the call was answered."
+          - name: last_leg_disposition
+            description: "Disposition of the final call leg (e.g. Voicemail, Answered)."

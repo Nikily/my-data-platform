@@ -34,7 +34,8 @@ from dagster import AssetExecutionContext, asset
 # ── List every dbt mart model that should be exported to Power BI ─────────────
 # These must match the model names in dbt_project/models/marts/*.sql
 MART_TABLES = [
-    "mart_example",
+    "mart_8x8_call_summary",
+    # "mart_example",       # generic placeholder — enable when needed
     # "dim_customer",
     # "fact_orders",
 ]
