@@ -64,7 +64,7 @@ def test_pbx(pbx_id: str, country: str) -> bool:
     try:
         response = requests.get(
             f"{BASE_URL}{ENDPOINT}",
-            headers={"8x8-apikey": API_KEY},
+            headers={"Authorization": f"Bearer {API_KEY}"},
             params={
                 "pbxId":     pbx_id,
                 "startTime": WINDOW_START,

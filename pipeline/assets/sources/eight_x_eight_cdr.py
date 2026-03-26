@@ -76,7 +76,7 @@ def _load_pbx_list() -> list[tuple[str, str]]:
 
 
 def _headers() -> dict:
-    return {"8x8-apikey": os.environ["EIGHT_X_EIGHT_API_KEY"]}
+    return {"Authorization": f"Bearer {os.environ['EIGHT_X_EIGHT_API_KEY']}"}
 
 
 def _epoch_ms_to_api_str(epoch_ms: int) -> str:
