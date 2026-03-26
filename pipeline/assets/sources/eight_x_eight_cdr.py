@@ -53,9 +53,9 @@ _INITIAL_LOAD_UTC_MS: int = int(
     datetime(2026, 3, 1, 0, 0, 0, tzinfo=_CET).timestamp() * 1000
 )
 
-# Path to the PBX list CSV, relative to this file's location in the repo.
-# Layout: docs/8x8/pbx.csv  →  pipeline/assets/sources/eight_x_eight_cdr.py
-_PBX_CSV = Path(__file__).parent.parent.parent.parent / "docs" / "8x8" / "pbx.csv"
+# The dbt seed is the single source of truth for the PBX list.
+# To add or remove a PBX, edit dbt_project/seeds/8x8/pbx_country_mapping.csv.
+_PBX_CSV = Path(__file__).parent.parent.parent.parent / "dbt_project" / "seeds" / "8x8" / "pbx_country_mapping.csv"
 
 _ENDPOINT = "/api/analytics/report/external/v2/call-records"
 _PAGE_SIZE = 7000       # API maximum
@@ -67,12 +67,12 @@ _REQUEST_TIMEOUT = 60   # seconds
 
 def _load_pbx_list() -> list[tuple[str, str]]:
     """
-    Read the PBX list from docs/8x8/pbx.csv.
+    Read the PBX list from dbt_project/seeds/8x8/pbx_country_mapping.csv.
     Returns a list of (pbx_id, country) tuples.
     """
     with open(_PBX_CSV, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        return [(row["pbx"].strip(), row["country"].strip()) for row in reader if row["pbx"].strip()]
+        return [(row["pbx_id"].strip(), row["country"].strip()) for row in reader if row["pbx_id"].strip()]
 
 
 def _headers() -> dict:
