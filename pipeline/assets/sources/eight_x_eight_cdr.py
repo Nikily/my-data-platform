@@ -60,7 +60,7 @@ _PBX_CSV = (
 )
 
 _TOKEN_PATH = "/v1/oauth/token"
-_CDR_PATH   = "/api/analytics/report/external/v2/call-records"
+_CDR_PATH   = "/analytics/work/v2/call-records"
 _PAGE_SIZE  = 7000
 _TIMEZONE   = "Europe/Paris"
 _TIMEOUT    = 60
@@ -83,9 +83,9 @@ def _fetch_token() -> str:
     The 8x8-apikey header identifies the application; the body carries the
     user credentials. Returns the access_token string (valid for 30 minutes).
     """
-    base_url = os.environ["EIGHT_X_EIGHT_BASE_URL"].rstrip("/")
+    auth_base_url = os.environ["EIGHT_X_EIGHT_AUTH_BASE_URL"].rstrip("/")
     response = requests.post(
-        f"{base_url}{_TOKEN_PATH}",
+        f"{auth_base_url}{_TOKEN_PATH}",
         headers={"8x8-apikey": os.environ["EIGHT_X_EIGHT_API_KEY"]},
         data={
             "username": os.environ["EIGHT_X_EIGHT_USERNAME"],
