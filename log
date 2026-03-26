@@ -8,24 +8,36 @@ API key  : eght_O***********************************************
 Testing 4 PBX(es) from pbx_country_mapping.csv...
 
   PBX: chapmanfreebornai (Spain)
-  Window: 2026-03-19 16:25:50  →  2026-03-26 16:25:50 (CET)
-  HTTP 401
-  [FAIL] {"timestamp":1774538750875,"status":401,"error":"Unauthorized","message":"Full authentication is required to access this resource","path":"/api/analytics/report/external/v2/call-records"}
+  Window: 2026-03-19 16:36:02  →  2026-03-26 16:36:02 (CET)
+  HTTP 404
+  [FAIL] {
+  "message":"no Route matched with those values",
+  "request_id":"f591512ea851860eb9ccfa3bf73ce26e"
+}
 
   PBX: chapmanfreebornai497 (Hong Kong)
-  Window: 2026-03-19 16:25:50  →  2026-03-26 16:25:50 (CET)
-  HTTP 401
-  [FAIL] {"timestamp":1774538751292,"status":401,"error":"Unauthorized","message":"Full authentication is required to access this resource","path":"/api/analytics/report/external/v2/call-records"}
+  Window: 2026-03-19 16:36:02  →  2026-03-26 16:36:02 (CET)
+  HTTP 404
+  [FAIL] {
+  "message":"no Route matched with those values",
+  "request_id":"2103ca60323fed2050432f25d7cd7344"
+}
 
   PBX: chapmanfreebornai519 (United Kingdom)
-  Window: 2026-03-19 16:25:50  →  2026-03-26 16:25:50 (CET)
-  HTTP 401
-  [FAIL] {"timestamp":1774538751940,"status":401,"error":"Unauthorized","message":"Full authentication is required to access this resource","path":"/api/analytics/report/external/v2/call-records"}
+  Window: 2026-03-19 16:36:02  →  2026-03-26 16:36:02 (CET)
+  HTTP 404
+  [FAIL] {
+  "message":"no Route matched with those values",
+  "request_id":"25036d3d73f91c33d41f3d002f6aaf32"
+}
 
   PBX: chapmanfreebornai631 (United States)
-  Window: 2026-03-19 16:25:50  →  2026-03-26 16:25:50 (CET)
-  HTTP 401
-  [FAIL] {"timestamp":1774538752371,"status":401,"error":"Unauthorized","message":"Full authentication is required to access this resource","path":"/api/analytics/report/external/v2/call-records"}
+  Window: 2026-03-19 16:36:02  →  2026-03-26 16:36:02 (CET)
+  HTTP 404
+  [FAIL] {
+  "message":"no Route matched with those values",
+  "request_id":"9ea1880aa178112c46bc117919642479"
+}
 
 ============================================================
 Summary
