@@ -8,5 +8,18 @@ API key  : eght_O***********************************************
 Step 1 — Fetching Bearer token
   URL      : https://platform.8x8.com/v1/oauth/token
   Username : nikola.ilic@chapmanfreeborn.aero
-  HTTP 429
-  [FAIL] 
+  HTTP 404
+  [FAIL] <!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2014. by 8x8. Inc,
+  ~ All rights reserved.
+  ~
+  ~ This software is the confidential and proprietary information
+  ~ of 8x8 Inc. ("Confidential Information").  You
+  ~ shall not disclose such Confidential Information and shall use
+  ~ it only in accordance with the terms of the license agreement
+  ~ you entered into with 8x8 Inc.
+-->
+
+<html lang="en">
+    <h
