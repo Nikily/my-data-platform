@@ -93,10 +93,20 @@ pip install --quiet -e "$APP_DIR"
 info "Installing DuckDB extensions (azure, delta)..."
 python "$APP_DIR/scripts/install_duckdb_extensions.py"
 
-# ── 5. dbt packages ───────────────────────────────────────────────────────────
+# ── 5. dbt packages + manifest ────────────────────────────────────────────────
 info "Installing dbt packages..."
 cd "$APP_DIR/dbt_project"
 "$VENV_DIR/bin/dbt" deps --profiles-dir . --project-dir .
+
+# Generate the dbt manifest (required by Dagster's @dbt_assets decorator at startup).
+# DUCKDB_PATH must be set; if .env already exists use it, otherwise use a temp path.
+if [ -f "$APP_DIR/.env" ]; then
+    # shellcheck source=/dev/null
+    set -a; source "$APP_DIR/.env"; set +a
+fi
+export DUCKDB_PATH="${DUCKDB_PATH:-$DATA_DIR/platform.duckdb}"
+info "Generating dbt manifest (dbt parse)..."
+"$VENV_DIR/bin/dbt" parse --profiles-dir . --project-dir .
 cd "$APP_DIR"
 
 # ── 6. Data directories ───────────────────────────────────────────────────────

@@ -8,7 +8,7 @@ via the `[tool.dagster] module_name` setting.
 
 from pathlib import Path
 
-from dagster import Definitions, load_assets_from_modules
+from dagster import Definitions, EnvVar, load_assets_from_modules
 from dagster_dbt import DbtCliResource, DbtProject, dbt_assets
 from dagster_duckdb import DuckDBResource
 
@@ -51,7 +51,7 @@ defs = Definitions(
     resources={
         # Shared DuckDB connection — used by ADLS Delta source and Parquet export.
         # dlt and dbt manage their own connections to the same file via DUCKDB_PATH.
-        "duckdb": DuckDBResource(database="${DUCKDB_PATH}"),
+        "duckdb": DuckDBResource(database=EnvVar("DUCKDB_PATH")),
 
         # dbt CLI resource — points at our dbt project and profiles directory.
         "dbt": DbtCliResource(
