@@ -15,32 +15,200 @@ Step 2 — Testing 4 PBX(es)
 
   PBX : chapmanfreebornai (Spain)
   URL : https://api.8x8.com/analytics/work/v2/call-records
-  Window: 2026-03-20 10:21:04  →  2026-03-27 10:21:04 (CET, last 7 days)
-  HTTP 401
-  [FAIL] {"message":"Invalid Credentials","code":"KA:Invalid_Creds"}
+  Window: 2026-03-20 12:31:33  →  2026-03-27 12:31:33 (CET, last 7 days)
+  HTTP 200
+  Total records in window : 352
+  Records returned (max 5): 5
+  First record:
+  {
+      "dnis": "3259563131",
+      "aaDestination": null,
+      "callId": "1773357934556",
+      "startTimeUTC": 1774609636307,
+      "startTime": "2026-03-27T12:07:16.307+0100",
+      "connectTimeUTC": 0,
+      "connectTime": "0",
+      "disconnectedTimeUTC": 1774609638999,
+      "disconnectedTime": "2026-03-27T12:07:18.999+0100",
+      "talkTimeMS": 0,
+      "talkTime": "00:00:00",
+      "caller": "+3215793653",
+      "callerName": "3215793653",
+      "callee": "32231",
+      "calleeName": " AA",
+      "direction": "Incoming",
+      "callerId": "4243232,+12123124",
+      "missed": "Missed",
+      "abandoned": "Abandoned",
+      "answered": "-",
+      "answeredTime": 0,
+      "calleeDisconnectOnHold": "",
+      "callerDisconnectOnHold": "",
+      "pbxId": "chapmanfreebornai",
+      "sipCallId": "392447739_16471744@217.110.38.252",
+      "lastLegDisposition": "Missed",
+      "callLegCount": "1",
+      "callTime": 2692,
+      "ringDuration": 58,
+      "abandonedTime": 2692,
+      "calleeHoldDurationMS": 0,
+      "calleeHoldDuration": "00:00:00",
+      "waitTimeMS": 0,
+      "waitTime": "00:00:00",
+      "departments": null,
+      "branches": [
+          "Brugge"
+      ]
+  }
 
   PBX : chapmanfreebornai497 (Hong Kong)
   URL : https://api.8x8.com/analytics/work/v2/call-records
-  Window: 2026-03-20 10:21:04  →  2026-03-27 10:21:04 (CET, last 7 days)
-  HTTP 401
-  [FAIL] {"code":"KA:Invalid_Creds","message":"Invalid Credentials"}
+  Window: 2026-03-20 12:31:33  →  2026-03-27 12:31:33 (CET, last 7 days)
+  HTTP 200
+  Total records in window : 1
+  Records returned (max 5): 1
+  First record:
+  {
+      "dnis": "85235254462",
+      "aaDestination": null,
+      "callId": "1766395025243",
+      "startTimeUTC": 1774009059030,
+      "startTime": "2026-03-20T13:17:39.030+0100",
+      "connectTimeUTC": 0,
+      "connectTime": "0",
+      "disconnectedTimeUTC": 1774009161893,
+      "disconnectedTime": "2026-03-20T13:19:21.893+0100",
+      "talkTimeMS": 0,
+      "talkTime": "00:00:00",
+      "caller": "+31242342",
+      "callerName": "",
+      "callee": "85462",
+      "calleeName": "WQ Ki",
+      "direction": "Incoming",
+      "callerId": ",+87272212",
+      "missed": "Missed",
+      "abandoned": "-",
+      "answered": "-",
+      "answeredTime": 0,
+      "calleeDisconnectOnHold": "",
+      "callerDisconnectOnHold": "",
+      "pbxId": "chapmanfreebornai497",
+      "sipCallId": "210358446-3982997858-45542519@MSX1UK.mydomain.com",
+      "lastLegDisposition": "Voicemail",
+      "callLegCount": "2",
+      "callTime": 102863,
+      "ringDuration": 1324,
+      "abandonedTime": 0,
+      "calleeHoldDurationMS": 0,
+      "calleeHoldDuration": "00:00:00",
+      "waitTimeMS": 0,
+      "waitTime": "00:00:00",
+      "departments": null,
+      "branches": [
+          "Sai Iool"
+      ]
+  }
 
   PBX : chapmanfreebornai519 (United Kingdom)
   URL : https://api.8x8.com/analytics/work/v2/call-records
-  Window: 2026-03-20 10:21:04  →  2026-03-27 10:21:04 (CET, last 7 days)
-  HTTP 401
-  [FAIL] {"code":"KA:Invalid_Creds","message":"Invalid Credentials"}
+  Window: 2026-03-20 12:31:33  →  2026-03-27 12:31:33 (CET, last 7 days)
+  HTTP 200
+  Total records in window : 385
+  Records returned (max 5): 5
+  First record:
+  {
+      "dnis": "441342830007",
+      "aaDestination": "44532",
+      "callId": "1762859768107",
+      "startTimeUTC": 1774610741408,
+      "startTime": "2026-03-27T12:25:41.408+0100",
+      "connectTimeUTC": 0,
+      "connectTime": "0",
+      "disconnectedTimeUTC": 1774610771236,
+      "disconnectedTime": "2026-03-27T12:26:11.236+0100",
+      "talkTimeMS": 16898,
+      "talkTime": "00:00:16",
+      "caller": "+3243252453232",
+      "callerName": "",
+      "callee": "32322",
+      "calleeName": "Magma Ops Control Centre AA",
+      "direction": "Incoming",
+      "callerId": ",+32423555",
+      "missed": "-",
+      "abandoned": "-",
+      "answered": "Answered",
+      "answeredTime": 1774610754338,
+      "calleeDisconnectOnHold": "",
+      "callerDisconnectOnHold": "",
+      "pbxId": "chapmanfreebornai519",
+      "sipCallId": "174248857_100481892@151.2.143.5",
+      "lastLegDisposition": "Answered",
+      "callLegCount": "3",
+      "callTime": 29828,
+      "ringDuration": 6438,
+      "abandonedTime": 0,
+      "calleeHoldDurationMS": 0,
+      "calleeHoldDuration": "00:00:00",
+      "waitTimeMS": 0,
+      "waitTime": "00:00:00",
+      "departments": null,
+      "branches": [
+          "London"
+      ]
+  }
 
   PBX : chapmanfreebornai631 (United States)
   URL : https://api.8x8.com/analytics/work/v2/call-records
-  Window: 2026-03-20 10:21:04  →  2026-03-27 10:21:04 (CET, last 7 days)
-  HTTP 401
-  [FAIL] {"code":"KA:Invalid_Creds","message":"Invalid Credentials"}
+  Window: 2026-03-20 12:31:33  →  2026-03-27 12:31:33 (CET, last 7 days)
+  HTTP 200
+  Total records in window : 191
+  Records returned (max 5): 5
+  First record:
+  {
+      "dnis": "16467474275",
+      "aaDestination": null,
+      "callId": "1774332147852",
+      "startTimeUTC": 1774561584199,
+      "startTime": "2026-03-26T22:46:24.199+0100",
+      "connectTimeUTC": 0,
+      "connectTime": "0",
+      "disconnectedTimeUTC": 1774561625313,
+      "disconnectedTime": "2026-03-26T22:47:05.313+0100",
+      "talkTimeMS": 0,
+      "talkTime": "00:00:00",
+      "caller": "+2332324",
+      "callerName": "MARS KIIHH",
+      "callee": "19755",
+      "calleeName": "Hord LIOO",
+      "direction": "Incoming",
+      "callerId": "KO LIK,+2343525322",
+      "missed": "Missed",
+      "abandoned": "-",
+      "answered": "-",
+      "answeredTime": 0,
+      "calleeDisconnectOnHold": "",
+      "callerDisconnectOnHold": "",
+      "pbxId": "chapmanfreebornai631",
+      "sipCallId": "57332907_64349144@206.146.99.28",
+      "lastLegDisposition": "Voicemail",
+      "callLegCount": "3",
+      "callTime": 41114,
+      "ringDuration": 15053,
+      "abandonedTime": 0,
+      "calleeHoldDurationMS": 0,
+      "calleeHoldDuration": "00:00:00",
+      "waitTimeMS": 0,
+      "waitTime": "00:00:00",
+      "departments": null,
+      "branches": [
+          "New York"
+      ]
+  }
 
 ============================================================
 Summary
 ============================================================
-  [FAIL]  chapmanfreebornai (Spain)
-  [FAIL]  chapmanfreebornai497 (Hong Kong)
-  [FAIL]  chapmanfreebornai519 (United Kingdom)
-  [FAIL]  chapmanfreebornai631 (United States)
+  [OK  ]  chapmanfreebornai (Spain)
+  [OK  ]  chapmanfreebornai497 (Hong Kong)
+  [OK  ]  chapmanfreebornai519 (United Kingdom)
+  [OK  ]  chapmanfreebornai631 (United States)
