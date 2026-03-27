@@ -3,35 +3,76 @@ version: 2
 sources:
   - name: raw_eight_x_eight
     description: >
-      Raw 8x8 Work data loaded by dlt from the 8x8 Analytics API.
-      All PBXs (Spain, Hong Kong, United Kingdom, United States) share a
-      single table — pbx_id identifies the source PBX per row.
-      Written to the `raw_eight_x_eight` schema in DuckDB.
-      Column names are normalised from camelCase to snake_case by dlt
-      (e.g. `callId` → `call_id`, `startTimeUTC` → `start_time_utc`).
+      Raw 8x8 Work CDR data loaded by dlt from the 8x8 Analytics API.
+      All PBXs share a single table; pbx_id identifies the source office.
+      Column names are normalised from camelCase to snake_case by dlt.
+      Schema verified against live API responses (March 2026).
     schema: raw_eight_x_eight
     tables:
       - name: call_detail_records
         description: >
-          One row per call leg as returned by GET /v2/call-records.
-          Loaded incrementally; deduplicated on `call_id`.
+          One row per call leg. Loaded incrementally per PBX; deduplicated on call_id.
         columns:
           - name: call_id
-            description: "Unique identifier for the call (callId from API)."
+            description: "Unique call identifier (callId). Primary key."
             tests:
               - unique
               - not_null
-          - name: start_time_utc
-            description: "Call start time as epoch milliseconds (UTC)."
+          - name: pbx_id
+            description: "PBX identifier, e.g. chapmanfreebornai519."
             tests:
               - not_null
-          - name: pbx_id
-            description: "PBX identifier."
+          - name: dnis
+            description: "Dialled Number Identification Service — the number that was dialled."
+          - name: aa_destination
+            description: "Auto-attendant destination extension, null if not applicable."
+          - name: start_time_utc
+            description: "Call start time as epoch milliseconds (UTC). Used as incremental cursor."
+            tests:
+              - not_null
+          - name: connect_time_utc
+            description: "Time the call connected as epoch ms (UTC). 0 when call never connected."
+          - name: disconnected_time_utc
+            description: "Time the call disconnected as epoch ms (UTC)."
+          - name: talk_time_ms
+            description: "Talk time in milliseconds."
+          - name: call_time
+            description: "Total call duration in milliseconds."
+          - name: ring_duration
+            description: "Ring duration in milliseconds."
+          - name: abandoned_time
+            description: "Abandoned time in milliseconds."
+          - name: callee_hold_duration_ms
+            description: "Time callee was on hold in milliseconds."
+          - name: wait_time_ms
+            description: "Wait time in milliseconds."
+          - name: answered_time
+            description: "Epoch ms timestamp of when the call was answered. 0 if not answered."
+          - name: call_leg_count
+            description: "Number of call legs as a string (e.g. '1', '2', '3'). Cast to integer in staging."
+          - name: caller
+            description: "Caller phone number."
+          - name: caller_name
+            description: "Caller display name."
+          - name: caller_id
+            description: "Caller ID string as returned by the API (comma-separated)."
+          - name: callee
+            description: "Callee extension or identifier."
+          - name: callee_name
+            description: "Callee display name."
           - name: direction
             description: "Call direction: Incoming or Outgoing."
           - name: missed
-            description: "Whether the call was missed."
+            description: "'Missed' or '-'."
+          - name: abandoned
+            description: "'Abandoned' or '-'."
           - name: answered
-            description: "Whether the call was answered."
+            description: "'Answered' or '-'."
           - name: last_leg_disposition
-            description: "Disposition of the final call leg (e.g. Voicemail, Answered)."
+            description: "Final disposition of the call: Missed, Answered, Voicemail, etc."
+          - name: sip_call_id
+            description: "SIP call identifier."
+          - name: departments
+            description: "List of department names associated with the call. May be null."
+          - name: branches
+            description: "List of branch names associated with the call."

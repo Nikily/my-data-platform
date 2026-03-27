@@ -1,23 +1,20 @@
 -- stg_8x8_call_detail_records.sql
 --
 -- Staging model for 8x8 Work Call Detail Records.
+-- Schema derived from actual API responses (March 2026).
 --
 -- Source: raw_eight_x_eight.call_detail_records (written by dlt)
---         All PBXs (Spain, HK, UK, US) land in this single table.
---         The pbx_id column identifies which PBX each record came from.
+--         All PBXs share one table; pbx_id + country identify the office.
 --
--- What this model does:
---   1. Renames columns from dlt's snake_case normalisation to clear,
---      self-documenting names.
---   2. Converts UTC epoch milliseconds to proper TIMESTAMP values.
---   3. Derives human-readable duration columns (seconds).
---   4. Joins the pbx_country_mapping seed to add a country column.
---
--- Column name note:
---   dlt normalises camelCase API fields to snake_case:
---     callId          → call_id
---     startTimeUTC    → start_time_utc
---     talkTimeMS      → talk_time_ms
+-- Key type notes (verified against live data):
+--   call_leg_count  — API returns a STRING ("1","2","3") → cast to INTEGER
+--   answered_time   — epoch ms TIMESTAMP when answered, 0 when not → NULL when 0
+--   connect_time_utc / connect_time — 0 / "0" when call never connected → NULL
+--   ring_duration   — milliseconds
+--   call_time       — milliseconds
+--   talk_time_ms    — milliseconds
+--   wait_time_ms    — milliseconds
+--   departments / branches — LIST type (may be NULL)
 
 with source as (
     select * from {{ source('raw_eight_x_eight', 'call_detail_records') }}
@@ -29,16 +26,15 @@ pbx_map as (
 
 staged as (
     select
-        -- ── Identifiers ──────────────────────────────────────────────────────
+        -- ── Identifiers ───────────────────────────────────────────────────────
         s.call_id,
         s.pbx_id,
+        p.country,
         s.sip_call_id,
         s.dnis,
+        s.aa_destination,
 
-        -- ── Geography (from pbx_country_mapping seed) ─────────────────────
-        p.country,
-
-        -- ── Parties ──────────────────────────────────────────────────────────
+        -- ── Parties ───────────────────────────────────────────────────────────
         s.caller,
         s.caller_name,
         s.caller_id,
@@ -46,43 +42,61 @@ staged as (
         s.callee_name,
         s.direction,
 
-        -- ── Timestamps (converted from epoch ms to TIMESTAMP) ─────────────
-        -- epoch_ms() is a DuckDB built-in: converts BIGINT milliseconds → TIMESTAMP
-        epoch_ms(s.start_time_utc)         as started_at,
-        epoch_ms(s.connect_time_utc)       as connected_at,
-        epoch_ms(s.disconnected_time_utc)  as disconnected_at,
+        -- ── Timestamps ────────────────────────────────────────────────────────
+        -- epoch_ms() converts BIGINT milliseconds → TIMESTAMP (DuckDB built-in)
+        epoch_ms(s.start_time_utc)                                  as started_at,
 
-        -- Raw local-time strings from the API (include UTC offset, e.g. -0500)
-        s.start_time                       as start_time_local,
-        s.connect_time                     as connect_time_local,
-        s.disconnected_time                as disconnected_time_local,
+        -- connect_time_utc is 0 when the call never connected
+        case
+            when s.connect_time_utc = 0 then null
+            else epoch_ms(s.connect_time_utc)
+        end                                                         as connected_at,
 
-        -- ── Outcome ──────────────────────────────────────────────────────────
+        epoch_ms(s.disconnected_time_utc)                           as disconnected_at,
+
+        -- answered_time is an epoch ms timestamp when the call was answered,
+        -- and 0 when it was not answered
+        case
+            when s.answered_time = 0 then null
+            else epoch_ms(s.answered_time)
+        end                                                         as answered_at,
+
+        -- ── Outcome flags ─────────────────────────────────────────────────────
         s.missed,
         s.abandoned,
         s.answered,
         s.last_leg_disposition,
-        s.call_leg_count,
 
-        -- ── Durations (converted from milliseconds to seconds) ────────────
-        round(s.call_time     / 1000.0, 3) as call_duration_seconds,
-        round(s.talk_time_ms  / 1000.0, 3) as talk_duration_seconds,
-        round(s.ring_duration / 1000.0, 3) as ring_duration_seconds,
-        round(s.wait_time_ms  / 1000.0, 3) as wait_duration_seconds,
-        round(s.callee_hold_duration_ms / 1000.0, 3) as callee_hold_duration_seconds,
-        round(s.abandoned_time  / 1000.0, 3) as abandoned_duration_seconds,
-        round(s.answered_time   / 1000.0, 3) as answered_duration_seconds,
+        -- Boolean convenience columns for easier filtering in Power BI / marts
+        s.missed    = 'Missed'   as is_missed,
+        s.answered  = 'Answered' as is_answered,
+        s.abandoned = 'Abandoned' as is_abandoned,
 
-        -- Formatted HH:MM:SS strings as provided by the API
-        s.talk_time                        as talk_time_formatted,
-        s.callee_hold_duration             as callee_hold_duration_formatted,
-        s.wait_time                        as wait_time_formatted,
+        -- call_leg_count arrives as a string from the API ("1", "2", "3")
+        s.call_leg_count::integer                                   as call_leg_count,
 
-        -- ── Classification ───────────────────────────────────────────────────
+        -- ── Durations in seconds (source is milliseconds) ──────────────────
+        round(s.call_time          / 1000.0, 3)                    as call_duration_seconds,
+        round(s.talk_time_ms       / 1000.0, 3)                    as talk_duration_seconds,
+        round(s.ring_duration      / 1000.0, 3)                    as ring_duration_seconds,
+        round(s.wait_time_ms       / 1000.0, 3)                    as wait_duration_seconds,
+        round(s.callee_hold_duration_ms / 1000.0, 3)               as callee_hold_duration_seconds,
+        round(s.abandoned_time     / 1000.0, 3)                    as abandoned_duration_seconds,
+
+        -- Formatted HH:MM:SS strings as returned by the API
+        s.talk_time                                                 as talk_time_formatted,
+        s.callee_hold_duration                                      as callee_hold_duration_formatted,
+        s.wait_time                                                 as wait_time_formatted,
+
+        -- ── Hold / transfer flags ──────────────────────────────────────────
+        s.callee_disconnect_on_hold,
+        s.caller_disconnect_on_hold,
+
+        -- ── Classification ────────────────────────────────────────────────
         s.departments,
         s.branches,
 
-        -- ── dlt load metadata ────────────────────────────────────────────────
+        -- ── dlt metadata ──────────────────────────────────────────────────
         s._dlt_load_id,
         s._dlt_id
 
