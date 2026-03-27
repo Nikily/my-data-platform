@@ -1,5 +1,6 @@
 dagster._core.errors.DagsterUserCodeLoadError: Error occurred during the loading of Dagster definitions in
 executable_path=/opt/my_data_platform/.venv/bin/python3.13, module_name=pipeline.definitions, working_directory=/opt/my_data_platform
+
   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_grpc/server.py", line 465, in __init__
     self._loaded_repositories: LoadedRepositories | None = LoadedRepositories(
                                                            ~~~~~~~~~~~~~~~~~~^
@@ -25,8 +26,13 @@ executable_path=/opt/my_data_platform/.venv/bin/python3.13, module_name=pipeline
     ~~~~~~~~~~~~~~^^^^^^^
   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/errors.py", line 289, in user_code_error_boundary
     raise new_error from e
+
 The above exception was caused by the following exception:
-dagster_dbt.errors.DagsterDbtManifestNotFoundError: /opt/my_data_platform/dbt_project/target/manifest.json does not exist.
+pydantic_core._pydantic_core.ValidationError: 1 validation error for DbtCliResource
+dbt_executable
+  Value error, The dbt executable 'dbt' does not exist. Please specify a valid path to a dbt executable. [type=value_error, input_value='dbt', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/value_error
+
   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/errors.py", line 279, in user_code_error_boundary
     yield
   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_grpc/server.py", line 277, in __init__
@@ -56,20 +62,31 @@ dagster_dbt.errors.DagsterDbtManifestNotFoundError: /opt/my_data_platform/dbt_pr
   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
   File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  File "/opt/my_data_platform/pipeline/definitions.py", line 31, in <module>
-    @dbt_assets(
-     ~~~~~~~~~~^
-        manifest=dbt_project.manifest_path,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        name="dbt_models",
-        ^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/pipeline/definitions.py", line 57, in <module>
+    "dbt": DbtCliResource(
+           ~~~~~~~~~~~~~~^
+        project_dir=str(DBT_PROJECT_DIR),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        profiles_dir=str(DBT_PROJECT_DIR),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ),
+    ^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/resource.py", line 229, in __init__
+    super().__init__(
+    ~~~~~~~~~~~~~~~~^
+        project_dir=project_dir,  # type: ignore
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        **kwargs,
+        ^^^^^^^^^
     )
     ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/decorator_utils.py", line 217, in wrapped_with_context_manager_fn
-    return fn(*args, **kwargs)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/asset_decorator.py", line 314, in dbt_assets
-    manifest = validate_manifest(manifest)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/dbt_manifest.py", line 38, in validate_manifest
-    manifest = read_manifest_path(manifest.resolve())
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/dbt_manifest.py", line 25, in read_manifest_path
-    raise DagsterDbtManifestNotFoundError(f"{manifest_path} does not exist.")
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_config/pythonic_config/resource.py", line 227, in __init__
+    super().__init__(**data_without_resources, **resource_pointers)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_config/pythonic_config/config.py", line 253, in __init__
+    super().__init__(**modified_data_by_config_key)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/pydantic/main.py", line 250, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+
