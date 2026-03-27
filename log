@@ -6,10 +6,7 @@ Base URL : https://api.8x8.com
 API key  : eght_O***********************************************
 
 Step 1 — Fetching Bearer token
-  URL      : https://api.8x8.com/v1/oauth/token
+  URL      : https://platform.8x8.com/v1/oauth/token
   Username : nikola.ilic@chapmanfreeborn.aero
-  HTTP 404
-  [FAIL] {
-  "message":"no Route matched with those values",
-  "request_id":"5550c160a3c32304c2a7bc0f3a9a4c1c"
-}
+  HTTP 429
+  [FAIL] 
