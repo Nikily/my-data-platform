@@ -6,20 +6,41 @@ Base URL : https://api.8x8.com
 API key  : eght_O***********************************************
 
 Step 1 — Fetching Bearer token
-  URL      : https://platform.8x8.com/v1/oauth/token
+  URL      : https://api.8x8.com/analytics/work/v1/oauth/token
   Username : nikola.ilic@chapmanfreeborn.aero
-  HTTP 404
-  [FAIL] <!DOCTYPE html>
-<!--
-  ~ Copyright (c) 2014. by 8x8. Inc,
-  ~ All rights reserved.
-  ~
-  ~ This software is the confidential and proprietary information
-  ~ of 8x8 Inc. ("Confidential Information").  You
-  ~ shall not disclose such Confidential Information and shall use
-  ~ it only in accordance with the terms of the license agreement
-  ~ you entered into with 8x8 Inc.
--->
+  HTTP 200
+  Token obtained (expires in 1799s): eyJhbGciOiJSUzI1NiIsInR5cCI6Ik...
 
-<html lang="en">
-    <h
+Step 2 — Testing 4 PBX(es)
+
+  PBX : chapmanfreebornai (Spain)
+  URL : https://api.8x8.com/analytics/work/v2/call-records
+  Window: 2026-03-20 10:21:04  →  2026-03-27 10:21:04 (CET, last 7 days)
+  HTTP 401
+  [FAIL] {"message":"Invalid Credentials","code":"KA:Invalid_Creds"}
+
+  PBX : chapmanfreebornai497 (Hong Kong)
+  URL : https://api.8x8.com/analytics/work/v2/call-records
+  Window: 2026-03-20 10:21:04  →  2026-03-27 10:21:04 (CET, last 7 days)
+  HTTP 401
+  [FAIL] {"code":"KA:Invalid_Creds","message":"Invalid Credentials"}
+
+  PBX : chapmanfreebornai519 (United Kingdom)
+  URL : https://api.8x8.com/analytics/work/v2/call-records
+  Window: 2026-03-20 10:21:04  →  2026-03-27 10:21:04 (CET, last 7 days)
+  HTTP 401
+  [FAIL] {"code":"KA:Invalid_Creds","message":"Invalid Credentials"}
+
+  PBX : chapmanfreebornai631 (United States)
+  URL : https://api.8x8.com/analytics/work/v2/call-records
+  Window: 2026-03-20 10:21:04  →  2026-03-27 10:21:04 (CET, last 7 days)
+  HTTP 401
+  [FAIL] {"code":"KA:Invalid_Creds","message":"Invalid Credentials"}
+
+============================================================
+Summary
+============================================================
+  [FAIL]  chapmanfreebornai (Spain)
+  [FAIL]  chapmanfreebornai497 (Hong Kong)
+  [FAIL]  chapmanfreebornai519 (United Kingdom)
+  [FAIL]  chapmanfreebornai631 (United States)
