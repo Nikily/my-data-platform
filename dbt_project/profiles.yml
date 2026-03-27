@@ -13,5 +13,5 @@ my_data_platform:
   outputs:
     prod:
       type: duckdb
-      path: "{{ env_var('DUCKDB_PATH') }}"
+      path: "{{ env_var('DUCKDB_PATH', '/tmp/my_data_platform.duckdb') }}"
       threads: 4
