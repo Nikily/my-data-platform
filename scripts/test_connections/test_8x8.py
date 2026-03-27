@@ -25,13 +25,12 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent
 load_dotenv(PROJECT_ROOT / ".env")
 
 # ── Config ────────────────────────────────────────────────────────────────────
-BASE_URL      = os.environ.get("EIGHT_X_EIGHT_BASE_URL", "").rstrip("/")
-AUTH_BASE_URL = os.environ.get("EIGHT_X_EIGHT_AUTH_BASE_URL", "").rstrip("/")
-API_KEY       = os.environ.get("EIGHT_X_EIGHT_API_KEY", "")
+BASE_URL = os.environ.get("EIGHT_X_EIGHT_BASE_URL", "").rstrip("/")
+API_KEY  = os.environ.get("EIGHT_X_EIGHT_API_KEY", "")
 USERNAME      = os.environ.get("EIGHT_X_EIGHT_USERNAME", "")
 PASSWORD      = os.environ.get("EIGHT_X_EIGHT_PASSWORD", "")
 
-TOKEN_PATH = "/v1/oauth/token"
+TOKEN_PATH = "/analytics/work/v1/oauth/token"
 CDR_PATH   = "/analytics/work/v2/call-records"
 PBX_CSV    = PROJECT_ROOT / "dbt_project" / "seeds" / "8x8" / "pbx_country_mapping.csv"
 
@@ -44,11 +43,10 @@ WINDOW_END   = _now.strftime("%Y-%m-%d %H:%M:%S")
 
 def check_env() -> bool:
     required = {
-        "EIGHT_X_EIGHT_BASE_URL":      BASE_URL,
-        "EIGHT_X_EIGHT_AUTH_BASE_URL": AUTH_BASE_URL,
-        "EIGHT_X_EIGHT_API_KEY":       API_KEY,
-        "EIGHT_X_EIGHT_USERNAME":      USERNAME,
-        "EIGHT_X_EIGHT_PASSWORD":      PASSWORD,
+        "EIGHT_X_EIGHT_BASE_URL":  BASE_URL,
+        "EIGHT_X_EIGHT_API_KEY":   API_KEY,
+        "EIGHT_X_EIGHT_USERNAME":  USERNAME,
+        "EIGHT_X_EIGHT_PASSWORD":  PASSWORD,
     }
     missing = [k for k, v in required.items() if not v]
     if missing:
@@ -66,12 +64,12 @@ def load_pbx_list() -> list[tuple[str, str]]:
 def fetch_token() -> str | None:
     """POST to the token endpoint and return the access_token."""
     print(f"\nStep 1 — Fetching Bearer token")
-    print(f"  URL      : {AUTH_BASE_URL}{TOKEN_PATH}")
+    print(f"  URL      : {BASE_URL}{TOKEN_PATH}")
     print(f"  Username : {USERNAME}")
 
     try:
         response = requests.post(
-            f"{AUTH_BASE_URL}{TOKEN_PATH}",
+            f"{BASE_URL}{TOKEN_PATH}",
             headers={"8x8-apikey": API_KEY},
             data={"username": USERNAME, "password": PASSWORD},
             timeout=30,
