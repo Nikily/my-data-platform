@@ -98,7 +98,7 @@ def test_pbx(pbx_id: str, country: str, token: str) -> bool:
     try:
         response = requests.get(
             f"{BASE_URL}{CDR_PATH}",
-            headers={"Authorization": f"Bearer {token}"},
+            headers={"Authorization": f"Bearer {token}", "8x8-apikey": API_KEY},
             params={
                 "pbxId":     pbx_id,
                 "startTime": WINDOW_START,

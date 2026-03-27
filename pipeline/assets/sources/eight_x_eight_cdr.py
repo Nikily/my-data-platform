@@ -122,7 +122,10 @@ def call_detail_records_resource(
     ),
 ) -> Iterator[list]:
     base_url = os.environ["EIGHT_X_EIGHT_BASE_URL"].rstrip("/")
-    headers  = {"Authorization": f"Bearer {token}"}
+    headers  = {
+        "Authorization": f"Bearer {token}",
+        "8x8-apikey":    os.environ["EIGHT_X_EIGHT_API_KEY"],
+    }
 
     window_start = _epoch_ms_to_api_str(start_time_utc.last_value)
     window_end   = _epoch_ms_to_api_str(int(datetime.now(timezone.utc).timestamp() * 1000))
