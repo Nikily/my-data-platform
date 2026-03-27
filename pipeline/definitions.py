@@ -6,6 +6,7 @@ This file wires together all assets, resources, and schedules.
 via the `[tool.dagster] module_name` setting.
 """
 
+import sys
 from pathlib import Path
 
 from dagster import Definitions, EnvVar, load_assets_from_modules
@@ -17,14 +18,14 @@ from pipeline.assets.sources import adls_delta, csv_local, csv_sftp, eight_x_eig
 from pipeline.schedules.daily_schedule import daily_schedule
 
 # ── dbt project setup ─────────────────────────────────────────────────────────
-# DbtProject manages the lifecycle of the dbt project.
-# `prepare_if_dev()` runs `dbt parse` on startup to generate manifest.json
-# when running locally / in development. In production the manifest should be
-# pre-compiled as part of your deploy step (run `dbt parse` before starting the
-# Dagster services).
 DBT_PROJECT_DIR = Path(__file__).parent.parent / "dbt_project"
+# dbt lives in the same venv as Dagster — derive the path from sys.executable
+# so it works regardless of whether `dbt` is on the system PATH.
+DBT_EXECUTABLE = str(Path(sys.executable).parent / "dbt")
 
 dbt_project = DbtProject(project_dir=DBT_PROJECT_DIR)
+# In dev mode this runs `dbt parse` to regenerate the manifest.
+# In production (systemd) it is a no-op; run `dbt parse` once after deploy.
 dbt_project.prepare_if_dev()
 
 
@@ -57,6 +58,7 @@ defs = Definitions(
         "dbt": DbtCliResource(
             project_dir=str(DBT_PROJECT_DIR),
             profiles_dir=str(DBT_PROJECT_DIR),
+            dbt_executable=DBT_EXECUTABLE,
         ),
     },
     schedules=[daily_schedule],
