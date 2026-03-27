@@ -1,214 +1,75 @@
-============================================================
-8x8 API connectivity test
-============================================================
-
-Base URL : https://api.8x8.com
-API key  : eght_O***********************************************
-
-Step 1 — Fetching Bearer token
-  URL      : https://api.8x8.com/analytics/work/v1/oauth/token
-  Username : nikola.ilic@chapmanfreeborn.aero
-  HTTP 200
-  Token obtained (expires in 1799s): eyJhbGciOiJSUzI1NiIsInR5cCI6Ik...
-
-Step 2 — Testing 4 PBX(es)
-
-  PBX : chapmanfreebornai (Spain)
-  URL : https://api.8x8.com/analytics/work/v2/call-records
-  Window: 2026-03-20 12:31:33  →  2026-03-27 12:31:33 (CET, last 7 days)
-  HTTP 200
-  Total records in window : 352
-  Records returned (max 5): 5
-  First record:
-  {
-      "dnis": "3259563131",
-      "aaDestination": null,
-      "callId": "1773357934556",
-      "startTimeUTC": 1774609636307,
-      "startTime": "2026-03-27T12:07:16.307+0100",
-      "connectTimeUTC": 0,
-      "connectTime": "0",
-      "disconnectedTimeUTC": 1774609638999,
-      "disconnectedTime": "2026-03-27T12:07:18.999+0100",
-      "talkTimeMS": 0,
-      "talkTime": "00:00:00",
-      "caller": "+3215793653",
-      "callerName": "3215793653",
-      "callee": "32231",
-      "calleeName": " AA",
-      "direction": "Incoming",
-      "callerId": "4243232,+12123124",
-      "missed": "Missed",
-      "abandoned": "Abandoned",
-      "answered": "-",
-      "answeredTime": 0,
-      "calleeDisconnectOnHold": "",
-      "callerDisconnectOnHold": "",
-      "pbxId": "chapmanfreebornai",
-      "sipCallId": "392447739_16471744@217.110.38.252",
-      "lastLegDisposition": "Missed",
-      "callLegCount": "1",
-      "callTime": 2692,
-      "ringDuration": 58,
-      "abandonedTime": 2692,
-      "calleeHoldDurationMS": 0,
-      "calleeHoldDuration": "00:00:00",
-      "waitTimeMS": 0,
-      "waitTime": "00:00:00",
-      "departments": null,
-      "branches": [
-          "Brugge"
-      ]
-  }
-
-  PBX : chapmanfreebornai497 (Hong Kong)
-  URL : https://api.8x8.com/analytics/work/v2/call-records
-  Window: 2026-03-20 12:31:33  →  2026-03-27 12:31:33 (CET, last 7 days)
-  HTTP 200
-  Total records in window : 1
-  Records returned (max 5): 1
-  First record:
-  {
-      "dnis": "85235254462",
-      "aaDestination": null,
-      "callId": "1766395025243",
-      "startTimeUTC": 1774009059030,
-      "startTime": "2026-03-20T13:17:39.030+0100",
-      "connectTimeUTC": 0,
-      "connectTime": "0",
-      "disconnectedTimeUTC": 1774009161893,
-      "disconnectedTime": "2026-03-20T13:19:21.893+0100",
-      "talkTimeMS": 0,
-      "talkTime": "00:00:00",
-      "caller": "+31242342",
-      "callerName": "",
-      "callee": "85462",
-      "calleeName": "WQ Ki",
-      "direction": "Incoming",
-      "callerId": ",+87272212",
-      "missed": "Missed",
-      "abandoned": "-",
-      "answered": "-",
-      "answeredTime": 0,
-      "calleeDisconnectOnHold": "",
-      "callerDisconnectOnHold": "",
-      "pbxId": "chapmanfreebornai497",
-      "sipCallId": "210358446-3982997858-45542519@MSX1UK.mydomain.com",
-      "lastLegDisposition": "Voicemail",
-      "callLegCount": "2",
-      "callTime": 102863,
-      "ringDuration": 1324,
-      "abandonedTime": 0,
-      "calleeHoldDurationMS": 0,
-      "calleeHoldDuration": "00:00:00",
-      "waitTimeMS": 0,
-      "waitTime": "00:00:00",
-      "departments": null,
-      "branches": [
-          "Sai Iool"
-      ]
-  }
-
-  PBX : chapmanfreebornai519 (United Kingdom)
-  URL : https://api.8x8.com/analytics/work/v2/call-records
-  Window: 2026-03-20 12:31:33  →  2026-03-27 12:31:33 (CET, last 7 days)
-  HTTP 200
-  Total records in window : 385
-  Records returned (max 5): 5
-  First record:
-  {
-      "dnis": "441342830007",
-      "aaDestination": "44532",
-      "callId": "1762859768107",
-      "startTimeUTC": 1774610741408,
-      "startTime": "2026-03-27T12:25:41.408+0100",
-      "connectTimeUTC": 0,
-      "connectTime": "0",
-      "disconnectedTimeUTC": 1774610771236,
-      "disconnectedTime": "2026-03-27T12:26:11.236+0100",
-      "talkTimeMS": 16898,
-      "talkTime": "00:00:16",
-      "caller": "+3243252453232",
-      "callerName": "",
-      "callee": "32322",
-      "calleeName": "Magma Ops Control Centre AA",
-      "direction": "Incoming",
-      "callerId": ",+32423555",
-      "missed": "-",
-      "abandoned": "-",
-      "answered": "Answered",
-      "answeredTime": 1774610754338,
-      "calleeDisconnectOnHold": "",
-      "callerDisconnectOnHold": "",
-      "pbxId": "chapmanfreebornai519",
-      "sipCallId": "174248857_100481892@151.2.143.5",
-      "lastLegDisposition": "Answered",
-      "callLegCount": "3",
-      "callTime": 29828,
-      "ringDuration": 6438,
-      "abandonedTime": 0,
-      "calleeHoldDurationMS": 0,
-      "calleeHoldDuration": "00:00:00",
-      "waitTimeMS": 0,
-      "waitTime": "00:00:00",
-      "departments": null,
-      "branches": [
-          "London"
-      ]
-  }
-
-  PBX : chapmanfreebornai631 (United States)
-  URL : https://api.8x8.com/analytics/work/v2/call-records
-  Window: 2026-03-20 12:31:33  →  2026-03-27 12:31:33 (CET, last 7 days)
-  HTTP 200
-  Total records in window : 191
-  Records returned (max 5): 5
-  First record:
-  {
-      "dnis": "16467474275",
-      "aaDestination": null,
-      "callId": "1774332147852",
-      "startTimeUTC": 1774561584199,
-      "startTime": "2026-03-26T22:46:24.199+0100",
-      "connectTimeUTC": 0,
-      "connectTime": "0",
-      "disconnectedTimeUTC": 1774561625313,
-      "disconnectedTime": "2026-03-26T22:47:05.313+0100",
-      "talkTimeMS": 0,
-      "talkTime": "00:00:00",
-      "caller": "+2332324",
-      "callerName": "MARS KIIHH",
-      "callee": "19755",
-      "calleeName": "Hord LIOO",
-      "direction": "Incoming",
-      "callerId": "KO LIK,+2343525322",
-      "missed": "Missed",
-      "abandoned": "-",
-      "answered": "-",
-      "answeredTime": 0,
-      "calleeDisconnectOnHold": "",
-      "callerDisconnectOnHold": "",
-      "pbxId": "chapmanfreebornai631",
-      "sipCallId": "57332907_64349144@206.146.99.28",
-      "lastLegDisposition": "Voicemail",
-      "callLegCount": "3",
-      "callTime": 41114,
-      "ringDuration": 15053,
-      "abandonedTime": 0,
-      "calleeHoldDurationMS": 0,
-      "calleeHoldDuration": "00:00:00",
-      "waitTimeMS": 0,
-      "waitTime": "00:00:00",
-      "departments": null,
-      "branches": [
-          "New York"
-      ]
-  }
-
-============================================================
-Summary
-============================================================
-  [OK  ]  chapmanfreebornai (Spain)
-  [OK  ]  chapmanfreebornai497 (Hong Kong)
-  [OK  ]  chapmanfreebornai519 (United Kingdom)
-  [OK  ]  chapmanfreebornai631 (United States)
+dagster._core.errors.DagsterUserCodeLoadError: Error occurred during the loading of Dagster definitions in
+executable_path=/opt/my_data_platform/.venv/bin/python3.13, module_name=pipeline.definitions, working_directory=/opt/my_data_platform
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_grpc/server.py", line 465, in __init__
+    self._loaded_repositories: LoadedRepositories | None = LoadedRepositories(
+                                                           ~~~~~~~~~~~~~~~~~~^
+        loadable_target_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        defs_state_info=self._defs_state_info,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_grpc/server.py", line 264, in __init__
+    with user_code_error_boundary(
+         ~~~~~~~~~~~~~~~~~~~~~~~~^
+        DagsterUserCodeLoadError,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+        ),
+        ^^
+    ):
+    ^
+  File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/errors.py", line 289, in user_code_error_boundary
+    raise new_error from e
+The above exception was caused by the following exception:
+dagster_dbt.errors.DagsterDbtManifestNotFoundError: /opt/my_data_platform/dbt_project/target/manifest.json does not exist.
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/errors.py", line 279, in user_code_error_boundary
+    yield
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_grpc/server.py", line 277, in __init__
+    loadable_targets = get_loadable_targets(
+        python_file=loadable_target_origin.python_file,
+    ...<5 lines>...
+        resolve_lazy_defs=True,
+    )
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_grpc/utils.py", line 56, in get_loadable_targets
+    else loadable_targets_from_python_module(module_name, working_directory)
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/workspace/autodiscovery.py", line 33, in loadable_targets_from_python_module
+    module = load_python_module(
+        module_name,
+        working_directory=working_directory,
+        remove_from_path_fn=remove_from_path_fn,
+    )
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/code_pointer.py", line 137, in load_python_module
+    return importlib.import_module(module_name)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/opt/my_data_platform/pipeline/definitions.py", line 31, in <module>
+    @dbt_assets(
+     ~~~~~~~~~~^
+        manifest=dbt_project.manifest_path,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        name="dbt_models",
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/decorator_utils.py", line 217, in wrapped_with_context_manager_fn
+    return fn(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/asset_decorator.py", line 314, in dbt_assets
+    manifest = validate_manifest(manifest)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/dbt_manifest.py", line 38, in validate_manifest
+    manifest = read_manifest_path(manifest.resolve())
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/dbt_manifest.py", line 25, in read_manifest_path
+    raise DagsterDbtManifestNotFoundError(f"{manifest_path} does not exist.")
