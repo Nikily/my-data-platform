@@ -1,135 +1,36 @@
-dagster._core.errors.DagsterExecutionStepExecutionError: Error occurred while executing op "eight_x_eight_cdr_raw":
-
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_plan.py", line 247, in dagster_event_sequence_for_step
-    yield from check.generator(step_events)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 505, in core_dagster_event_sequence_for_step
-    for user_event in _step_output_error_checked_user_event_sequence(
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        step_context,
-        ^^^^^^^^^^^^^
-        _process_asset_results_to_events(step_context, user_event_sequence),
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ):
-    ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 184, in _step_output_error_checked_user_event_sequence
-    for user_event in user_event_sequence:
-                      ^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 88, in _process_asset_results_to_events
-    for user_event in user_event_sequence:
-                      ^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute.py", line 188, in execute_core_compute
-    for step_output in _yield_compute_results(step_context, inputs, compute_fn, compute_context):
-                       ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute.py", line 157, in _yield_compute_results
-    for event in iterate_with_context(
-                 ~~~~~~~~~~~~~~~~~~~~^
-        lambda: op_execution_error_boundary(
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ...<7 lines>...
-        user_event_generator,
-        ^^^^^^^^^^^^^^^^^^^^^
-    ):
-    ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_utils/__init__.py", line 392, in iterate_with_context
-    with context_fn():
-         ~~~~~~~~~~^^
-  File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
-    self.gen.throw(value)
-    ~~~~~~~~~~~~~~^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/utils.py", line 87, in op_execution_error_boundary
-    raise error_cls(
-    ...<4 lines>...
-    ) from e
-
-The above exception was caused by the following exception:
-dlt.pipeline.exceptions.PipelineStepFailed: Pipeline execution failed at `step=extract` when processing package with `load_id=1774866781.0114477` with exception:
-
-<class 'dlt.extract.exceptions.ResourceExtractionError'>
-In processing pipe `call_detail_records`: extraction of resource `call_detail_records` in `generator` `call_detail_records_resource` caused an exception: 400 Client Error: Bad Request for url: https://api.8x8.com/analytics/work/v2/call-records?scrollId=Y2hhcG1hbmZyZWVib3JuYWlfMTc2NTgzODgxNzg0NF8xNzcyNDQ0MDUyOTMw
-
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/utils.py", line 57, in op_execution_error_boundary
-    yield
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_utils/__init__.py", line 394, in iterate_with_context
-    next_output = next(iterator)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute_generator.py", line 135, in _coerce_op_compute_fn_to_iterator
-    result = invoke_compute_fn(
-        fn, context, kwargs, context_arg_provided, config_arg_class, resource_arg_mapping
-    )
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute_generator.py", line 115, in invoke_compute_fn
-    return fn(context, **args_to_pass) if context_arg_provided else fn(**args_to_pass)
-           ~~^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/pipeline/assets/sources/eight_x_eight_cdr.py", line 196, in eight_x_eight_cdr_raw
-    load_info = pipeline.run(eight_x_eight_source(pbx_id=pbx_id, token=token))
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 224, in _wrap
-    step_info = f(self, *args, **kwargs)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 272, in _wrap
-    return f(self, *args, **kwargs)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 757, in run
-    self.extract(
-    ~~~~~~~~~~~~^
-        data,
-        ^^^^^
-    ...<8 lines>...
-        loader_file_format=loader_file_format,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 224, in _wrap
-    step_info = f(self, *args, **kwargs)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 178, in _wrap
-    rv = f(self, *args, **kwargs)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 164, in _wrap
-    return f(self, *args, **kwargs)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 272, in _wrap
-    return f(self, *args, **kwargs)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 516, in extract
-    raise PipelineStepFailed(
-    ...<5 lines>...
-    ) from exc
-
-The above exception was caused by the following exception:
-dlt.extract.exceptions.ResourceExtractionError: In processing pipe `call_detail_records`: extraction of resource `call_detail_records` in `generator` `call_detail_records_resource` caused an exception: 400 Client Error: Bad Request for url: https://api.8x8.com/analytics/work/v2/call-records?scrollId=Y2hhcG1hbmZyZWVib3JuYWlfMTc2NTgzODgxNzg0NF8xNzcyNDQ0MDUyOTMw
-
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 493, in extract
-    self._extract_source(
-    ~~~~~~~~~~~~~~~~~~~~^
-        extract_step,
-        ^^^^^^^^^^^^^
-    ...<3 lines>...
-        refresh=refresh or self.refresh,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 1388, in _extract_source
-    load_id = extract.extract(
-        source, max_parallel_items, workers, load_package_state_update=load_package_state_update
-    )
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/extract/extract.py", line 487, in extract
-    self._extract_single_source(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        load_id,
-        ^^^^^^^^
-    ...<2 lines>...
-        workers=workers,
-        ^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/extract/extract.py", line 405, in _extract_single_source
-    for pipe_item in pipes:
-                     ^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/extract/pipe_iterator.py", line 158, in __next__
-    pipe_item = self._get_source_item()
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/extract/pipe_iterator.py", line 304, in _get_source_item
-    raise ResourceExtractionError(pipe.name, gen, str(ex), "generator") from ex
-
-The above exception was caused by the following exception:
-requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: https://api.8x8.com/analytics/work/v2/call-records?scrollId=Y2hhcG1hbmZyZWVib3JuYWlfMTc2NTgzODgxNzg0NF8xNzcyNDQ0MDUyOTMw
-
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/extract/pipe_iterator.py", line 274, in _get_source_item
-    pipe_item = next(gen)
-  File "/opt/my_data_platform/pipeline/assets/sources/eight_x_eight_cdr.py", line 148, in call_detail_records_resource
-    response.raise_for_status()
-    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/requests/models.py", line 1026, in raise_for_status
-    raise HTTPError(http_error_msg, response=self)
-
+[0m12:27:23  Running with dbt=1.11.7
+[0m12:27:24  Registered adapter: duckdb=1.10.1
+[0m12:27:24  Found 4 models, 1 seed, 14 data tests, 3 sources, 590 macros
+[0m12:27:24  
+[0m12:27:24  Concurrency: 4 threads (target='prod')
+[0m12:27:24  
+[0m12:27:24  1 of 4 START sql view model main_staging.stg_8x8_call_detail_records ........... [RUN]
+[0m12:27:24  2 of 4 START sql view model main_staging.stg_example ........................... [RUN]
+[0m12:27:24  1 of 4 ERROR creating sql view model main_staging.stg_8x8_call_detail_records .. [[31mERROR[0m in 0.08s]
+[0m12:27:24  2 of 4 ERROR creating sql view model main_staging.stg_example .................. [[31mERROR[0m in 0.08s]
+[0m12:27:24  3 of 4 SKIP relation main_marts.mart_8x8_call_summary .......................... [[33mSKIP[0m]
+[0m12:27:24  4 of 4 SKIP relation main_marts.mart_example ................................... [[33mSKIP[0m]
+[0m12:27:24  
+[0m12:27:24  Finished running 2 table models, 2 view models in 0 hours 0 minutes and 0.21 seconds (0.21s).
+[0m12:27:24  
+[0m12:27:24  [31mCompleted with 2 errors, 0 partial successes, and 0 warnings:[0m
+[0m12:27:24  
+[0m12:27:24  [31mFailure in model stg_8x8_call_detail_records (models/staging/8x8/stg_8x8_call_detail_records.sql)[0m
+[0m12:27:24    Runtime Error in model stg_8x8_call_detail_records (models/staging/8x8/stg_8x8_call_detail_records.sql)
+  Catalog Error: Table with name "raw_eight_x_eight.call_detail_records" does not exist because schema "raw_eight_x_eight" does not exist.
+  
+  LINE 24:     select * from "my_data_platform"."raw_eight_x_eight"."call_detail_records...
+                             ^
+[0m12:27:24  
+[0m12:27:24    compiled code at target/compiled/my_data_platform/models/staging/8x8/stg_8x8_call_detail_records.sql
+[0m12:27:24  
+[0m12:27:24  [31mFailure in model stg_example (models/staging/stg_example.sql)[0m
+[0m12:27:24    Runtime Error in model stg_example (models/staging/stg_example.sql)
+  Catalog Error: Table with name "raw_rest_api.orders" does not exist because schema "raw_rest_api" does not exist.
+  
+  LINE 21:     select * from "my_data_platform"."raw_rest_api"."orders"
+                             ^
+[0m12:27:24  
+[0m12:27:24    compiled code at target/compiled/my_data_platform/models/staging/stg_example.sql
+[0m12:27:24  
+[0m12:27:24  Done. PASS=0 WARN=0 ERROR=2 SKIP=2 NO-OP=0 TOTAL=4
