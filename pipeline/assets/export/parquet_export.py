@@ -32,13 +32,13 @@ from azure.identity import ClientSecretCredential
 from azure.storage.blob import BlobServiceClient
 from dagster import AssetExecutionContext, asset
 
-# ── List every dbt mart model that should be exported to Power BI ─────────────
-# These must match the model names in dbt_project/models/marts/*.sql
-MART_TABLES = [
-    "mart_8x8_call_summary",
-    # "mart_example",       # generic placeholder — enable when needed
-    # "dim_customer",
-    # "fact_orders",
+# ── Tables to export — (schema, table_name) ───────────────────────────────────
+EXPORT_TABLES: list[tuple[str, str]] = [
+    # Aggregated daily summary (mart)
+    ("main_marts",   "mart_8x8_call_summary"),
+    # Full CDR detail for dashboard drill-through
+    ("main_staging", "stg_8x8_call_detail_records"),
+    # ("main_marts", "mart_example"),   # generic placeholder — enable when needed
 ]
 
 
@@ -91,11 +91,11 @@ def parquet_export(context: AssetExecutionContext) -> None:
     )
 
     with duckdb.connect(os.environ["DUCKDB_PATH"], read_only=True) as conn:
-        for table in MART_TABLES:
+        for schema, table in EXPORT_TABLES:
             row_count = _export_table_to_blob(
                 conn=conn,
                 blob_client=blob_service,
-                schema="main_marts",
+                schema=schema,
                 table=table,
                 container=container,
                 blob_prefix=blob_prefix,
