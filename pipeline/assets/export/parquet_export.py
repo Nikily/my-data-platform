@@ -9,8 +9,8 @@ using the native Azure Blob Storage connector — no gateway or ODBC driver
 required.
 
 HOW TO CUSTOMISE:
-  1. Set AZURE_STORAGE_ACCOUNT_NAME, AZURE_STORAGE_ACCOUNT_KEY,
-     EXPORT_CONTAINER and EXPORT_PATH in your .env file.
+  1. Set AZURE_STORAGE_ACCOUNT_NAME, AZURE_TENANT_ID, AZURE_CLIENT_ID,
+     AZURE_CLIENT_SECRET, EXPORT_CONTAINER and EXPORT_PATH in your .env file.
   2. Add the name of each dbt mart model you want to export to MART_TABLES.
   3. In Power BI, connect to Azure Blob Storage, point at EXPORT_CONTAINER,
      and load the Parquet files from EXPORT_PATH.
@@ -28,6 +28,7 @@ import os
 import duckdb
 import pyarrow as pa
 import pyarrow.parquet as pq
+from azure.identity import ClientSecretCredential
 from azure.storage.blob import BlobServiceClient
 from dagster import AssetExecutionContext, asset
 
@@ -77,13 +78,17 @@ def _export_table_to_blob(
 )
 def parquet_export(context: AssetExecutionContext) -> None:
     account_name = os.environ["AZURE_STORAGE_ACCOUNT_NAME"]
-    account_key = os.environ["AZURE_STORAGE_ACCOUNT_KEY"]
     container = os.environ["EXPORT_CONTAINER"]
     blob_prefix = os.environ.get("EXPORT_PATH", "marts/")
 
+    credential = ClientSecretCredential(
+        tenant_id=os.environ["AZURE_TENANT_ID"],
+        client_id=os.environ["AZURE_CLIENT_ID"],
+        client_secret=os.environ["AZURE_CLIENT_SECRET"],
+    )
     blob_service = BlobServiceClient(
         account_url=f"https://{account_name}.blob.core.windows.net",
-        credential=account_key,
+        credential=credential,
     )
 
     with duckdb.connect(os.environ["DUCKDB_PATH"], read_only=True) as conn:
