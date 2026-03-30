@@ -24,6 +24,19 @@ pbx_map as (
     select pbx_id, country from {{ ref('pbx_country_mapping') }}
 ),
 
+-- dlt flattens nested arrays into child tables; re-aggregate them here
+departments_agg as (
+    select _dlt_root_id, list(value) as departments
+    from {{ source('raw_eight_x_eight', 'call_detail_records__departments') }}
+    group by _dlt_root_id
+),
+
+branches_agg as (
+    select _dlt_root_id, list(value) as branches
+    from {{ source('raw_eight_x_eight', 'call_detail_records__branches') }}
+    group by _dlt_root_id
+),
+
 staged as (
     select
         -- ── Identifiers ───────────────────────────────────────────────────────
@@ -93,15 +106,17 @@ staged as (
         s.caller_disconnect_on_hold,
 
         -- ── Classification ────────────────────────────────────────────────
-        s.departments,
-        s.branches,
+        dept.departments,
+        br.branches,
 
         -- ── dlt metadata ──────────────────────────────────────────────────
         s._dlt_load_id,
         s._dlt_id
 
     from source s
-    left join pbx_map p on s.pbx_id = p.pbx_id
+    left join pbx_map p    on s.pbx_id  = p.pbx_id
+    left join departments_agg dept on s._dlt_id = dept._dlt_root_id
+    left join branches_agg    br   on s._dlt_id = br._dlt_root_id
 )
 
 select * from staged

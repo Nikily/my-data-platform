@@ -96,7 +96,7 @@ def parquet_export(context: AssetExecutionContext) -> None:
             row_count = _export_table_to_blob(
                 conn=conn,
                 blob_client=blob_service,
-                schema="marts",
+                schema="main_marts",
                 table=table,
                 container=container,
                 blob_prefix=blob_prefix,

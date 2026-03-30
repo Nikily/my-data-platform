@@ -9,6 +9,10 @@ sources:
       Schema verified against live API responses (March 2026).
     schema: raw_eight_x_eight
     tables:
+      - name: call_detail_records__departments
+        description: "dlt child table — one row per department per call leg."
+      - name: call_detail_records__branches
+        description: "dlt child table — one row per branch per call leg."
       - name: call_detail_records
         description: >
           One row per call leg. Loaded incrementally per PBX; deduplicated on call_id.
