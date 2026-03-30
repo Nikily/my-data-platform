@@ -145,6 +145,13 @@ def call_detail_records_resource(
             params=params,
             timeout=_TIMEOUT,
         )
+
+        # A 400 on a scroll request means the cursor expired — stop pagination
+        # cleanly so that already-yielded records are committed and the next run
+        # resumes from the watermark.
+        if response.status_code == 400 and "scrollId" in params:
+            break
+
         response.raise_for_status()
         payload = response.json()
 
