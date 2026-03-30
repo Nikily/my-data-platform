@@ -1,24 +1,24 @@
-[0m12:48:39  Running with dbt=1.11.7
-[0m12:48:40  Registered adapter: duckdb=1.10.1
-[0m12:48:40  Found 4 models, 1 seed, 14 data tests, 3 sources, 590 macros
-[0m12:48:40  
-[0m12:48:40  Concurrency: 4 threads (target='prod')
-[0m12:48:40  
-[0m12:48:40  1 of 2 START sql view model main_staging.stg_8x8_call_detail_records ........... [RUN]
-[0m12:48:40  1 of 2 ERROR creating sql view model main_staging.stg_8x8_call_detail_records .. [[31mERROR[0m in 0.05s]
-[0m12:48:40  2 of 2 SKIP relation main_marts.mart_8x8_call_summary .......................... [[33mSKIP[0m]
-[0m12:48:40  
-[0m12:48:40  Finished running 1 table model, 1 view model in 0 hours 0 minutes and 0.17 seconds (0.17s).
-[0m12:48:40  
-[0m12:48:40  [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
-[0m12:48:40  
-[0m12:48:40  [31mFailure in model stg_8x8_call_detail_records (models/staging/8x8/stg_8x8_call_detail_records.sql)[0m
-[0m12:48:40    Runtime Error in model stg_8x8_call_detail_records (models/staging/8x8/stg_8x8_call_detail_records.sql)
+[0m12:52:41  Running with dbt=1.11.7
+[0m12:52:42  Registered adapter: duckdb=1.10.1
+[0m12:52:42  Found 4 models, 1 seed, 14 data tests, 3 sources, 590 macros
+[0m12:52:42  
+[0m12:52:42  Concurrency: 4 threads (target='prod')
+[0m12:52:42  
+[0m12:52:42  1 of 2 START sql view model main_staging.stg_8x8_call_detail_records ........... [RUN]
+[0m12:52:42  1 of 2 ERROR creating sql view model main_staging.stg_8x8_call_detail_records .. [[31mERROR[0m in 0.05s]
+[0m12:52:42  2 of 2 SKIP relation main_marts.mart_8x8_call_summary .......................... [[33mSKIP[0m]
+[0m12:52:42  
+[0m12:52:42  Finished running 1 table model, 1 view model in 0 hours 0 minutes and 0.17 seconds (0.17s).
+[0m12:52:42  
+[0m12:52:42  [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[0m12:52:42  
+[0m12:52:42  [31mFailure in model stg_8x8_call_detail_records (models/staging/8x8/stg_8x8_call_detail_records.sql)[0m
+[0m12:52:42    Runtime Error in model stg_8x8_call_detail_records (models/staging/8x8/stg_8x8_call_detail_records.sql)
   Catalog Error: Table with name "raw_eight_x_eight.call_detail_records" does not exist because schema "raw_eight_x_eight" does not exist.
   
   LINE 24:     select * from "my_data_platform"."raw_eight_x_eight"."call_detail_records...
                              ^
-[0m12:48:40  
-[0m12:48:40    compiled code at target/compiled/my_data_platform/models/staging/8x8/stg_8x8_call_detail_records.sql
-[0m12:48:40  
-[0m12:48:40  Done. PASS=0 WARN=0 ERROR=1 SKIP=1 NO-OP=0 TOTAL=2
+[0m12:52:42  
+[0m12:52:42    compiled code at target/compiled/my_data_platform/models/staging/8x8/stg_8x8_call_detail_records.sql
+[0m12:52:42  
+[0m12:52:42  Done. PASS=0 WARN=0 ERROR=1 SKIP=1 NO-OP=0 TOTAL=2
