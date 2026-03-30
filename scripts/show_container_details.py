@@ -30,6 +30,7 @@ credential = ClientSecretCredential(
 
 account_name = os.environ["AZURE_STORAGE_ACCOUNT_NAME"]
 account_url = f"https://{account_name}.blob.core.windows.net"
+dfs_url = f"https://{account_name}.dfs.core.windows.net"
 
 client = BlobServiceClient(account_url=account_url, credential=credential)
 container_client = client.get_container_client(container_name)
@@ -48,8 +49,12 @@ print()
 print("── Power BI / Azure Storage connection details ──────────────")
 print(f"  Account name   : {account_name}")
 print(f"  Container name : {container_name}")
-print(f"  Blob endpoint  : {account_url}")
-print(f"  Container URL  : {account_url}/{container_name}")
+print()
+print("  Use this URL in Power BI (ADLS Gen2 connector):")
+print(f"    {dfs_url}/{container_name}")
+print()
+print("  Blob endpoint (for SDK / pipeline use only):")
+print(f"    {account_url}/{container_name}")
 print()
 print("── Authentication (service principal) ───────────────────────")
 print(f"  Tenant ID      : {os.environ['AZURE_TENANT_ID']}")
