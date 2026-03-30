@@ -171,6 +171,7 @@ def eight_x_eight_source(pbx_id: str, token: str) -> dlt.sources.DltSource:
 @asset(
     group_name="raw_ingestion",
     kinds={"dlt", "duckdb"},
+    deps=["azure_container_8x8"],
     description=(
         "Incrementally loads 8x8 Work CDR data into DuckDB for each PBX defined "
         "in dbt_project/seeds/8x8/pbx_country_mapping.csv. Fetches a Bearer token "

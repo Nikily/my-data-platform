@@ -14,6 +14,7 @@ from dagster_dbt import DbtCliResource, DbtProject, dbt_assets
 from dagster_duckdb import DuckDBResource
 
 from pipeline.assets.export import parquet_export
+from pipeline.assets.infra import azure_containers
 from pipeline.assets.sources import adls_delta, csv_local, csv_sftp, eight_x_eight_cdr, rest_api
 from pipeline.schedules.daily_schedule import daily_schedule
 
@@ -39,12 +40,14 @@ def dbt_models(context, dbt: DbtCliResource):
 
 
 # ── Collect all assets ────────────────────────────────────────────────────────
+infra_assets = load_assets_from_modules([azure_containers])
 ingestion_assets = load_assets_from_modules([rest_api, csv_local, csv_sftp, adls_delta, eight_x_eight_cdr])
 export_assets = load_assets_from_modules([parquet_export])
 
 # ── Definitions ───────────────────────────────────────────────────────────────
 defs = Definitions(
     assets=[
+        *infra_assets,
         *ingestion_assets,
         dbt_models,
         *export_assets,
