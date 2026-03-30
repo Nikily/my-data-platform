@@ -1,20 +1,101 @@
+dagster._core.errors.DagsterExecutionStepExecutionError: Error occurred while executing op "parquet_export":
+
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_plan.py", line 247, in dagster_event_sequence_for_step
+    yield from check.generator(step_events)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 505, in core_dagster_event_sequence_for_step
+    for user_event in _step_output_error_checked_user_event_sequence(
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        step_context,
+        ^^^^^^^^^^^^^
+        _process_asset_results_to_events(step_context, user_event_sequence),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 184, in _step_output_error_checked_user_event_sequence
+    for user_event in user_event_sequence:
+                      ^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 88, in _process_asset_results_to_events
+    for user_event in user_event_sequence:
+                      ^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute.py", line 188, in execute_core_compute
+    for step_output in _yield_compute_results(step_context, inputs, compute_fn, compute_context):
+                       ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute.py", line 157, in _yield_compute_results
+    for event in iterate_with_context(
+                 ~~~~~~~~~~~~~~~~~~~~^
+        lambda: op_execution_error_boundary(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+        user_event_generator,
+        ^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_utils/__init__.py", line 392, in iterate_with_context
+    with context_fn():
+         ~~~~~~~~~~^^
+  File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/utils.py", line 87, in op_execution_error_boundary
+    raise error_cls(
+    ...<4 lines>...
+    ) from e
+
+The above exception was caused by the following exception:
+_duckdb.CatalogException: Catalog Error: Table with name "marts.mart_8x8_call_summary" does not exist because schema "marts" does not exist.
+
+LINE 1: SELECT * FROM marts.mart_8x8_call_summary;
+                      ^
+
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/utils.py", line 57, in op_execution_error_boundary
+    yield
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_utils/__init__.py", line 394, in iterate_with_context
+    next_output = next(iterator)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute_generator.py", line 135, in _coerce_op_compute_fn_to_iterator
+    result = invoke_compute_fn(
+        fn, context, kwargs, context_arg_provided, config_arg_class, resource_arg_mapping
+    )
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute_generator.py", line 115, in invoke_compute_fn
+    return fn(context, **args_to_pass) if context_arg_provided else fn(**args_to_pass)
+           ~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/pipeline/assets/export/parquet_export.py", line 94, in parquet_export
+    with duckdb.connect(os.environ["DUCKDB_PATH"], read_only=True) as conn:
+         ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/pipeline/assets/export/parquet_export.py", line 96, in parquet_export
+    row_count = _export_table_to_blob(
+        conn=conn,
+    ...<4 lines>...
+        blob_prefix=blob_prefix,
+    )
+  File "/opt/my_data_platform/pipeline/assets/export/parquet_export.py", line 54, in _export_table_to_blob
+    arrow_table: pa.Table = conn.execute(
+                            ~~~~~~~~~~~~^
+        f"SELECT * FROM {schema}.{table};"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ).fetch_arrow_table()
+    ^
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 dagster_dbt.errors.DagsterDbtCliRuntimeError: The dbt CLI process with command
 
-`/opt/my_data_platform/.venv/bin/dbt run --select my_data_platform.staging.8x8.stg_8x8_call_detail_records my_data_platform.8x8.pbx_country_mapping my_data_platform.marts.8x8.mart_8x8_call_summary`
+`/opt/my_data_platform/.venv/bin/dbt run --select my_data_platform.marts.8x8.mart_8x8_call_summary my_data_platform.staging.8x8.stg_8x8_call_detail_records my_data_platform.8x8.pbx_country_mapping`
 
-failed with exit code `1`. Check the stdout in the Dagster compute logs for the full information about the error, or view the dbt debug log: /opt/my_data_platform/dbt_project/target/dbt_models-3f570fe-3a30ba0/dbt.log.
+failed with exit code `1`. Check the stdout in the Dagster compute logs for the full information about the error, or view the dbt debug log: /opt/my_data_platform/dbt_project/target/dbt_models-f6c302f-438c06b/dbt.log.
 
 Errors parsed from dbt logs:
 
-1 of 2 ERROR creating sql view model main_staging.stg_8x8_call_detail_records .. [[31mERROR[0m in 0.05s]
+1 of 2 ERROR creating sql view model main_staging.stg_8x8_call_detail_records .. [[31mERROR[0m in 0.06s]
 
 [31mFailure in model stg_8x8_call_detail_records (models/staging/8x8/stg_8x8_call_detail_records.sql)[0m
 
   Runtime Error in model stg_8x8_call_detail_records (models/staging/8x8/stg_8x8_call_detail_records.sql)
-  Catalog Error: Table with name "main_seeds.pbx_country_mapping" does not exist because schema "main_seeds" does not exist.
+  Binder Error: Values list "s" does not have a column named "departments"
   
-  LINE 28:     select pbx_id, country from "platform"."main_seeds"."pbx_country_mapping"
-                                           ^
+  LINE 100:         s.departments,
+                    ^
 
   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_plan.py", line 247, in dagster_event_sequence_for_step
     yield from check.generator(step_events)
@@ -60,70 +141,4 @@ Errors parsed from dbt logs:
     ~~~~~~~~~~~~~~~~~~~~^^
   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_cli_invocation.py", line 470, in _raise_on_error
     raise error
-
------------------------------------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------------------------------------
-
-dagster._core.errors.DagsterExecutionStepExecutionError: Error occurred while executing op "parquet_export":
-
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_plan.py", line 247, in dagster_event_sequence_for_step
-    yield from check.generator(step_events)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 505, in core_dagster_event_sequence_for_step
-    for user_event in _step_output_error_checked_user_event_sequence(
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        step_context,
-        ^^^^^^^^^^^^^
-        _process_asset_results_to_events(step_context, user_event_sequence),
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ):
-    ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 184, in _step_output_error_checked_user_event_sequence
-    for user_event in user_event_sequence:
-                      ^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 88, in _process_asset_results_to_events
-    for user_event in user_event_sequence:
-                      ^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute.py", line 188, in execute_core_compute
-    for step_output in _yield_compute_results(step_context, inputs, compute_fn, compute_context):
-                       ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute.py", line 157, in _yield_compute_results
-    for event in iterate_with_context(
-                 ~~~~~~~~~~~~~~~~~~~~^
-        lambda: op_execution_error_boundary(
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ...<7 lines>...
-        user_event_generator,
-        ^^^^^^^^^^^^^^^^^^^^^
-    ):
-    ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_utils/__init__.py", line 392, in iterate_with_context
-    with context_fn():
-         ~~~~~~~~~~^^
-  File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
-    self.gen.throw(value)
-    ~~~~~~~~~~~~~~^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/utils.py", line 87, in op_execution_error_boundary
-    raise error_cls(
-    ...<4 lines>...
-    ) from e
-
-The above exception was caused by the following exception:
-KeyError: 'AZURE_STORAGE_ACCOUNT_KEY'
-
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/utils.py", line 57, in op_execution_error_boundary
-    yield
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_utils/__init__.py", line 394, in iterate_with_context
-    next_output = next(iterator)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute_generator.py", line 135, in _coerce_op_compute_fn_to_iterator
-    result = invoke_compute_fn(
-        fn, context, kwargs, context_arg_provided, config_arg_class, resource_arg_mapping
-    )
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute_generator.py", line 115, in invoke_compute_fn
-    return fn(context, **args_to_pass) if context_arg_provided else fn(**args_to_pass)
-           ~~^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/pipeline/assets/export/parquet_export.py", line 80, in parquet_export
-    account_key = os.environ["AZURE_STORAGE_ACCOUNT_KEY"]
-                  ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "<frozen os>", line 716, in __getitem__
 
