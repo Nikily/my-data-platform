@@ -43,3 +43,23 @@ def azure_container_8x8(context: AssetExecutionContext) -> None:
     else:
         container_client.create_container()
         context.log.info(f"Created container '{container}'.")
+
+
+@asset(
+    group_name="infra",
+    kinds={"azure"},
+    description=(
+        "Ensures the Azure Blob Storage container for Power BI Parquet exports exists. "
+        "Creates it if absent. Container name is read from EXPORT_CONTAINER."
+    ),
+)
+def azure_container_export(context: AssetExecutionContext) -> None:
+    container = os.environ["EXPORT_CONTAINER"]
+    client = _blob_service_client()
+    container_client = client.get_container_client(container)
+
+    if container_client.exists():
+        context.log.info(f"Container '{container}' already exists.")
+    else:
+        container_client.create_container()
+        context.log.info(f"Created container '{container}'.")

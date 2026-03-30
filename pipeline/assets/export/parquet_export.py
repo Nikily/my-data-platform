@@ -73,8 +73,7 @@ def _export_table_to_blob(
         "Exports dbt mart tables from DuckDB as Parquet files to Azure Blob Storage "
         "so Power BI Service and Desktop can connect natively."
     ),
-    # Declare dependency on the dbt models asset (defined in definitions.py)
-    deps=["dbt_models"],
+    deps=["dbt_models", "azure_container_export"],
 )
 def parquet_export(context: AssetExecutionContext) -> None:
     account_name = os.environ["AZURE_STORAGE_ACCOUNT_NAME"]
