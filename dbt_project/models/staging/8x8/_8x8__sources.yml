@@ -9,6 +9,10 @@ sources:
       Schema verified against live API responses (March 2026).
     schema: raw_eight_x_eight
     tables:
+      - name: users
+        description: "8x8 user list loaded by dlt from the Admin Provisioning API."
+      - name: users__service_info__extensions
+        description: "dlt child table — one row per extension per user."
       - name: call_detail_records__departments
         description: "dlt child table — one row per department per call leg."
       - name: call_detail_records__branches

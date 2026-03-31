@@ -23,6 +23,12 @@ models:
       +materialized: view
       +schema: staging
 
+    # Intermediate models join and enrich staging data.
+    # Materialised as views — no data duplication, always up to date.
+    intermediate:
+      +materialized: view
+      +schema: intermediate
+
     # Mart models are the analytics-ready output consumed by Power BI.
     # Materialised as tables — written to DuckDB and exported as Parquet.
     marts:

@@ -45,6 +45,7 @@ from typing import Iterator
 import dlt
 import requests
 from dagster import AssetExecutionContext, asset
+from pipeline.utils.eight_x_eight import fetch_token
 
 # ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -59,11 +60,10 @@ _PBX_CSV = (
     / "dbt_project" / "seeds" / "8x8" / "pbx_country_mapping.csv"
 )
 
-_TOKEN_PATH = "/analytics/work/v1/oauth/token"
-_CDR_PATH   = "/analytics/work/v2/call-records"
-_PAGE_SIZE  = 7000
-_TIMEZONE   = "Europe/Paris"
-_TIMEOUT    = 60
+_CDR_PATH  = "/analytics/work/v2/call-records"
+_PAGE_SIZE = 7000
+_TIMEZONE  = "Europe/Paris"
+_TIMEOUT   = 60
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -76,25 +76,6 @@ def _load_pbx_list() -> list[tuple[str, str]]:
             for row in reader if row["pbx_id"].strip()
         ]
 
-
-def _fetch_token() -> str:
-    """
-    Exchange username + password for a Bearer token via POST /v1/oauth/token.
-    The 8x8-apikey header identifies the application; the body carries the
-    user credentials. Returns the access_token string (valid for 30 minutes).
-    """
-    base_url = os.environ["EIGHT_X_EIGHT_BASE_URL"].rstrip("/")
-    response = requests.post(
-        f"{base_url}{_TOKEN_PATH}",
-        headers={"8x8-apikey": os.environ["EIGHT_X_EIGHT_API_KEY"]},
-        data={
-            "username": os.environ["EIGHT_X_EIGHT_USERNAME"],
-            "password": os.environ["EIGHT_X_EIGHT_PASSWORD"],
-        },
-        timeout=_TIMEOUT,
-    )
-    response.raise_for_status()
-    return response.json()["access_token"]
 
 
 def _epoch_ms_to_api_str(epoch_ms: int) -> str:
@@ -190,7 +171,7 @@ def eight_x_eight_cdr_raw(context: AssetExecutionContext) -> None:
     context.log.info(f"Loaded {len(pbx_list)} PBX(es): {[p for p, _ in pbx_list]}")
 
     context.log.info("Fetching Bearer token from 8x8 token endpoint...")
-    token = _fetch_token()
+    token = fetch_token()
     context.log.info("Token obtained successfully.")
 
     for pbx_id, country in pbx_list:

@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: int_8x8_cdr_enriched
+    description: >
+      CDR call detail records enriched with user profile and site information.
+      One row per call leg. Agent columns are NULL when the internal party
+      cannot be matched to a known extension (e.g. external-only legs).
+    columns:
+      - name: call_id
+        description: "Unique call identifier. Primary key."
+        tests:
+          - not_null
+      - name: direction
+        description: "Call direction: Incoming or Outgoing."
+      - name: agent_user_id
+        description: "8x8 user ID of the matched internal agent. NULL if unmatched."
+      - name: agent_first_name
+        description: "First name of the internal agent."
+      - name: agent_last_name
+        description: "Last name of the internal agent."
+      - name: agent_department
+        description: "Department of the internal agent."
+      - name: agent_site_name
+        description: "Site name of the internal agent's office."
+      - name: agent_site_pbx_name
+        description: "PBX code name of the agent's site."
