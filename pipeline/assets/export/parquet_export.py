@@ -34,11 +34,8 @@ from dagster import AssetExecutionContext, asset
 
 # ── Tables to export — (schema, table_name) ───────────────────────────────────
 EXPORT_TABLES: list[tuple[str, str]] = [
-    # Aggregated daily summary (mart)
-    ("main_marts",   "mart_8x8_call_summary"),
-    # Full CDR detail for dashboard drill-through
-    ("main_staging", "stg_8x8_call_detail_records"),
-    # ("main_marts", "mart_example"),   # generic placeholder — enable when needed
+    # Enriched CDR detail with site information — primary Power BI source
+    ("main_intermediate", "int_8x8_cdr_enriched"),
 ]
 
 

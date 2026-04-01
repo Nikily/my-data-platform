@@ -17,6 +17,7 @@ from pipeline.assets.export import parquet_export
 from pipeline.assets.infra import azure_containers
 from pipeline.assets.sources import adls_delta, csv_local, csv_sftp, eight_x_eight_cdr, eight_x_eight_users, rest_api
 from pipeline.schedules.daily_schedule import daily_schedule
+from pipeline.schedules.eight_x_eight_schedule import eight_x_eight_schedule
 
 # ── dbt project setup ─────────────────────────────────────────────────────────
 DBT_PROJECT_DIR = Path(__file__).parent.parent / "dbt_project"
@@ -64,5 +65,5 @@ defs = Definitions(
             dbt_executable=DBT_EXECUTABLE,
         ),
     },
-    schedules=[daily_schedule],
+    schedules=[daily_schedule, eight_x_eight_schedule],
 )
