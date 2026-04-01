@@ -9,8 +9,6 @@ sources:
       Schema verified against live API responses (March 2026).
     schema: raw_eight_x_eight
     tables:
-      - name: pbx_sites
-        description: "8x8 site list per PBX loaded by dlt from the Analytics API."
       - name: users
         description: "8x8 user list loaded by dlt from the Admin Provisioning API."
       - name: users__service_info__extensions
