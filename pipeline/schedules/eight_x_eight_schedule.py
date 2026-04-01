@@ -11,7 +11,7 @@ Runs only the assets needed for the 8x8 CDR pipeline in dependency order:
 Runs daily at 07:00 CET/CEST (Europe/Paris).
 """
 
-from dagster import AssetSelection, ScheduleDefinition
+from dagster import AssetKey, AssetSelection, ScheduleDefinition
 
 eight_x_eight_schedule = ScheduleDefinition(
     name="daily_eight_x_eight",
@@ -20,8 +20,8 @@ eight_x_eight_schedule = ScheduleDefinition(
     target=AssetSelection.assets(
         "azure_container_8x8",
         "eight_x_eight_cdr_raw",
-        "stg_8x8_call_detail_records",
-        "int_8x8_cdr_enriched",
+        AssetKey(["staging", "stg_8x8_call_detail_records"]),
+        AssetKey(["intermediate", "int_8x8_cdr_enriched"]),
         "azure_container_export",
         "parquet_export",
     ),
