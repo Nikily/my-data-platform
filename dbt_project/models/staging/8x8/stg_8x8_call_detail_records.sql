@@ -58,6 +58,7 @@ staged as (
         -- ── Timestamps ────────────────────────────────────────────────────────
         -- epoch_ms() converts BIGINT milliseconds → TIMESTAMP (DuckDB built-in)
         epoch_ms(s.start_time_utc)                                  as started_at,
+        s.start_time                                                as started_at_local,
 
         -- connect_time_utc is 0 when the call never connected
         case

@@ -26,6 +26,7 @@ enriched as (
         cdr.callee_name,
         cdr.direction,
         cdr.started_at,
+        cdr.started_at_local,
         cdr.connected_at,
         cdr.disconnected_at,
         cdr.answered_at,
