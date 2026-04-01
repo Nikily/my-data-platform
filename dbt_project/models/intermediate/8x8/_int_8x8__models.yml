@@ -21,7 +21,5 @@ models:
         description: "Last name of the internal agent."
       - name: agent_department
         description: "Department of the internal agent."
-      - name: agent_site_name
-        description: "Site name of the internal agent's office."
-      - name: agent_site_pbx_name
-        description: "PBX code name of the agent's site."
+      - name: site_name
+        description: "Site name of the call, taken from the first element of the branches array."

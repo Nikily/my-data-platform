@@ -2,19 +2,12 @@
 --
 -- Intermediate model: enriches 8x8 CDR with site information.
 --
--- Join logic: cdr.pbx_id = site.pbx_id
--- Each CDR row gets the site name for the PBX it belongs to.
---
--- Note: if a PBX has multiple active sites, a row will appear for each.
--- In practice each PBX maps to one site; verify in stg_8x8_pbx_sites if
--- you see unexpected duplicates.
+-- Site name is derived directly from the `branches` array on each CDR row
+-- (populated by dlt from the call_detail_records__branches child table).
+-- The first element of the array is the site name for the call.
 
 with cdr as (
     select * from {{ ref('stg_8x8_call_detail_records') }}
-),
-
-sites as (
-    select * from {{ ref('stg_8x8_pbx_sites') }}
 ),
 
 enriched as (
@@ -58,12 +51,11 @@ enriched as (
         cdr.departments,
         cdr.branches,
 
-        -- ── Site information ──────────────────────────────────────────────────
-        s.site_id,
-        s.site_name
+        -- ── Site ──────────────────────────────────────────────────────────────
+        -- branches is a VARCHAR[] from the dlt child table; first element = site name
+        cdr.branches[1]     as site_name
 
     from cdr
-    left join sites s on cdr.pbx_id = s.pbx_id
 )
 
 select * from enriched
