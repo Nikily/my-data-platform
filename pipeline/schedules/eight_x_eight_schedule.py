@@ -20,7 +20,8 @@ eight_x_eight_schedule = ScheduleDefinition(
     target=AssetSelection.assets(
         "azure_container_8x8",
         "eight_x_eight_cdr_raw",
-        "dbt_models",
+        "stg_8x8_call_detail_records",
+        "int_8x8_cdr_enriched",
         "azure_container_export",
         "parquet_export",
     ),
