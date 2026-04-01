@@ -39,7 +39,13 @@ dagster._core.errors.DagsterInvalidDefinitionError: Failed to resolve asset job 
     ) from e
 
 The above exception was caused by the following exception:
-dagster._core.errors.DagsterInvalidDefinitionError: Error resolving selection for asset job "__anonymous_asset_job_daily_eight_x_eight": Selected keys must be a subset of existing executable asset keys. Invalid selected keys: {AssetKey(['dbt_models'])}
+dagster._core.errors.DagsterInvalidSubsetError: AssetKey(s) ['int_8x8_cdr_enriched', 'stg_8x8_call_detail_records'] were selected, but no AssetsDefinition objects supply these keys. Make sure all keys are spelled correctly, and all AssetsDefinitions are correctly added to the `Definitions`.
+
+For selected asset ["int_8x8_cdr_enriched"], did you mean one of the following?
+	["intermediate", "int_8x8_cdr_enriched"]
+
+For selected asset ["stg_8x8_call_detail_records"], did you mean one of the following?
+	["staging", "stg_8x8_call_detail_records"]
 
   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/definitions/repository_definition/repository_data_builder.py", line 127, in resolve_unresolved_job_def
     job_def = unresolved_job_def.resolve(
@@ -47,18 +53,15 @@ dagster._core.errors.DagsterInvalidDefinitionError: Error resolving selection fo
         default_executor_def=default_executor_def,
         resource_defs=top_level_resources,
     )
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/definitions/unresolved_asset_job_definition.py", line 178, in resolve
-    raise DagsterInvalidDefinitionError(
-        f'Error resolving selection for asset job "{self.name}": {e}'
-    ) from e
-
-The above exception was caused by the following exception:
-dagster._core.errors.DagsterInvalidDefinitionError: Selected keys must be a subset of existing executable asset keys. Invalid selected keys: {AssetKey(['dbt_models'])}
-
   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/definitions/unresolved_asset_job_definition.py", line 176, in resolve
     job_asset_graph = get_asset_graph_for_job(asset_graph, self.selection)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/definitions/assets/job/asset_job.py", line 243, in get_asset_graph_for_job
-    raise DagsterInvalidDefinitionError(
-    ...<2 lines>...
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/definitions/assets/job/asset_job.py", line 240, in get_asset_graph_for_job
+    selected_keys = selection.resolve(parent_asset_graph)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/definitions/asset_selection.py", line 500, in resolve
+    return self.resolve_inner(asset_graph, allow_missing=allow_missing)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/definitions/asset_selection.py", line 1227, in resolve_inner
+    raise DagsterInvalidSubsetError(
+    ...<4 lines>...
     )
 
