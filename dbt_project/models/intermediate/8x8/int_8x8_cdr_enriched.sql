@@ -1,21 +1,20 @@
 -- int_8x8_cdr_enriched.sql
 --
--- Intermediate model: enriches 8x8 CDR with user and site information.
+-- Intermediate model: enriches 8x8 CDR with site information.
 --
--- Join logic:
---   Incoming calls  → callee  = user extension number (the agent who received)
---   Outgoing calls  → caller  = user extension number (the agent who dialled)
+-- Join logic: cdr.pbx_id = site.pbx_id
+-- Each CDR row gets the site name for the PBX it belongs to.
 --
--- Result: one row per call leg with the internal agent's profile and site
--- attached. External caller/callee data (where no extension match exists)
--- is preserved from CDR; agent columns will be NULL for those rows.
+-- Note: if a PBX has multiple active sites, a row will appear for each.
+-- In practice each PBX maps to one site; verify in stg_8x8_pbx_sites if
+-- you see unexpected duplicates.
 
 with cdr as (
     select * from {{ ref('stg_8x8_call_detail_records') }}
 ),
 
-users as (
-    select * from {{ ref('stg_8x8_users') }}
+sites as (
+    select * from {{ ref('stg_8x8_pbx_sites') }}
 ),
 
 enriched as (
@@ -59,27 +58,12 @@ enriched as (
         cdr.departments,
         cdr.branches,
 
-        -- ── Agent (internal party) identity ───────────────────────────────────
-        u.user_id                               as agent_user_id,
-        u.user_name                             as agent_user_name,
-        u.first_name                            as agent_first_name,
-        u.last_name                             as agent_last_name,
-        u.primary_email                         as agent_email,
-        u.department                            as agent_department,
-        u.job_title                             as agent_job_title,
-        u.extension_number                      as agent_extension,
-        u.primary_phone_number                  as agent_phone_number,
-
-        -- ── Agent site information ────────────────────────────────────────────
-        u.site_id                               as agent_site_id,
-        u.site_name                             as agent_site_name,
-        u.site_pbx_name                         as agent_site_pbx_name
+        -- ── Site information ──────────────────────────────────────────────────
+        s.site_id,
+        s.site_name
 
     from cdr
-    left join users u on (
-        (cdr.direction = 'Incoming' and cdr.callee = u.extension_number)
-        or (cdr.direction = 'Outgoing' and cdr.caller = u.extension_number)
-    )
+    left join sites s on cdr.pbx_id = s.pbx_id
 )
 
 select * from enriched
