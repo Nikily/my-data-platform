@@ -9,8 +9,8 @@ via the `[tool.dagster] module_name` setting.
 import sys
 from pathlib import Path
 
-from dagster import Definitions, EnvVar, load_assets_from_modules
-from dagster_dbt import DbtCliResource, DbtProject, dbt_assets
+from dagster import AssetKey, Definitions, EnvVar, load_assets_from_modules
+from dagster_dbt import DagsterDbtTranslator, DbtCliResource, DbtProject, dbt_assets
 from dagster_duckdb import DuckDBResource
 
 from pipeline.assets.export import parquet_export
@@ -31,9 +31,21 @@ dbt_project = DbtProject(project_dir=DBT_PROJECT_DIR)
 dbt_project.prepare_if_dev()
 
 
+class _DbtTranslator(DagsterDbtTranslator):
+    """Maps dbt sources that are produced by Dagster assets to their asset keys,
+    so Dagster enforces the correct execution order (no parallel lock conflicts)."""
+
+    def get_asset_key(self, dbt_resource_props: dict) -> AssetKey:
+        if dbt_resource_props.get("resource_type") == "source":
+            if dbt_resource_props.get("source_name") == "raw_eight_x_eight":
+                return AssetKey("eight_x_eight_cdr_raw")
+        return super().get_asset_key(dbt_resource_props)
+
+
 @dbt_assets(
     manifest=dbt_project.manifest_path,
     name="dbt_models",
+    dagster_dbt_translator=_DbtTranslator(),
 )
 def dbt_models(context, dbt: DbtCliResource):
     """Runs all dbt models (staging → marts)."""
