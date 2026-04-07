@@ -18,6 +18,7 @@ enriched as (
         cdr.country,
         cdr.sip_call_id,
         cdr.dnis,
+        cdr.started_at_local::date as "date", 
         cdr.aa_destination,
         cdr.caller,
         cdr.caller_name,
@@ -37,6 +38,10 @@ enriched as (
         cdr.is_missed,
         cdr.is_answered,
         cdr.is_abandoned,
+        case 
+	        when cdr.answered != '-' and cdr.answered not null then 'Answered'
+	        when cdr.missed != '-' and cdr.missed not null then 'Missed'
+        end as type,
         cdr.call_leg_count,
         cdr.call_duration_seconds,
         cdr.talk_duration_seconds,
@@ -54,7 +59,8 @@ enriched as (
 
         -- ── Site ──────────────────────────────────────────────────────────────
         -- branches is a VARCHAR[] from the dlt child table; first element = site name
-        cdr.branches[1]     as site_name
+        cdr.branches[1]     as site_name,
+        Left(regexp_extract(cdr.branches[1], '^(.+?)\s-'),-2) as short_site_name
 
     from cdr
 )
