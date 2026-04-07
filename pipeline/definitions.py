@@ -32,13 +32,17 @@ dbt_project.prepare_if_dev()
 
 
 class _DbtTranslator(DagsterDbtTranslator):
-    """Maps dbt sources that are produced by Dagster assets to their asset keys,
-    so Dagster enforces the correct execution order (no parallel lock conflicts)."""
+    """Maps the raw_eight_x_eight.call_detail_records dbt source to the
+    eight_x_eight_cdr_raw Dagster asset so Dagster enforces execution order
+    and does not run ingestion and dbt in parallel (which causes a DuckDB lock conflict)."""
 
     def get_asset_key(self, dbt_resource_props: dict) -> AssetKey:
-        if dbt_resource_props.get("resource_type") == "source":
-            if dbt_resource_props.get("source_name") == "raw_eight_x_eight":
-                return AssetKey("eight_x_eight_cdr_raw")
+        if (
+            dbt_resource_props.get("resource_type") == "source"
+            and dbt_resource_props.get("source_name") == "raw_eight_x_eight"
+            and dbt_resource_props.get("name") == "call_detail_records"
+        ):
+            return AssetKey("eight_x_eight_cdr_raw")
         return super().get_asset_key(dbt_resource_props)
 
 
