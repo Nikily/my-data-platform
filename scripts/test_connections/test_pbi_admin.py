@@ -50,11 +50,10 @@ def get_token(scope):
 
 def check_env() -> bool:
     required = {
-        "PBI_REST_API_TOKEN_URL": TOKEN_URL,
-        "PBI_REST_API_BASE_URL":  BASE_URL,
-        "AZURE_TENANT_ID":        TENANT_ID,
-        "AZURE_CLIENT_ID":        CLIENT_ID,
-        "AZURE_CLIENT_SECRET":    CLIENT_SECRET,
+        "PBI_REST_API_BASE_URL": BASE_URL,
+        "AZURE_TENANT_ID":       TENANT_ID,
+        "AZURE_CLIENT_ID":       CLIENT_ID,
+        "AZURE_CLIENT_SECRET":   CLIENT_SECRET,
     }
     missing = [k for k, v in required.items() if not v]
     if missing:
@@ -65,36 +64,19 @@ def check_env() -> bool:
 
 
 def fetch_token() -> str | None:
-    """Obtain a Bearer token via OAuth2 client credentials flow."""
+    """Obtain a Bearer token via MSAL client credentials flow."""
     print("\nStep 1 — Fetching Bearer token")
-    print(f"  Token URL : {TOKEN_URL}")
+    print(f"  Authority : https://login.microsoftonline.com/{TENANT_ID}")
     print(f"  Client ID : {CLIENT_ID}")
     print(f"  Scope     : {PBI_SCOPE}")
 
     try:
-        response = requests.post(
-            TOKEN_URL,
-            data={
-                "grant_type":    "client_credentials",
-                "client_id":     CLIENT_ID,
-                "client_secret": CLIENT_SECRET,
-                "scope":         PBI_SCOPE,
-            },
-            timeout=30,
-        )
-    except requests.exceptions.ConnectionError as e:
-        print(f"  [ERROR] Could not connect: {e}")
+        token = get_token(PBI_SCOPE)
+    except Exception as e:
+        print(f"  [ERROR] {e}")
         return None
 
-    print(f"  HTTP {response.status_code}")
-
-    if not response.ok:
-        print(f"  [FAIL] {response.text[:400]}")
-        return None
-
-    token = response.json().get("access_token")
-    expires_in = response.json().get("expires_in", "?")
-    print(f"  Token obtained (expires in {expires_in}s): {token[:30]}...")
+    print(f"  Token obtained: {token[:30]}...")
     return token
 
 
@@ -146,6 +128,7 @@ def main():
     print(f"\nBase URL  : {BASE_URL}")
     print(f"Tenant ID : {TENANT_ID}")
     print(f"Client ID : {CLIENT_ID}")
+    print(f"Client secret: {'*' * 6}{CLIENT_SECRET[-4:]}")
 
     token = fetch_token()
     if not token:

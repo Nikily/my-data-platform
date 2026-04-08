@@ -36,6 +36,9 @@ dependencies = [
     # HTTP for REST API sources
     "requests>=2.32.0",
 
+    # Microsoft Authentication Library — used for Power BI Admin API auth
+    "msal>=1.28.0",
+
     # .env loading for standalone test scripts
     "python-dotenv>=1.0.0",
 ]
