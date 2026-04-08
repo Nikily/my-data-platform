@@ -1,77 +1,24 @@
-dagster._core.errors.DagsterInvalidDefinitionError: The following dbt resources are configured with identical Dagster asset keys. Please ensure that each dbt resource generates a unique Dagster asset key. See the reference for configuring Dagster asset keys for your dbt project: https://docs.dagster.io/integrations/libraries/dbt/reference#customizing-asset-keys.
+============================================================
+Power BI Admin REST API connectivity test
+============================================================
 
-The following dbt resources have the asset key `['eight_x_eight_cdr_raw']`:
-  - `source.my_data_platform.raw_eight_x_eight.call_detail_records` (models/staging/8x8/_8x8__sources.yml)
-  - `source.my_data_platform.raw_eight_x_eight.call_detail_records__branches` (models/staging/8x8/_8x8__sources.yml)
-  - `source.my_data_platform.raw_eight_x_eight.call_detail_records__departments` (models/staging/8x8/_8x8__sources.yml)
-  - `source.my_data_platform.raw_eight_x_eight.users` (models/staging/8x8/_8x8__sources.yml)
-  - `source.my_data_platform.raw_eight_x_eight.users__service_info__extensions` (models/staging/8x8/_8x8__sources.yml)
+Base URL  : https://api.powerbi.com/v1.0/myorg/admin
+Tenant ID : 1ce789f6-a437-44eb-b282-48c3053dbf99
+Client ID : 04e46469-7240-4311-bd6e-179936cf9d09
+Client secret: ******maBy
 
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_grpc/server.py", line 465, in __init__
-    self._loaded_repositories: LoadedRepositories | None = LoadedRepositories(
-                                                           ~~~~~~~~~~~~~~~~~~^
-        loadable_target_origin,
-        ^^^^^^^^^^^^^^^^^^^^^^^
-    ...<4 lines>...
-        defs_state_info=self._defs_state_info,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_grpc/server.py", line 277, in __init__
-    loadable_targets = get_loadable_targets(
-        python_file=loadable_target_origin.python_file,
-    ...<5 lines>...
-        resolve_lazy_defs=True,
-    )
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_grpc/utils.py", line 56, in get_loadable_targets
-    else loadable_targets_from_python_module(module_name, working_directory)
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/workspace/autodiscovery.py", line 33, in loadable_targets_from_python_module
-    module = load_python_module(
-        module_name,
-        working_directory=working_directory,
-        remove_from_path_fn=remove_from_path_fn,
-    )
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/code_pointer.py", line 137, in load_python_module
-    return importlib.import_module(module_name)
-           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
-  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
-  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
-  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
-  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  File "/opt/my_data_platform/pipeline/definitions.py", line 45, in <module>
-    @dbt_assets(
-     ~~~~~~~~~~^
-        manifest=dbt_project.manifest_path,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        name="dbt_models",
-        ^^^^^^^^^^^^^^^^^^
-        dagster_dbt_translator=_DbtTranslator(),
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/decorator_utils.py", line 217, in wrapped_with_context_manager_fn
-    return fn(*args, **kwargs)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/asset_decorator.py", line 316, in dbt_assets
-    specs, check_specs = build_dbt_specs(
-                         ~~~~~~~~~~~~~~~^
-        translator=dagster_dbt_translator,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ...<5 lines>...
-        project=project,
-        ^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/asset_utils.py", line 927, in build_dbt_specs
-    _validate_asset_keys(translator, manifest, key_by_unique_id)
-    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/asset_utils.py", line 964, in _validate_asset_keys
-    raise DagsterInvalidDefinitionError(
-        "\n\n".join([DUPLICATE_ASSET_KEY_ERROR_MESSAGE, *error_messages])
-    )
+Step 1 — Fetching Bearer token
+  Authority : https://login.microsoftonline.com/1ce789f6-a437-44eb-b282-48c3053dbf99
+  Client ID : 04e46469-7240-4311-bd6e-179936cf9d09
+  Scope     : https://analysis.windows.net/powerbi/api/.default
+  Token obtained: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUz...
 
+Step 2 — GET https://api.powerbi.com/v1.0/myorg/admin/apps?$top=2
+    ?$top=2
+  HTTP 404
+  [FAIL] 
+
+============================================================
+Summary
+============================================================
+  [FAIL]  Admin - Apps GetAppsAsAdm

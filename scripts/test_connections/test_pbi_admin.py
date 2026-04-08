@@ -29,7 +29,7 @@ TENANT_ID  = os.environ.get("AZURE_TENANT_ID", "")
 CLIENT_ID  = os.environ.get("AZURE_CLIENT_ID", "")
 CLIENT_SECRET = os.environ.get("AZURE_CLIENT_SECRET", "")
 
-APPS_PATH  = "/v1.0/myorg/admin/apps"
+APPS_PATH  = "/apps"
 # Power BI REST API resource scope for client credentials flow
 PBI_SCOPE  = "https://analysis.windows.net/powerbi/api/.default"
 
@@ -82,9 +82,9 @@ def fetch_token() -> str | None:
 
 def test_get_apps(token: str) -> bool:
     """Call Admin - Apps GetAppsAsAdmin and print the first few results."""
-    url = f"{BASE_URL}{APPS_PATH}"
+    url = f"{BASE_URL}{APPS_PATH}?$top=2"
     print(f"\nStep 2 — GET {url}")
-    print(f"  $top=10")
+    print(f"    ?$top=2")
 
     try:
         response = requests.get(
