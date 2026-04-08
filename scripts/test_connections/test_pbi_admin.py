@@ -12,6 +12,7 @@ Usage (from the project root, with the venv active):
 import json
 import os
 import sys
+import msal
 from pathlib import Path
 
 import requests
@@ -32,6 +33,20 @@ APPS_PATH  = "/v1.0/myorg/admin/apps"
 # Power BI REST API resource scope for client credentials flow
 PBI_SCOPE  = "https://analysis.windows.net/powerbi/api/.default"
 
+# -------------------------------
+# TOKEN ACQUISITION FUNCTION
+# -------------------------------
+def get_token(scope):
+    app = msal.ConfidentialClientApplication(
+        client_id=CLIENT_ID,
+        client_credential=CLIENT_SECRET,
+        token_cache=None,
+        authority=f"https://login.microsoftonline.com/{TENANT_ID}"
+    )
+    token = app.acquire_token_for_client(scopes=[scope])
+    if "access_token" not in token:
+        raise Exception(f"Failed to obtain token: {token}")
+    return token["access_token"]
 
 def check_env() -> bool:
     required = {
