@@ -4,7 +4,7 @@
 -- Note: dlt normalises all column names to snake_case and flattens the
 --       sharer object with __ separator.
 -- Guard: if the API returned no records dlt will not have created the table yet;
---        the {% if %} block returns an empty result set in that case.
+--        the if  block returns an empty result set in that case.
 
 {% set relation = adapter.get_relation(
     database = 'platform',
