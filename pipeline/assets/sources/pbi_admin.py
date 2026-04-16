@@ -195,22 +195,22 @@ def widely_shared_artifacts_resource(token: str) -> Iterator[list]:
 def unused_artifacts_resource(token: str, group_ids: list[str]) -> Iterator[list]:
     """
     GET /groups/{groupId}/unused for each workspace.
-    Yields records enriched with group_id so the workspace is identifiable.
+    Only called for Active, non-personal workspaces to stay within the
+    200 req/hr rate limit. Yields records enriched with group_id.
     """
     for group_id in group_ids:
-        time.sleep(_UNUSED_CALL_DELAY)  # avoid bursting through the 200 req/hr limit
+        time.sleep(_UNUSED_CALL_DELAY)
         params: dict = {}
         while True:
             try:
                 payload = _get(token, f"/groups/{group_id}/unused", params or None)
             except requests.exceptions.HTTPError as exc:
-                # Some workspace types (personal, read-only) return 4xx — skip them
+                # Some workspace types return 4xx — skip them cleanly
                 if exc.response is not None and exc.response.status_code in (400, 403, 404):
                     break
                 raise
             records = payload.get("unusedArtifactEntities", [])
             if records:
-                # Enrich with workspace ID for joinability
                 enriched = [{**r, "group_id": group_id} for r in records]
                 yield enriched
             continuation_token = payload.get("continuationToken")
@@ -219,15 +219,15 @@ def unused_artifacts_resource(token: str, group_ids: list[str]) -> Iterator[list
             params = {"continuationToken": continuation_token}
 
 
-# ── Dagster asset ──────────────────────────────────────────────────────────────
+# ── Dagster assets ─────────────────────────────────────────────────────────────
 
 @asset(
     group_name="raw_ingestion",
     kinds={"dlt", "duckdb"},
     description=(
-        "Full snapshot of all Power BI Admin REST API endpoints loaded into DuckDB. "
+        "Full snapshot of Power BI Admin REST API endpoints loaded into DuckDB. "
         "Covers apps, capacities, refreshables, groups (workspaces), dashboards, "
-        "reports, datasets, widely-shared artifacts, and unused artifacts per workspace."
+        "reports, datasets, and widely-shared artifacts."
     ),
 )
 def pbi_admin_raw(context: AssetExecutionContext) -> None:
@@ -235,22 +235,6 @@ def pbi_admin_raw(context: AssetExecutionContext) -> None:
     token = fetch_pbi_token()
     context.log.info("Token obtained.")
 
-    # ── Fetch group IDs up front for the unused-artifacts endpoint ────────────
-    context.log.info("Fetching group list for unused-artifacts endpoint...")
-    group_ids: list[str] = []
-    skip = 0
-    while True:
-        payload = _get(token, "/groups", {"$top": _GROUPS_PAGE_SIZE, "$skip": skip})
-        batch = payload.get("value", [])
-        if not batch:
-            break
-        group_ids.extend(g["id"] for g in batch)
-        if len(batch) < _GROUPS_PAGE_SIZE:
-            break
-        skip += _GROUPS_PAGE_SIZE
-    context.log.info(f"Found {len(group_ids)} workspaces for unused-artifacts sweep.")
-
-    # ── Run all resources in a single dlt pipeline ────────────────────────────
     pipeline = dlt.pipeline(
         pipeline_name="pbi_admin",
         destination=dlt.destinations.duckdb(credentials=os.environ["DUCKDB_PATH"]),
@@ -267,7 +251,57 @@ def pbi_admin_raw(context: AssetExecutionContext) -> None:
             reports_resource(token=token),
             datasets_resource(token=token),
             widely_shared_artifacts_resource(token=token),
-            unused_artifacts_resource(token=token, group_ids=group_ids),
         ]
+    )
+    context.log.info(f"Load complete: {load_info}")
+
+
+@asset(
+    group_name="raw_ingestion",
+    kinds={"dlt", "duckdb"},
+    deps=["pbi_admin_raw"],
+    description=(
+        "Sweeps all Active, non-personal workspaces for artifacts unused in 30+ days. "
+        "Runs separately from pbi_admin_raw because the /groups/{id}/unused endpoint "
+        "is limited to 200 req/hr — with hundreds of workspaces this can take a long time. "
+        "Schedule this weekly rather than daily."
+    ),
+)
+def pbi_admin_unused_artifacts_raw(context: AssetExecutionContext) -> None:
+    context.log.info("Fetching Power BI Bearer token via MSAL...")
+    token = fetch_pbi_token()
+    context.log.info("Token obtained.")
+
+    # Fetch only Active, non-personal workspaces to minimise API calls
+    context.log.info("Fetching active workspaces...")
+    group_ids: list[str] = []
+    skip = 0
+    _PERSONAL_TYPES = {"PersonalGroup", "Personal"}
+    while True:
+        payload = _get(token, "/groups", {"$top": _GROUPS_PAGE_SIZE, "$skip": skip})
+        batch = payload.get("value", [])
+        if not batch:
+            break
+        group_ids.extend(
+            g["id"] for g in batch
+            if g.get("state") == "Active" and g.get("type") not in _PERSONAL_TYPES
+        )
+        if len(batch) < _GROUPS_PAGE_SIZE:
+            break
+        skip += _GROUPS_PAGE_SIZE
+
+    context.log.info(
+        f"Found {len(group_ids)} active non-personal workspaces — "
+        f"estimated time at 0.5 s/call: ~{len(group_ids) // 2} seconds."
+    )
+
+    pipeline = dlt.pipeline(
+        pipeline_name="pbi_admin_unused",
+        destination=dlt.destinations.duckdb(credentials=os.environ["DUCKDB_PATH"]),
+        dataset_name="raw_pbi_admin",
+    )
+
+    load_info = pipeline.run(
+        unused_artifacts_resource(token=token, group_ids=group_ids)
     )
     context.log.info(f"Load complete: {load_info}")

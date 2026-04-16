@@ -67,6 +67,7 @@ def dbt_models(context, dbt: DbtCliResource):
 # ── Collect all assets ────────────────────────────────────────────────────────
 infra_assets = load_assets_from_modules([azure_containers])
 ingestion_assets = load_assets_from_modules([rest_api, csv_local, csv_sftp, adls_delta, eight_x_eight_cdr, eight_x_eight_users, pbi_admin])
+# pbi_admin exports both pbi_admin_raw and pbi_admin_unused_artifacts_raw
 export_assets = load_assets_from_modules([parquet_export])
 
 # ── Definitions ───────────────────────────────────────────────────────────────
