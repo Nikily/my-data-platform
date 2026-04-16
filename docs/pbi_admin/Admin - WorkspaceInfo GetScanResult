@@ -1,0 +1,1141 @@
+---
+layout: Reference
+title: Admin - WorkspaceInfo GetScanResult - REST API (Power BI Power BI REST APIs) | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/rest/api/power-bi/admin/workspace-info-get-scan-result
+uid: api.powerbi.com.power-bi.admin.workspaceinfo_getscanresult
+breadcrumb_path: /rest/breadcrumb/toc.json
+rest_product: Power BI
+ms.service: powerbi
+products:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d3197845-b4ce-44c6-a237-cd4be160e76c
+author: rloutlaw
+ms.author: routlaw
+ms.devlang: rest-api
+ms.date: 2018-03-14T00:00:00.0000000Z
+uhfHeaderId: MSDocsHeader-MSPowerBI
+feedback_system: None
+enable_rest_try_it: true
+ms.topic: generated-reference
+description: Gets the scan result for the specified scan. Only make this API call after a successful GetScanStatus API call.
+locale: en-us
+document_id: 5ce8efff-71d6-2dbf-25aa-affff28c38d1
+document_version_independent_id: e2d336b6-0dd6-8263-5e76-7b1686b4dc62
+updated_at: 2026-03-12T22:07:00.0000000Z
+original_content_git_url: https://github.com/MicrosoftDocs/powerbi-rest-api-docs-pr/blob/live/docs-ref-autogen/power-bi/Admin/Workspace-Info-Get-Scan-Result.yml
+gitcommit: https://github.com/MicrosoftDocs/powerbi-rest-api-docs-pr/blob/c9d0f7f4b68ec51bf911d878bbb268b3111eb427/docs-ref-autogen/power-bi/Admin/Workspace-Info-Get-Scan-Result.yml
+git_commit_id: c9d0f7f4b68ec51bf911d878bbb268b3111eb427
+site_name: Docs
+depot_name: MSDN.powerbi-rest-api
+page_type: rest
+page_kind: operation
+toc_rel: ../toc.json
+pdf_url_template: https://learn.microsoft.com/pdfstore/en-us/MSDN.powerbi-rest-api/{branchName}{pdfName}
+feedback_product_url: ''
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: api/power-bi/admin/workspace-info-get-scan-result
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs-ref-autogen/power-bi/Admin/Workspace-Info-Get-Scan-Result.yml
+cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d3197845-b4ce-44c6-a237-cd4be160e76c
+spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/aea905fb-0a9d-4d46-b30f-e9cbaf772d1b
+platformId: 9a591cd0-48e3-753a-9a6d-0988fb9efae4
+---
+
+# Admin - WorkspaceInfo GetScanResult
+
+- Service:
+    - Power BI REST APIs
+
+- API Version:
+    - v1.0
+
+Gets the scan result for the specified scan.
+
+Only make this API call after a successful [GetScanStatus](/en-us/rest/api/power-bi/admin/workspace-info-get-scan-status) API call. The scan result will remain available for 24 hours.
+
+## Permissions
+
+The user must be a Fabric administrator or authenticate using a service principal.
+
+When running under service principal authentication, an app **must not** have any admin-consent required permissions for Power BI set on it in the Azure portal.
+
+## Required Scope
+
+Tenant.Read.All or Tenant.ReadWrite.All
+
+Relevant only when authenticating via a standard delegated admin access token. Must not be present when authentication via a service principal is used.
+
+## Limitations
+
+Maximum 500 requests per hour. 
+
+```http
+GET https://api.powerbi.com/v1.0/myorg/admin/workspaces/scanResult/{scanId}
+```
+
+## URI Parameters
+
+| Name | In | Required | Type | Description |
+| --- | --- | --- | --- | --- |
+| scanId | path | True | string (uuid) | The scan ID, which is included in the response from the workspaces or the [Admin - WorkspaceInfo PostWorkspaceInfo](/en-us/rest/api/power-bi/admin/workspace-info-post-workspace-info) API call that triggered the scan. |
+
+## Responses
+
+| Name | Type | Description |
+| --- | --- | --- |
+| 200 OK | WorkspaceInfoResponse | OK |
+
+## Examples
+
+### Example
+
+#### Sample request
+
+```http
+GET https://api.powerbi.com/v1.0/myorg/admin/workspaces/scanResult/e7d03602-4873-4760-b37e-1563ef5358e3
+```
+
+#### Sample response
+
+- Status code:
+    - 200
+
+```json
+{
+  "workspaces": [
+    {
+      "id": "d507422c-8d6d-4361-ac7a-30074a8cd0a1",
+      "name": "V2 shared",
+      "type": "Workspace",
+      "state": "Active",
+      "isOnDedicatedCapacity": true,
+      "capacityId": "0f084df7-c13d-451b-af5f-ed0c466403b2",
+      "defaultDatasetStorageFormat": "Small",
+      "reports": [
+        {
+          "id": "c6d072d1-ed20-4b60-8329-16c4b934203b",
+          "name": "CompositeModelParams-RLS",
+          "datasetId": "132593c4-bf8d-4548-8f25-1ebb16a1613c",
+          "createdDateTime": "2020-06-16T08:22:49.14",
+          "modifiedDateTime": "2020-06-16T08:22:49.14",
+          "modifiedBy": "john@contoso.com",
+          "reportType": "PaginatedReport",
+          "endorsementDetails": {
+            "endorsement": "Certified",
+            "certifiedBy": "john@contoso.com"
+          },
+          "sensitivityLabel": {
+            "labelId": "85b38049-4259-43a2-8feb-244e222d96c0"
+          },
+          "users": [
+            {
+              "displayName": "John Nick",
+              "emailAddress": "john@contoso.com",
+              "appUserAccessRight": "ReadExplore",
+              "identifier": "john@contoso.com",
+              "graphId": "3fadb6e4-130c-4a8f-aeac-416e38b66756",
+              "principalType": "User"
+            }
+          ],
+          "tags": [
+            "3b4b36a5-7895-4548-93b7-924e6e65833e",
+            "8ce91ed7-8423-4492-b831-48906997aab2"
+          ]
+        }
+      ],
+      "dashboards": [
+        {
+          "id": "80814ece-9302-49e3-b6bc-bad2f7a86c1a",
+          "displayName": "CompositeModelParamsDashboard",
+          "isReadOnly": false,
+          "tiles": [
+            {
+              "id": "e687cc21-5b32-48f5-8c5e-4b844f190579",
+              "title": "CompositeModelParamsDashboard",
+              "reportId": "c6d072d1-ed20-4b60-8329-16c4b934203b",
+              "datasetId": "132593c4-bf8d-4548-8f25-1ebb16a1613c"
+            }
+          ],
+          "sensitivityLabel": {
+            "labelId": "d9b9581a-0594-4c39-81c5-91ddf40baeda"
+          },
+          "users": [
+            {
+              "displayName": "John Nick",
+              "emailAddress": "john@contoso.com",
+              "appUserAccessRight": "ReadExplore",
+              "identifier": "john@contoso.com",
+              "graphId": "3fadb6e4-130c-4a8f-aeac-416e38b66756",
+              "principalType": "User"
+            }
+          ],
+          "tags": [
+            "3b4b36a5-7895-4548-93b7-924e6e65833e",
+            "8ce91ed7-8423-4492-b831-48906997aab2"
+          ]
+        }
+      ],
+      "datasets": [
+        {
+          "id": "e7e8a355-e77b-4418-a7b8-ae5972fdaa03",
+          "name": "ExportB",
+          "tables": [
+            {
+              "name": "DW_Revenues",
+              "columns": [
+                {
+                  "name": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+                  "dataType": "Int64",
+                  "isHidden": true
+                }
+              ],
+              "measures": [
+                {
+                  "name": "MyMeasure",
+                  "expression": "CALCULATE(SELECTEDVALUE('DW_Revenues DW_RevenuesTestToBeDeleted'[Numbers])*10)",
+                  "description": "My measure",
+                  "isHidden": false
+                }
+              ],
+              "isHidden": false,
+              "description": "My table",
+              "source": [
+                {
+                  "expression": "let\n    Source = Revenues,\n    Param = RevenuesParam\nin\n    Source"
+                }
+              ]
+            }
+          ],
+          "relationships": [],
+          "configuredBy": "john@contoso.com",
+          "targetStorageMode": "Abf",
+          "endorsementDetails": {
+            "endorsement": "Certified",
+            "certifiedBy": "john@contoso.com"
+          },
+          "expressions": [
+            {
+              "name": "Revenues",
+              "description": "revenues",
+              "expression": "let\n    Source = Sql.Database(\"sqlserver.database.windows.net\", \"DB\"),\n    RevenuesTable = Source{[Schema=\"DB_SCHEMA\",Item=\"DB_SCHEMA_ITEM\"]}[Data]\nin\n    RevenuesTable"
+            },
+            {
+              "name": "RevenuesParam",
+              "description": "revenues param",
+              "expression": "\"revenues param value\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]"
+            }
+          ],
+          "roles": [
+            {
+              "name": "Teams",
+              "modelPermission": "Read",
+              "members": [
+                {
+                  "memberName": "john@contoso.com",
+                  "memberId": "ee96296b-fb71-4f65-a8af-c0ec5a7daced",
+                  "memberType": "User",
+                  "identityProvider": "AzureAD"
+                },
+                {
+                  "memberName": "group@contoso.com",
+                  "memberId": "0a1cdbc3-f82c-4001-8b96-be04ae9d25a3",
+                  "memberType": "Group",
+                  "identityProvider": "AzureAD"
+                }
+              ],
+              "tablePermissions": [
+                {
+                  "name": "DW_Revenues DW_RevenuesTest",
+                  "filterExpression": "[InTeams] = \"True\""
+                }
+              ]
+            }
+          ],
+          "upstreamDataflows": [
+            {
+              "targetDataflowId": "a842dbb1-32ca-46b0-9648-498b2c2d5e38",
+              "groupId": "b7416115-7421-42c0-b525-1505ce40d2f0"
+            },
+            {
+              "targetDataflowId": "06898194-2eaf-4122-bacc-133db1f8585d",
+              "groupId": "7263838d-80d7-4b8d-a1f6-50fc27e74a97"
+            }
+          ],
+          "datasourceUsages": [
+            {
+              "datasourceInstanceId": "c79ad907-df19-43fe-a0f7-d9f365d67070"
+            }
+          ],
+          "misconfiguredDatasourceUsages": [
+            {
+              "datasourceInstanceId": "80ec28bc-fe81-43ea-be52-a07a95cfbcab"
+            }
+          ],
+          "sensitivityLabel": {
+            "labelId": "bf3dc57d-d796-41c0-bbe9-a47f5ee3331e"
+          },
+          "users": [
+            {
+              "displayName": "John Nick",
+              "emailAddress": "john@contoso.com",
+              "appUserAccessRight": "ReadExplore",
+              "identifier": "john@contoso.com",
+              "graphId": "3fadb6e4-130c-4a8f-aeac-416e38b66756",
+              "principalType": "User"
+            }
+          ],
+          "tags": [
+            "3b4b36a5-7895-4548-93b7-924e6e65833e",
+            "8ce91ed7-8423-4492-b831-48906997aab2"
+          ]
+        }
+      ],
+      "dataflows": [
+        {
+          "objectId": "a842dbb1-32ca-46b0-9648-498b2c2d5e38",
+          "name": "Azure SQL",
+          "description": "Azure SQL dataflow",
+          "configuredBy": "john@contoso.com",
+          "modifiedBy": "john@contoso.com",
+          "modifiedDateTime": "2020-06-16T08:27:47.783Z",
+          "endorsementDetails": {
+            "endorsement": "Certified",
+            "certifiedBy": "john@contoso.com"
+          },
+          "datasourceUsages": [
+            {
+              "datasourceInstanceId": "c79ad907-df19-43fe-a0f7-d9f365d67070"
+            }
+          ],
+          "misconfiguredDatasourceUsages": [
+            {
+              "datasourceInstanceId": "80ec28bc-fe81-43ea-be52-a07a95cfbcab"
+            }
+          ],
+          "sensitivityLabel": {
+            "labelId": "5c9f8c24-2a94-4fd2-a105-9a8b096c5af1"
+          },
+          "users": [
+            {
+              "displayName": "John Nick",
+              "emailAddress": "john@contoso.com",
+              "appUserAccessRight": "ReadExplore",
+              "identifier": "john@contoso.com",
+              "graphId": "3fadb6e4-130c-4a8f-aeac-416e38b66756",
+              "principalType": "User"
+            }
+          ],
+          "tags": [
+            "3b4b36a5-7895-4548-93b7-924e6e65833e",
+            "8ce91ed7-8423-4492-b831-48906997aab2"
+          ]
+        }
+      ],
+      "datamarts": [
+        {
+          "id": "9df8d63c-db5b-44c3-a8e3-9f8c8ec1eec2",
+          "name": "MyDatamart",
+          "description": "SQL datamart",
+          "type": "Sql",
+          "configuredBy": "john@contoso.com",
+          "configuredById": "5c9f8c24-2a94-4fd2-a105-9a8b096cdsew",
+          "modifiedBy": "john@contoso.com",
+          "modifiedDateTime": "2020-06-16T08:27:47.783Z",
+          "sensitivityLabel": {
+            "labelId": "5c9f8c24-2a94-4fd2-a105-9a8b096c5af1"
+          },
+          "endorsementDetails": {
+            "endorsement": "Certified",
+            "certifiedBy": "john@contoso.com"
+          },
+          "UpstreamDataflows": [
+            {
+              "targetDataflowId": "5c9f8c24-2a94-34fd-a105-9a8b096c4555",
+              "groupId": "5c9f8c24-4dsc-4fd2-a105-9a8b096c4fgt"
+            }
+          ],
+          "datasourceUsages": [
+            {
+              "datasourceInstanceId": "c79ad907-df19-43fe-a0f7-d9f365d67070"
+            }
+          ],
+          "Users": [
+            {
+              "displayName": "John Nick",
+              "emailAddress": "john@contoso.com",
+              "identifier": "john@contoso.com",
+              "graphId": "3fadb6e4-130c-4a8f-aeac-416e38b66756",
+              "principalType": "User",
+              "userType": "User",
+              "profile": {
+                "id": "45416453",
+                "displayName": "John's profile"
+              },
+              "datamartUserAccessRight": "Read"
+            }
+          ],
+          "tags": [
+            "3b4b36a5-7895-4548-93b7-924e6e65833e",
+            "8ce91ed7-8423-4492-b831-48906997aab2"
+          ]
+        }
+      ],
+      "users": [
+        {
+          "displayName": "John Nick",
+          "emailAddress": "john@contoso.com",
+          "appUserAccessRight": "ReadExplore",
+          "identifier": "john@contoso.com",
+          "graphId": "3fadb6e4-130c-4a8f-aeac-416e38b66756",
+          "principalType": "User"
+        }
+      ]
+    }
+  ],
+  "datasourceInstances": [
+    {
+      "datasourceType": "Sql",
+      "connectionDetails": {
+        "server": "qlserver.database.windows.net",
+        "database": "dbo.largest_table"
+      },
+      "datasourceId": "c79ad907-df19-43fe-a0f7-d9f365d67070",
+      "gatewayId": "e820592e-f8cf-4a6f-b1ed-566799d29565"
+    }
+  ],
+  "misconfiguredDatasourceInstances": [
+    {
+      "datasourceType": "Sql",
+      "connectionDetails": {
+        "server": "sqlserver.database.windows.net",
+        "database": "dbo.table"
+      },
+      "datasourceId": "80ec28bc-fe81-43ea-be52-a07a95cfbcab",
+      "gatewayId": "505a19c1-4190-4e8e-a4f6-dd72722feced"
+    }
+  ]
+}
+```
+
+## Definitions
+
+| Name | Description |
+| --- | --- |
+| ASMashupExpression | A dataset table source |
+| Column | A dataset column |
+| DashboardUser | A Power BI user access right entry for a dashboard |
+| DashboardUserAccessRight | The access right that the user has for the dashboard (permission level) |
+| DataflowUser | A Power BI user access right entry for a dataflow |
+| DataflowUserAccessRight | The access right that a user has for the dataflow (permission level) |
+| datamartState | The datamart current state |
+| datamartStatus | The datamart status |
+| datamartType | The datamart type |
+| DatamartUser | A Power BI user access right entry for a report |
+| DatamartUserAccessRight | The access right that the user has for the datamart (permission level) |
+| DatasetUser | A Power BI user access right entry for a dataset |
+| DatasetUserAccessRight | The access right that the user has for the dataset (permission level) |
+| Datasource | A Power BI data source |
+| DatasourceConnectionDetails | The Power BI data source connection details. See examples in [Get Datasources](/en-us/rest/api/power-bi/datasets/get-datasources#examples) or [Get Datasources In Group](/en-us/rest/api/power-bi/datasets/get-datasources-in-group#examples). |
+| DatasourceUsage | Data source usage |
+| DefaultDatasetStorageFormat | The default dataset storage format in the group |
+| DependentDataflow | A Power BI dependent dataflow |
+| DependentDatamart | A Power BI dependent datamart |
+| DependentDataset | A Power BI dependent dataset |
+| EndorsementDetails | Power BI endorsement details |
+| Expression | A dataset expression |
+| GroupUser | A Power BI user with access to the workspace |
+| GroupUserAccessRight | The access right (permission level) that a user has on the workspace |
+| Measure | A Power BI measure |
+| PrincipalType | The principal type |
+| ReportUser | A Power BI user access right entry for a report |
+| ReportUserAccessRight | The access right that the user has for the report (permission level) |
+| Role | A role in a dataset’s RLS configuration |
+| RoleMember | A role member |
+| RoleTablePermission | A role filter |
+| Row | A data row in a dataset |
+| SensitivityLabel | Sensitivity label info for a Power BI item (such as a report or a dashboard) |
+| ServicePrincipalProfile | A Power BI service principal profile. Only relevant for [Power BI Embedded multi-tenancy solution](/en-us/power-bi/developer/embedded/embed-multi-tenancy). |
+| Table | A dataset table |
+| WorkspaceInfo | Workspace info details |
+| WorkspaceInfoDashboard | A Power BI dashboard returned by WorkspaceInfo APIs. The API returns a subset of the following list of dashboard properties. The subset depends on the API called, caller permissions, and the availability of data in the Power BI database. |
+| WorkspaceInfoDataflow | The metadata of a dataflow returned by Workspace Info APIs. Below is a list of properties that may be returned for a dataflow. Only a subset of the properties will be returned depending on the API called, the caller permissions and the availability of the data in the Power BI database. |
+| WorkspaceInfoDatamart | A Power BI datamart returned by Workspace Info APIs. The API returns a subset of the following list of datamart properties. The subset depends on the API called, caller permissions, and the availability of data in the Power BI database. |
+| WorkspaceInfoDataset | A Power BI dataset returned by WorkspaceInfo APIs. The API returns a subset of the following list of dataset properties. The subset depends on the API called, caller permissions, and the availability of the data in the Power BI database. |
+| WorkspaceInfoReport | A Power BI report returned by Workspace Info APIs. The API returns a subset of the following list of report properties. The subset depends on the API called, caller permissions, and the availability of data in the Power BI database. |
+| WorkspaceInfoResponse | Workspace info response |
+| WorkspaceInfoTile | A Power BI tile returned by WorkspaceInfo APIs |
+
+### ASMashupExpression
+
+Object
+
+A dataset table source
+
+| Name | Type | Description |
+| --- | --- | --- |
+| expression | string | The source expression |
+
+### Column
+
+Object
+
+A dataset column
+
+| Name | Type | Description |
+| --- | --- | --- |
+| dataCategory | string | Optional. The string value to be used for the data category which describes the data within this column. |
+| dataType | string | The column data type |
+| formatString | string | Optional. The format of the column as specified in [FORMAT_STRING](/en-us/analysis-services/multidimensional-models/mdx/mdx-cell-properties-format-string-contents). |
+| isHidden | boolean | Optional. Whether the column is hidden. The default is `false`. |
+| name | string <br>pattern: ^[\x09\x0A\x0D\x20-\uD7FF\uE000-\uFFFD\u10000-\u10FFFF]+$ | The column name |
+| sortByColumn | string | Optional. String name of a column in the same table to be used to order the current column. |
+| summarizeBy | string | Optional. The aggregate function to use for summarizing this column. |
+
+### DashboardUser
+
+Object
+
+A Power BI user access right entry for a dashboard
+
+| Name | Type | Description |
+| --- | --- | --- |
+| dashboardUserAccessRight | DashboardUserAccessRight | The access right that the user has for the dashboard (permission level) |
+| displayName | string | Display name of the principal |
+| emailAddress | string | Email address of the user |
+| graphId | string | Identifier of the principal in Microsoft Graph. Only available for admin APIs. |
+| identifier | string | Identifier of the principal |
+| principalType | PrincipalType | The principal type |
+| profile | ServicePrincipalProfile | A Power BI service principal profile. Only relevant for [Power BI Embedded multi-tenancy solution](/en-us/power-bi/developer/embedded/embed-multi-tenancy). |
+| userType | string | Type of the user. |
+
+### DashboardUserAccessRight
+
+Enumeration
+
+The access right that the user has for the dashboard (permission level)
+
+| Value | Description |
+| --- | --- |
+| None | No permission to content in dashboard |
+| Read | Grants Read access to content in dashboard |
+| ReadWrite | Grants Read and Write access to content in dashboard |
+| ReadReshare | Grants Read and Reshare access to content in dashboard |
+| ReadCopy | Grants Read and Copy access to content in dashboard |
+| Owner | Grants Read, Write and Reshare access to content in report |
+
+### DataflowUser
+
+Object
+
+A Power BI user access right entry for a dataflow
+
+| Name | Type | Description |
+| --- | --- | --- |
+| DataflowUserAccessRight | DataflowUserAccessRight | The access right that a user has for the dataflow (permission level) |
+| displayName | string | Display name of the principal |
+| emailAddress | string | Email address of the user |
+| graphId | string | Identifier of the principal in Microsoft Graph. Only available for admin APIs. |
+| identifier | string | Identifier of the principal |
+| principalType | PrincipalType | The principal type |
+| profile | ServicePrincipalProfile | A Power BI service principal profile. Only relevant for [Power BI Embedded multi-tenancy solution](/en-us/power-bi/developer/embedded/embed-multi-tenancy). |
+| userType | string | Type of the user. |
+
+### DataflowUserAccessRight
+
+Enumeration
+
+The access right that a user has for the dataflow (permission level)
+
+| Value | Description |
+| --- | --- |
+| None | Removes permission to content in dataflow |
+| Read | Grants Read access to content in dataflow |
+| ReadWrite | Grants Read and Write access to content in dataflow |
+| ReadReshare | Grants Read and Reshare access to content in dataflow |
+| Owner | Grants Read, Write and Reshare access to content in dataflow |
+
+### datamartState
+
+Enumeration
+
+The datamart current state
+
+| Value | Description |
+| --- | --- |
+| Invalid | The datamart has invalid state |
+| Initialized | The datamart was initialized |
+| Active | The datamart is active |
+| Migrating | The datamart is migrating |
+| Evicted | The datamart was evicted |
+| Deleted | The datamart was deleted |
+
+### datamartStatus
+
+Enumeration
+
+The datamart status
+
+| Value | Description |
+| --- | --- |
+| Invalid | The datamart has invalid status |
+| Available | The datamart is available |
+| SuspendedInCriticalPhase | The datamart is suspended in critical phase |
+| InProgress | The datamart is in progress |
+| Error | The datamart has error status |
+| OutOfRegion | The datamart is out of region |
+| NoCapacity | The datamart has no capacity |
+
+### datamartType
+
+Enumeration
+
+The datamart type
+
+| Value | Description |
+| --- | --- |
+| Unset | The datamart type was unset |
+| Ignore | The datamart has no type |
+| Sql | The datamart is of Sql type |
+| Lakehouse | The datamart is of Lakehouse type |
+| Dataverse | The datamart is of Dataverse type |
+| Datawarehouse | The datamart is of Datawarehouse type |
+
+### DatamartUser
+
+Object
+
+A Power BI user access right entry for a report
+
+| Name | Type | Description |
+| --- | --- | --- |
+| datamartUserAccessRight | DatamartUserAccessRight | The access right that the user has for the datamart (permission level) |
+| displayName | string | Display name of the principal |
+| emailAddress | string | Email address of the user |
+| graphId | string | Identifier of the principal in Microsoft Graph. Only available for admin APIs. |
+| identifier | string | Identifier of the principal |
+| principalType | PrincipalType | The principal type |
+| profile | ServicePrincipalProfile | A Power BI service principal profile. Only relevant for [Power BI Embedded multi-tenancy solution](/en-us/power-bi/developer/embedded/embed-multi-tenancy). |
+| userType | string | Type of the user. |
+
+### DatamartUserAccessRight
+
+Enumeration
+
+The access right that the user has for the datamart (permission level)
+
+| Value | Description |
+| --- | --- |
+| None | No permission to content in datamart |
+| Read | Grants Read access to content in datamart |
+| Write | Grants write access to content in datamart |
+| Reshare | Grants reshare access to content in datamart |
+| Explore | Grants explore access to content in datamart |
+| ReadWrite | Grants read and write access to content in datamart |
+| ReadReshare | Grants read and reshare access to content in datamart |
+| ReadWriteReshare | Grants read and write and reshare access to content in datamart |
+| ReadExplore | Grants read and explore access to content in datamart |
+| ReadReshareExplore | Grants read and reshare and explore access to content in datamart |
+| ReadWriteExplore | Grants read and write and explore access to content in datamart |
+| ReadWriteReshareExplore | Grants read and write and reshare and explore access to content in datamart |
+
+### DatasetUser
+
+Object
+
+A Power BI user access right entry for a dataset
+
+| Name | Type | Description |
+| --- | --- | --- |
+| datasetUserAccessRight | DatasetUserAccessRight | The access right that the user has for the dataset (permission level) |
+| displayName | string | Display name of the principal |
+| emailAddress | string | Email address of the user |
+| graphId | string | Identifier of the principal in Microsoft Graph. Only available for admin APIs. |
+| identifier | string | Identifier of the principal |
+| principalType | PrincipalType | The principal type |
+| profile | ServicePrincipalProfile | A Power BI service principal profile. Only relevant for [Power BI Embedded multi-tenancy solution](/en-us/power-bi/developer/embedded/embed-multi-tenancy). |
+| userType | string | Type of the user. |
+
+### DatasetUserAccessRight
+
+Enumeration
+
+The access right that the user has for the dataset (permission level)
+
+| Value | Description |
+| --- | --- |
+| None | Removes permission to the content in the dataset |
+| Read | Grants Read access to the content in the dataset |
+| ReadWrite | Grants Read and Write access to the content in the dataset |
+| ReadReshare | Grants Read and Reshare access to the content in the dataset |
+| ReadWriteReshare | Grants Read, Write, and Reshare access to the content in the dataset |
+| ReadExplore | Grants Read and Explore access to the content in the dataset |
+| ReadReshareExplore | Grants Read, Reshare, and Explore access to the content in the dataset |
+| ReadWriteExplore | Grants Read, Write, and Explore access to the content in the dataset |
+| ReadWriteReshareExplore | Grants Read, Write, Reshare, and Explore access to the content in the dataset |
+
+### Datasource
+
+Object
+
+A Power BI data source
+
+| Name | Type | Description |
+| --- | --- | --- |
+| connectionDetails | DatasourceConnectionDetails | The data source connection details |
+| connectionString | string | (Deprecated) The data source connection string. Available only for DirectQuery. |
+| datasourceId | string (uuid) | The bound data source ID, which is empty when not bound to a gateway |
+| datasourceType | string | The data source type |
+| gatewayId | string (uuid) | The bound gateway ID, which is empty when not bound to a gateway. When using a gateway cluster, the gateway ID refers to the primary (first) gateway in the cluster and is similar to the gateway cluster ID. |
+| name | string | (Deprecated) The data source name. Available only for DirectQuery. |
+
+### DatasourceConnectionDetails
+
+Object
+
+The Power BI data source connection details. See examples in [Get Datasources](/en-us/rest/api/power-bi/datasets/get-datasources#examples) or [Get Datasources In Group](/en-us/rest/api/power-bi/datasets/get-datasources-in-group#examples).
+
+| Name | Type | Description |
+| --- | --- | --- |
+| account | string | The connection account |
+| classInfo | string | The connection class information |
+| database | string | The connection database |
+| domain | string | The connection domain |
+| emailAddress | string | The connection email address |
+| kind | string | The connection kind |
+| loginServer | string | The connection login server |
+| path | string | The connection path |
+| server | string | The connection server |
+| url | string | The connection URL |
+
+### DatasourceUsage
+
+Object
+
+Data source usage
+
+| Name | Type | Description |
+| --- | --- | --- |
+| datasourceInstanceId | string (uuid) | The data source instance ID |
+
+### DefaultDatasetStorageFormat
+
+Enumeration
+
+The default dataset storage format in the group
+
+| Value | Description |
+| --- | --- |
+| Small | Small dataset storage format |
+| Large | Large dataset storage format |
+
+### DependentDataflow
+
+Object
+
+A Power BI dependent dataflow
+
+| Name | Type | Description |
+| --- | --- | --- |
+| groupId | string | The target group ID |
+| targetDataflowId | string | The target dataflow ID |
+
+### DependentDatamart
+
+Object
+
+A Power BI dependent datamart
+
+| Name | Type | Description |
+| --- | --- | --- |
+| groupId | string | The target group ID |
+| targetDatamartId | string | The target datamart ID |
+
+### DependentDataset
+
+Object
+
+A Power BI dependent dataset
+
+| Name | Type | Description |
+| --- | --- | --- |
+| groupId | string | The target group ID |
+| targetDatasetId | string | The target dataset ID |
+
+### EndorsementDetails
+
+Object
+
+Power BI endorsement details
+
+| Name | Type | Description |
+| --- | --- | --- |
+| certifiedBy | string | The user that certified the Power BI item (such as a report or a dashboard) |
+| endorsement | string | The endorsement status |
+
+### Expression
+
+Object
+
+A dataset expression
+
+| Name | Type | Description |
+| --- | --- | --- |
+| description | string | The expression description |
+| expression | string | The expression value |
+| name | string | The expression name |
+
+### GroupUser
+
+Object
+
+A Power BI user with access to the workspace
+
+| Name | Type | Description |
+| --- | --- | --- |
+| displayName | string | Display name of the principal |
+| emailAddress | string | Email address of the user |
+| graphId | string | Identifier of the principal in Microsoft Graph. Only available for admin APIs. |
+| groupUserAccessRight | GroupUserAccessRight | The access right (permission level) that a user has on the workspace |
+| identifier | string | Identifier of the principal |
+| principalType | PrincipalType | The principal type |
+| profile | ServicePrincipalProfile | A Power BI service principal profile. Only relevant for [Power BI Embedded multi-tenancy solution](/en-us/power-bi/developer/embedded/embed-multi-tenancy). |
+| userType | string | Type of the user. |
+
+### GroupUserAccessRight
+
+Enumeration
+
+The access right (permission level) that a user has on the workspace
+
+| Value | Description |
+| --- | --- |
+| None | No access to workspace content |
+| Member | Read, reshare and explore (ReadReshareExplore) access rights to workspace content |
+| Admin | Administrator rights to workspace content |
+| Contributor | Read and explore (ReadExplore) access to workspace content |
+| Viewer | Read-only (Read) access to workspace content |
+
+### Measure
+
+Object
+
+A Power BI measure
+
+| Name | Type | Description |
+| --- | --- | --- |
+| description | string | Optional. The measure description. |
+| expression | string | A valid DAX expression |
+| formatString | string | Optional. A string describing how the value should be formatted when it's displayed as specified in [FORMAT_STRING](/en-us/analysis-services/multidimensional-models/mdx/mdx-cell-properties-format-string-contents). |
+| isHidden | boolean | Optional. Whether the measure is hidden. |
+| name | string <br>pattern: ^[\x09\x0A\x0D\x20-\uD7FF\uE000-\uFFFD\u10000-\u10FFFF]+$ | The measure name |
+
+### PrincipalType
+
+Enumeration
+
+The principal type
+
+| Value | Description |
+| --- | --- |
+| None | No principal type. Use for whole organization level access. |
+| User | User principal type |
+| Group | Group principal type |
+| App | Service principal type |
+
+### ReportUser
+
+Object
+
+A Power BI user access right entry for a report
+
+| Name | Type | Description |
+| --- | --- | --- |
+| displayName | string | Display name of the principal |
+| emailAddress | string | Email address of the user |
+| graphId | string | Identifier of the principal in Microsoft Graph. Only available for admin APIs. |
+| identifier | string | Identifier of the principal |
+| principalType | PrincipalType | The principal type |
+| profile | ServicePrincipalProfile | A Power BI service principal profile. Only relevant for [Power BI Embedded multi-tenancy solution](/en-us/power-bi/developer/embedded/embed-multi-tenancy). |
+| reportUserAccessRight | ReportUserAccessRight | The access right that the user has for the report (permission level) |
+| userType | string | Type of the user. |
+
+### ReportUserAccessRight
+
+Enumeration
+
+The access right that the user has for the report (permission level)
+
+| Value | Description |
+| --- | --- |
+| None | No permission to content in report |
+| Read | Grants Read access to content in report |
+| ReadWrite | Grants Read and Write access to content in report |
+| ReadReshare | Grants Read and Reshare access to content in report |
+| ReadCopy | Grants Read and Copy access to content in report |
+| Owner | Grants Read, Write and Reshare access to content in report |
+
+### Role
+
+Object
+
+A role in a dataset’s RLS configuration
+
+| Name | Type | Description |
+| --- | --- | --- |
+| members | RoleMember | An array listing the members of the role |
+| modelPermission | string | The permissions that the role has on the dataset. For example, Read |
+| name | string | The name of the role |
+| tablePermissions | RoleTablePermission | An array that lists all the filters defined for the role |
+
+### RoleMember
+
+Object
+
+A role member
+
+| Name | Type | Description |
+| --- | --- | --- |
+| identityProvider | string | The role member identity provider |
+| memberId | string | The role member GUID as assigned by the identity provider |
+| memberName | string | The name of the role member |
+| memberType | string | The role member type (user or group) |
+
+### RoleTablePermission
+
+Object
+
+A role filter
+
+| Name | Type | Description |
+| --- | --- | --- |
+| filterExpression | string | The expression that filters the table specified in the filter |
+| name | string | The name of the table specified in the filter |
+
+### Row
+
+Object
+
+A data row in a dataset
+
+| Name | Type | Description |
+| --- | --- | --- |
+| id | string | The unique row ID |
+
+### SensitivityLabel
+
+Object
+
+Sensitivity label info for a Power BI item (such as a report or a dashboard)
+
+| Name | Type | Description |
+| --- | --- | --- |
+| labelId | string (uuid) | The sensitivity label ID |
+
+### ServicePrincipalProfile
+
+Object
+
+A Power BI service principal profile. Only relevant for [Power BI Embedded multi-tenancy solution](/en-us/power-bi/developer/embedded/embed-multi-tenancy).
+
+| Name | Type | Description |
+| --- | --- | --- |
+| displayName | string | The service principal profile name |
+| id | string (uuid) | The service principal profile ID |
+
+### Table
+
+Object
+
+A dataset table
+
+| Name | Type | Description |
+| --- | --- | --- |
+| columns | Column[] | The column schema for this table |
+| description | string | The table description |
+| isHidden | boolean | Optional. Whether this dataset table is hidden. |
+| measures | Measure[] | The measures within this table |
+| name | string <br>pattern: ^[\x09\x0A\x0D\x20\x23\x2D\x30-\x39\x40-\x5A\x5E-\x5F\x61-\x7A\x7E-\uD7FF\uE000-\uFFFD\u10000-\u10FFFF]{1,100}$ | The table name |
+| rows | Row[] | The data rows within this table |
+| source | ASMashupExpression[] | The table source |
+
+### WorkspaceInfo
+
+Object
+
+Workspace info details
+
+| Name | Type | Description |
+| --- | --- | --- |
+| capacityId | string | The workspace capacity ID |
+| dashboards | WorkspaceInfoDashboard[] | The dashboards associated with this workspace. The list of dashboard properties returned varies for different API calls, so you might not see all dashboard properties in an API response. |
+| dataRetrievalState | string | The workspace data retrieval state |
+| dataflows | WorkspaceInfoDataflow[] | The dataflows associated with this workspace. The list of dataflow properties returned varies for different API calls, so you might not see all dataflow properties in an API response. |
+| datamarts | WorkspaceInfoDatamart[] | The datamarts associated with this workspace. The list of datamart properties returned varies for different API calls, so you might not see all datamart properties in an API response. |
+| datasets | WorkspaceInfoDataset[] | The datasets associated with this workspace. The list of dataset properties returned varies for different API calls, so you might not see all dataset properties in an API response. |
+| defaultDatasetStorageFormat | DefaultDatasetStorageFormat | The default dataset storage format in the workspace. Returned only when `isOnDedicatedCapacity` is `true` |
+| description | string | The workspace description |
+| id | string (uuid) | The workspace object ID |
+| isOnDedicatedCapacity | boolean | Whether the workspace is assigned to a dedicated capacity |
+| name | string | The workspace name |
+| reports | WorkspaceInfoReport[] | The reports associated with this workspace. The list of report properties returned varies for different API calls, so you might not see all report properties in an API response. |
+| state | string | The workspace state |
+| type | string | The workspace type |
+| users | GroupUser[] | The users with access to the workspace. The list is returned only when explicitly requested. To retrieve a list of users for a classic workspace, use the Azure Active Directory Graph API. |
+
+### WorkspaceInfoDashboard
+
+Object
+
+A Power BI dashboard returned by WorkspaceInfo APIs. The API returns a subset of the following list of dashboard properties. The subset depends on the API called, caller permissions, and the availability of data in the Power BI database.
+
+| Name | Type | Description |
+| --- | --- | --- |
+| appId | string | The app ID, returned only if the dashboard belongs to an app |
+| dataClassification | string | The data classification tag of a Power BI item (such as a report or a dashboard) |
+| displayName | string | The display name of the dashboard |
+| id | string (uuid) | The dashboard ID |
+| isReadOnly | boolean | Whether the dashboard is read-only |
+| sensitivityLabel | SensitivityLabel | The sensitivity label |
+| tags | string[] (uuid) | The unique identifiers for the tags applied on an item. |
+| tiles | WorkspaceInfoTile[] | The tiles that belong to the dashboard |
+| users | DashboardUser[] | (Empty value) The dashboard user access details. This property will be removed from the payload response in an upcoming release. You can retrieve user information on a Power BI dashboard by using the [Get Dashboard Users as Admin](/en-us/rest/api/power-bi/admin/dashboards-get-dashboard-users-as-admin) API call, or the [PostWorkspaceInfo](/en-us/rest/api/power-bi/admin/workspace-info-post-workspace-info) API call with the `getArtifactUsers` parameter. |
+
+### WorkspaceInfoDataflow
+
+Object
+
+The metadata of a dataflow returned by Workspace Info APIs. Below is a list of properties that may be returned for a dataflow. Only a subset of the properties will be returned depending on the API called, the caller permissions and the availability of the data in the Power BI database.
+
+| Name | Type | Description |
+| --- | --- | --- |
+| configuredBy | string | The dataflow owner |
+| datasourceUsages | DatasourceUsage[] | The data source usages |
+| description | string | The dataflow description |
+| endorsementDetails | EndorsementDetails | The endorsement details |
+| misconfiguredDatasourceUsages | DatasourceUsage[] | The data source misconfigured usages |
+| modelUrl | string | A URL to the dataflow definition file (model.json) |
+| name | string | The dataflow name |
+| objectId | string (uuid) | The dataflow ID |
+| sensitivityLabel | SensitivityLabel | The sensitivity label |
+| tags | string[] (uuid) | The unique identifiers for the tags applied on an item. |
+| upstreamDataflows | DependentDataflow[] | The list of all the dataflows this item depends on |
+| upstreamDatamarts | DependentDatamart[] | The list of all the datamarts this item depends on |
+| users | DataflowUser[] | (Empty value) The dataflow user access details. This property will be removed from the payload response in an upcoming release. You can retrieve user information on a Power BI dataflow by using the [Get Dataflow Users as Admin](/en-us/rest/api/power-bi/admin/dataflows-get-dataflow-users-as-admin) API call, or the [PostWorkspaceInfo](/en-us/rest/api/power-bi/admin/workspace-info-post-workspace-info) API call with the `getArtifactUser` parameter. |
+
+### WorkspaceInfoDatamart
+
+Object
+
+A Power BI datamart returned by Workspace Info APIs. The API returns a subset of the following list of datamart properties. The subset depends on the API called, caller permissions, and the availability of data in the Power BI database.
+
+| Name | Type | Description |
+| --- | --- | --- |
+| configuredBy | string | The name of the datamart owner |
+| configuredById | string | The ID of the datamart owner |
+| datasourceUsages | DatasourceUsage[] | The data source usages |
+| description | string | The datamart description |
+| endorsementDetails | EndorsementDetails | The datamart endorsement details |
+| id | string (uuid) | The datamart ID |
+| modifiedBy | string | The last user that modified the datamart |
+| modifiedById | string | The ID of the last user that modified the datamart |
+| modifiedDateTime | string (date-time) | The date and time that the datamart was last modified |
+| name | string | The datamart name |
+| sensitivityLabel | SensitivityLabel | The datamart sensitivity label |
+| state | datamartState | The datamart current state |
+| status | datamartStatus | The datamart status |
+| suspendedBatchId | string | datamart suspended batch id |
+| tags | string[] (uuid) | The unique identifiers for the tags applied on an item. |
+| type | datamartType | The datamart type |
+| upstreamDataflows | DependentDataflow[] | The list of all the dataflows this item depends on |
+| upstreamDatamarts | DependentDatamart[] | The list of all the datamarts this item depends on |
+| users | DatamartUser[] | The user access details for a Power BI datamart. |
+
+### WorkspaceInfoDataset
+
+Object
+
+A Power BI dataset returned by WorkspaceInfo APIs. The API returns a subset of the following list of dataset properties. The subset depends on the API called, caller permissions, and the availability of the data in the Power BI database.
+
+| Name | Type | Description |
+| --- | --- | --- |
+| ContentProviderType | string | The content provider type for the semantic model.<br><br>The following ContentProviderTypes are stored in the tenant home region:<br><br><br>| ContentProviderType |<br>| --- |<br>| Excel |<br>| CSV |<br>| UsageMetricsUserReport |<br>| UsageMetricsUserDashboard |<br>| RealTimeInPushMode |<br>| RealTimeInPubNubMode |<br>| RealTimeInStreamingMode |<br><br><br>The following ContentProviderTypes are stored in the Capacity region:<br><br><br>| ContentProviderType |<br>| --- |<br>| PowerBIDesktop |<br>| PowerBIModelingService |<br>| PbixInImportMode |<br>| PbixInDirectQueryMode |<br>| PbixInCompositeMode |<br>| InImportMode |<br>| InDirectQueryMode |<br>| InCompositeMode | |
+| --- | --- | --- |
+| configuredBy | string | The dataset owner |
+| createdDate | string (date-time) | The dataset creation date and time |
+| datasourceUsages | DatasourceUsage[] | The data source usages |
+| description | string | The dataset description |
+| endorsementDetails | EndorsementDetails | The endorsement details |
+| expressions | Expression[] | The dataset expressions |
+| id | string | The dataset ID |
+| misconfiguredDatasourceUsages | DatasourceUsage[] | The data source misconfigured usages |
+| name | string | The dataset name |
+| roles | Role[] | The dataset roles |
+| schemaMayNotBeUpToDate | boolean | Whether the dataset schema might not be up to date |
+| schemaRetrievalError | string | The dataset schema retrieval error |
+| sensitivityLabel | SensitivityLabel | The sensitivity label |
+| tables | Table[] | The dataset tables |
+| tags | string[] (uuid) | The unique identifiers for the tags applied on an item. |
+| targetStorageMode | string | The dataset storage mode |
+| upstreamDataflows | DependentDataflow[] | The list of all the dataflows this item depends on |
+| upstreamDatamarts | DependentDatamart[] | The list of all the datamarts this item depends on |
+| upstreamDatasets | DependentDataset[] | The upstream datasets |
+| users | DatasetUser[] | (Empty value) The dataset user access details. This property will be removed from the payload response in an upcoming release. You can retrieve user information on a Power BI item (such as a report or a dashboard) by using the [Get Dataset Users as Admin](/en-us/rest/api/power-bi/admin/datasets-get-dataset-users-as-admin) API, or the [PostWorkspaceInfo](/en-us/rest/api/power-bi/admin/workspace-info-post-workspace-info) API with the `getArtifactUsers` parameter. |
+
+### WorkspaceInfoReport
+
+Object
+
+A Power BI report returned by Workspace Info APIs. The API returns a subset of the following list of report properties. The subset depends on the API called, caller permissions, and the availability of data in the Power BI database.
+
+| Name | Type | Description |
+| --- | --- | --- |
+| appId | string | The app ID, returned only if the report belongs to an app |
+| createdBy | string | The report owner. Available only for reports created after June 2019. |
+| createdById | string | The ID of the report owner. Available only for reports created after June 2019. |
+| createdDateTime | string (date-time) | The report creation date and time |
+| datasetId | string | The dataset ID of the report |
+| datasetWorkspaceId | string (uuid) | The workspace ID of the related dataset, returned only if the related dataset belongs to a different workspace |
+| description | string | The report description |
+| endorsementDetails | EndorsementDetails | The endorsement details |
+| format | string | The report definition format type. For **PowerBIReport**:<br><br>- [PBIR](/en-us/power-bi/developer/projects/projects-report?tabs=v2,desktop#pbir-format)<br>- [PBIRLegacy](/en-us/power-bi/developer/projects/projects-report?tabs=v2,desktop#reportjson)<br><br><br>For **PaginatedReport**:<br><br>- [`RDL`](/en-us/power-bi/paginated-reports/report-definition-language) |
+| id | string (uuid) | The report ID |
+| isOwnedByMe | boolean | Indicates whether the current user has the ability to either modify or create a copy of the report. |
+| modifiedBy | string | The last user that modified the report |
+| modifiedById | string | The ID of the last user that modified the report |
+| modifiedDateTime | string (date-time) | The date and time that the report was last modified |
+| name | string | The name of the report. App reports start with the prefix [App]. |
+| originalReportId | string (uuid) | The actual report ID when the workspace is published as an app. |
+| reportType | enum:<br>- PaginatedReport<br>- PowerBIReport | The report type |
+| sensitivityLabel | SensitivityLabel | The sensitivity label |
+| tags | string[] (uuid) | The unique identifiers for the tags applied on an item. |
+| users | ReportUser[] | (Empty value) The user access details for a Power BI report. This property will be removed from the payload response in an upcoming release. You can retrieve user information on a Power BI report by using the [Get Report Users as Admin](/en-us/rest/api/power-bi/admin/reports-get-report-users-as-admin) API call, or the [PostWorkspaceInfo](/en-us/rest/api/power-bi/admin/workspace-info-post-workspace-info) API call with the `getArtifactUsers` parameter. |
+
+### WorkspaceInfoResponse
+
+Object
+
+Workspace info response
+
+| Name | Type | Description |
+| --- | --- | --- |
+| datasourceInstances | Datasource[] | The data source instances associated with this scan |
+| misconfiguredDatasourceInstances | Datasource[] | The data source misconfigured instances associated with this scan |
+| workspaces | WorkspaceInfo[] | The workspace info associated with this scan |
+
+### WorkspaceInfoTile
+
+Object
+
+A Power BI tile returned by WorkspaceInfo APIs
+
+| Name | Type | Description |
+| --- | --- | --- |
+| datasetId | string | The dataset ID. Available only for tiles created from a report or by using a dataset, such as Q&A tiles. |
+| datasetWorkspaceId | string (uuid) | The workspace ID of the related dataset, returned only if the related dataset belongs to a different workspace |
+| id | string (uuid) | The tile ID |
+| reportId | string (uuid) | The report ID. Available only for tiles created from a report. |
+| title | string | The display name of the tile |
