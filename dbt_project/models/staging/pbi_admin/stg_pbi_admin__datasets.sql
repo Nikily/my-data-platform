@@ -1,21 +1,22 @@
 -- stg_pbi_admin__datasets.sql
 -- Source: Power BI Admin API — GET /admin/datasets
 -- One row per dataset (semantic model) across all workspaces in the tenant.
+-- Note: dlt normalises all column names to snake_case.
 
 select
-    id                                              as dataset_id,
-    name                                            as dataset_name,
-    "configuredBy"                                  as configured_by,
-    "workspaceId"                                   as workspace_id,
-    "isRefreshable"                                 as is_refreshable,
-    "isOnPremGatewayRequired"                       as is_on_prem_gateway_required,
-    "isEffectiveIdentityRequired"                   as is_effective_identity_required,
-    "isEffectiveIdentityRolesRequired"              as is_effective_identity_roles_required,
-    "isInPlaceSharingEnabled"                       as is_in_place_sharing_enabled,
-    "targetStorageMode"                             as target_storage_mode,
-    "ContentProviderType"                           as content_provider_type,
-    try_cast("createdDate" as timestamp)            as created_at,
-    "webUrl"                                        as web_url,
+    id                                  as dataset_id,
+    name                                as dataset_name,
+    configured_by,
+    workspace_id,
+    is_refreshable,
+    is_on_prem_gateway_required,
+    is_effective_identity_required,
+    is_effective_identity_roles_required,
+    is_in_place_sharing_enabled,
+    target_storage_mode,
+    content_provider_type,
+    try_cast(created_date as timestamp) as created_at,
+    web_url,
     description,
 
     _dlt_load_id,
