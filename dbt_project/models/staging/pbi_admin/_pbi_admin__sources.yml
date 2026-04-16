@@ -26,3 +26,19 @@ sources:
         description: "Reports shared with the whole organisation via a link. Source: GET /admin/widelySharedArtifacts/linksSharedToWholeOrganization"
       - name: unused_artifacts
         description: "Datasets, reports, and dashboards not accessed in 30+ days, per workspace. Source: GET /admin/groups/{groupId}/unused"
+      - name: scanner_workspaces
+        description: "Workspace metadata from the Scanner API. Parent table; child tables hold nested artifact and user data. Source: Workspace Scanner API"
+      - name: scanner_workspaces__users
+        description: "Workspace-level user access entries. dlt child table of scanner_workspaces."
+      - name: scanner_workspaces__reports
+        description: "Reports nested inside scanner workspace results. dlt child table of scanner_workspaces."
+      - name: scanner_workspaces__reports__users
+        description: "Per-report user access entries. dlt child table of scanner_workspaces__reports."
+      - name: scanner_workspaces__datasets
+        description: "Datasets nested inside scanner workspace results. dlt child table of scanner_workspaces."
+      - name: scanner_workspaces__datasets__users
+        description: "Per-dataset user access entries. dlt child table of scanner_workspaces__datasets."
+      - name: scanner_workspaces__dashboards
+        description: "Dashboards nested inside scanner workspace results. dlt child table of scanner_workspaces."
+      - name: scanner_workspaces__dashboards__users
+        description: "Per-dashboard user access entries. dlt child table of scanner_workspaces__dashboards."

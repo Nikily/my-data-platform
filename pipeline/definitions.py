@@ -51,6 +51,11 @@ class _DbtTranslator(DagsterDbtTranslator):
             if source_name == "raw_pbi_admin" and table_name == "apps":
                 return AssetKey("pbi_admin_raw")
 
+            # Map the scanner source to its Dagster asset so dbt waits for
+            # the scanner to finish before running scanner staging models.
+            if source_name == "raw_pbi_admin" and table_name == "scanner_workspaces":
+                return AssetKey("pbi_admin_scanner_raw")
+
         return super().get_asset_key(dbt_resource_props)
 
 

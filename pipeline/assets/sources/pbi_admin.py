@@ -16,6 +16,14 @@ ENDPOINTS LOADED:
   widely_shared_artifacts  GET /admin/widelySharedArtifacts/linksSharedToWholeOrganization
   unused_artifacts      GET /admin/groups/{groupId}/unused  (one call per workspace)
 
+WORKSPACE SCANNER (separate asset):
+  scanner_workspaces    POST /admin/workspaces/getInfo  (trigger)
+                        GET  /admin/workspaces/scanStatus/{scanId}  (poll)
+                        GET  /admin/workspaces/scanResult/{scanId}  (fetch)
+  Processes Active non-personal workspaces in batches of 100.
+  Returns workspace metadata plus per-artifact user access details for
+  reports, datasets, dashboards, and dataflows.
+
 AUTHENTICATION:
   Service principal via MSAL client credentials flow.
   Reads AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET from the environment.
@@ -41,6 +49,9 @@ _GROUPS_PAGE_SIZE = 5000  # groups endpoint supports up to 5000
 _TIMEOUT = 60
 _UNUSED_CALL_DELAY = 0.5   # seconds between per-workspace unused-artifacts calls
 _RATE_LIMIT_BACKOFF = 65   # seconds to wait on a 429 before retrying once
+_SCANNER_BATCH_SIZE = 100  # max workspaces per PostWorkspaceInfo call
+_SCANNER_POLL_INTERVAL = 10  # seconds between scanStatus polls
+_SCANNER_MAX_POLLS = 60    # give up after 10 minutes per batch
 
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
@@ -72,6 +83,46 @@ def _get(token: str, path: str, params: dict | None = None) -> dict:
         )
     response.raise_for_status()
     return response.json()
+
+
+def _post(token: str, path: str, params: dict | None = None, json_body: dict | None = None) -> dict:
+    """POST with one automatic retry on 429 (rate limit)."""
+    headers = {**_headers(token), "Content-Type": "application/json"}
+    response = requests.post(
+        f"{_base_url()}{path}",
+        headers=headers,
+        params=params,
+        json=json_body,
+        timeout=_TIMEOUT,
+    )
+    if response.status_code == 429:
+        retry_after = int(response.headers.get("Retry-After", _RATE_LIMIT_BACKOFF))
+        time.sleep(retry_after)
+        response = requests.post(
+            f"{_base_url()}{path}",
+            headers=headers,
+            params=params,
+            json=json_body,
+            timeout=_TIMEOUT,
+        )
+    response.raise_for_status()
+    return response.json()
+
+
+def _wait_for_scan(token: str, scan_id: str) -> None:
+    """Poll scanStatus until Succeeded, raise on failure or timeout."""
+    for _ in range(_SCANNER_MAX_POLLS):
+        status_data = _get(token, f"/workspaces/scanStatus/{scan_id}")
+        status = status_data.get("status", "")
+        if status == "Succeeded":
+            return
+        if status in ("Failed", "Cancelled"):
+            raise RuntimeError(f"Scan {scan_id} ended with status: {status}")
+        time.sleep(_SCANNER_POLL_INTERVAL)
+    raise TimeoutError(
+        f"Scan {scan_id} did not complete within "
+        f"{_SCANNER_MAX_POLLS * _SCANNER_POLL_INTERVAL} seconds"
+    )
 
 
 # ── dlt resources ──────────────────────────────────────────────────────────────
@@ -191,6 +242,45 @@ def widely_shared_artifacts_resource(token: str) -> Iterator[list]:
         params = {"continuationToken": continuation_token}
 
 
+@dlt.resource(name="scanner_workspaces", write_disposition="replace")
+def scanner_workspaces_resource(token: str, group_ids: list[str]) -> Iterator[list]:
+    """
+    Workspace Scanner API — 3-step async flow per batch of ≤100 workspaces:
+      1. POST /workspaces/getInfo  (trigger)
+      2. GET  /workspaces/scanStatus/{scanId}  (poll until Succeeded)
+      3. GET  /workspaces/scanResult/{scanId}  (fetch)
+    Yields workspace records including nested user access for reports,
+    datasets, dashboards, and dataflows. dlt auto-normalises nested arrays
+    into child tables (e.g. scanner_workspaces__reports__users).
+    """
+    scan_params = {
+        "lineage": "true",
+        "datasourceDetails": "true",
+        "getArtifactUsers": "true",
+    }
+
+    for i in range(0, len(group_ids), _SCANNER_BATCH_SIZE):
+        batch = group_ids[i : i + _SCANNER_BATCH_SIZE]
+
+        # Step 1: trigger scan for this batch
+        trigger = _post(
+            token,
+            "/workspaces/getInfo",
+            params=scan_params,
+            json_body={"workspaces": batch},
+        )
+        scan_id = trigger["id"]
+
+        # Step 2: poll until scan completes
+        _wait_for_scan(token, scan_id)
+
+        # Step 3: retrieve result
+        result = _get(token, f"/workspaces/scanResult/{scan_id}")
+        workspaces = result.get("workspaces", [])
+        if workspaces:
+            yield workspaces
+
+
 @dlt.resource(name="unused_artifacts", write_disposition="replace")
 def unused_artifacts_resource(token: str, group_ids: list[str]) -> Iterator[list]:
     """
@@ -303,5 +393,58 @@ def pbi_admin_unused_artifacts_raw(context: AssetExecutionContext) -> None:
 
     load_info = pipeline.run(
         unused_artifacts_resource(token=token, group_ids=group_ids)
+    )
+    context.log.info(f"Load complete: {load_info}")
+
+
+@asset(
+    group_name="raw_ingestion",
+    kinds={"dlt", "duckdb"},
+    deps=["pbi_admin_raw"],
+    description=(
+        "Workspace Scanner API snapshot: workspace metadata plus per-artifact "
+        "user access details (reports, datasets, dashboards, dataflows). "
+        "Runs after pbi_admin_raw to avoid DuckDB write conflicts. "
+        "Processes Active non-personal workspaces in batches of 100. "
+        "Loads into raw_pbi_admin schema as scanner_workspaces and child tables."
+    ),
+)
+def pbi_admin_scanner_raw(context: AssetExecutionContext) -> None:
+    context.log.info("Fetching Power BI Bearer token via MSAL...")
+    token = fetch_pbi_token()
+    context.log.info("Token obtained.")
+
+    # Fetch Active non-personal workspaces to scan
+    context.log.info("Fetching active workspaces for scanner...")
+    group_ids: list[str] = []
+    skip = 0
+    _PERSONAL_TYPES = {"PersonalGroup", "Personal"}
+    while True:
+        payload = _get(token, "/groups", {"$top": _GROUPS_PAGE_SIZE, "$skip": skip})
+        batch = payload.get("value", [])
+        if not batch:
+            break
+        group_ids.extend(
+            g["id"] for g in batch
+            if g.get("state") == "Active" and g.get("type") not in _PERSONAL_TYPES
+        )
+        if len(batch) < _GROUPS_PAGE_SIZE:
+            break
+        skip += _GROUPS_PAGE_SIZE
+
+    n_batches = (len(group_ids) + _SCANNER_BATCH_SIZE - 1) // _SCANNER_BATCH_SIZE
+    context.log.info(
+        f"Found {len(group_ids)} active non-personal workspaces — "
+        f"{n_batches} scan batches of up to {_SCANNER_BATCH_SIZE}."
+    )
+
+    pipeline = dlt.pipeline(
+        pipeline_name="pbi_admin_scanner",
+        destination=dlt.destinations.duckdb(credentials=os.environ["DUCKDB_PATH"]),
+        dataset_name="raw_pbi_admin",
+    )
+
+    load_info = pipeline.run(
+        scanner_workspaces_resource(token=token, group_ids=group_ids)
     )
     context.log.info(f"Load complete: {load_info}")
