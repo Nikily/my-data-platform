@@ -1,4 +1,98 @@
-dagster._core.errors.DagsterExecutionStepExecutionError: Error occurred while executing op "pbi_admin_raw":
+dagster_dbt.errors.DagsterDbtCliRuntimeError: The dbt CLI process with command
+
+`/opt/my_data_platform/.venv/bin/dbt run --select my_data_platform.staging.pbi_admin.stg_pbi_admin__dashboards my_data_platform.staging.pbi_admin.stg_pbi_admin__capacities my_data_platform.staging.pbi_admin.stg_pbi_admin__groups my_data_platform.staging.pbi_admin.stg_pbi_admin__apps my_data_platform.staging.pbi_admin.stg_pbi_admin__reports my_data_platform.staging.pbi_admin.stg_pbi_admin__datasets my_data_platform.staging.pbi_admin.stg_pbi_admin__refreshables my_data_platform.staging.pbi_admin.stg_pbi_admin__widely_shared_artifacts`
+
+failed with exit code `1`. Check the stdout in the Dagster compute logs for the full information about the error, or view the dbt debug log: /opt/my_data_platform/dbt_project/target/dbt_models-4a3c081-875409d/dbt.log.
+
+Errors parsed from dbt logs:
+
+1 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__apps .......... [[31mERROR[0m in 0.11s]
+
+3 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__dashboards .... [[31mERROR[0m in 0.11s]
+
+2 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__capacities .... [[31mERROR[0m in 0.11s]
+
+4 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__datasets ...... [[31mERROR[0m in 0.12s]
+
+5 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__groups ........ [[31mERROR[0m in 0.07s]
+
+6 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__refreshables .. [[31mERROR[0m in 0.08s]
+
+7 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__reports ....... [[31mERROR[0m in 0.08s]
+
+8 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__widely_shared_artifacts  [[31mERROR[0m in 0.08s]
+
+[31mFailure in model stg_pbi_admin__apps (models/staging/pbi_admin/stg_pbi_admin__apps.sql)[0m
+
+  Runtime Error in model stg_pbi_admin__apps (models/staging/pbi_admin/stg_pbi_admin__apps.sql)
+  Binder Error: Referenced column "publishedBy" not found in FROM clause!
+  Candidate bindings: "published_by", "_dlt_id", "id", "last_update"
+  
+  LINE 13:     "publishedBy"                           as published_by,
+               ^
+
+[31mFailure in model stg_pbi_admin__dashboards (models/staging/pbi_admin/stg_pbi_admin__dashboards.sql)[0m
+
+  Runtime Error in model stg_pbi_admin__dashboards (models/staging/pbi_admin/stg_pbi_admin__dashboards.sql)
+  Binder Error: Referenced column "displayName" not found in FROM clause!
+  Candidate bindings: "display_name", "is_read_only", "workspace_id", "id", "_dlt_load_id"
+  
+  LINE 11:     "displayName"                           as dashboard_name,
+               ^
+
+[31mFailure in model stg_pbi_admin__capacities (models/staging/pbi_admin/stg_pbi_admin__capacities.sql)[0m
+
+  Runtime Error in model stg_pbi_admin__capacities (models/staging/pbi_admin/stg_pbi_admin__capacities.sql)
+  Binder Error: Referenced column "displayName" not found in FROM clause!
+  Candidate bindings: "display_name", "id", "capacity_user_access_right", "state", "_dlt_load_id"
+  
+  LINE 12:     "displayName"                           as capacity_name,
+               ^
+
+[31mFailure in model stg_pbi_admin__datasets (models/staging/pbi_admin/stg_pbi_admin__datasets.sql)[0m
+
+  Runtime Error in model stg_pbi_admin__datasets (models/staging/pbi_admin/stg_pbi_admin__datasets.sql)
+  Binder Error: Referenced column "configuredBy" not found in FROM clause!
+  Candidate bindings: "configured_by", "content_provider_type", "name", "workspace_id", "id"
+  
+  LINE 12:     "configuredBy"                                  as configur...
+               ^
+
+[31mFailure in model stg_pbi_admin__groups (models/staging/pbi_admin/stg_pbi_admin__groups.sql)[0m
+
+  Runtime Error in model stg_pbi_admin__groups (models/staging/pbi_admin/stg_pbi_admin__groups.sql)
+  Binder Error: Referenced column "isReadOnly" not found in FROM clause!
+  Candidate bindings: "is_read_only", "id", "state", "is_on_dedicated_capacity", "pipeline_id"
+  
+  LINE 15:     "isReadOnly"                            as is_read_only,
+               ^
+
+[31mFailure in model stg_pbi_admin__refreshables (models/staging/pbi_admin/stg_pbi_admin__refreshables.sql)[0m
+
+  Runtime Error in model stg_pbi_admin__refreshables (models/staging/pbi_admin/stg_pbi_admin__refreshables.sql)
+  Binder Error: Referenced column "startTime" not found in FROM clause!
+  Candidate bindings: "start_time", "end_time", "last_refresh__id", "last_refresh__status", "last_refresh__start_time"
+  
+  LINE 20:     try_cast("startTime" as timestamp)              as window_start_at,
+                        ^
+
+[31mFailure in model stg_pbi_admin__reports (models/staging/pbi_admin/stg_pbi_admin__reports.sql)[0m
+
+  Runtime Error in model stg_pbi_admin__reports (models/staging/pbi_admin/stg_pbi_admin__reports.sql)
+  Binder Error: Referenced column "reportType" not found in FROM clause!
+  Candidate bindings: "report_type", "created_by", "original_report_object_id", "created_date_time", "description"
+  
+  LINE 12:     "reportType"                                    as report_type...
+               ^
+
+[31mFailure in model stg_pbi_admin__widely_shared_artifacts (models/staging/pbi_admin/stg_pbi_admin__widely_shared_artifacts.sql)[0m
+
+  Runtime Error in model stg_pbi_admin__widely_shared_artifacts (models/staging/pbi_admin/stg_pbi_admin__widely_shared_artifacts.sql)
+  Catalog Error: Table with name widely_shared_artifacts does not exist!
+  Did you mean "_dlt_pipeline_state"?
+  
+  LINE 26: from "platform"."raw_pbi_admin"."widely_shared_artifacts"
+                ^
 
   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_plan.py", line 247, in dagster_event_sequence_for_step
     yield from check.generator(step_events)
@@ -30,112 +124,18 @@ dagster._core.errors.DagsterExecutionStepExecutionError: Error occurred while ex
         ^^^^^^^^^^^^^^^^^^^^^
     ):
     ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_utils/__init__.py", line 392, in iterate_with_context
-    with context_fn():
-         ~~~~~~~~~~^^
-  File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
-    self.gen.throw(value)
-    ~~~~~~~~~~~~~~^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/utils.py", line 87, in op_execution_error_boundary
-    raise error_cls(
-    ...<4 lines>...
-    ) from e
-
-The above exception was caused by the following exception:
-dlt.pipeline.exceptions.PipelineStepFailed: Pipeline execution failed at `step=extract` when processing package with `load_id=1776341235.1994371` with exception:
-
-<class 'dlt.extract.exceptions.ResourceExtractionError'>
-In processing pipe `unused_artifacts`: extraction of resource `unused_artifacts` in `generator` `unused_artifacts_resource` caused an exception: 429 Client Error:  for url: https://api.powerbi.com/v1.0/myorg/admin/groups/7143171b-aa31-4194-84c2-dcc0ebf4d14a/unused
-
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/utils.py", line 57, in op_execution_error_boundary
-    yield
   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_utils/__init__.py", line 394, in iterate_with_context
     next_output = next(iterator)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute_generator.py", line 135, in _coerce_op_compute_fn_to_iterator
-    result = invoke_compute_fn(
-        fn, context, kwargs, context_arg_provided, config_arg_class, resource_arg_mapping
-    )
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute_generator.py", line 115, in invoke_compute_fn
-    return fn(context, **args_to_pass) if context_arg_provided else fn(**args_to_pass)
-           ~~^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/pipeline/assets/sources/pbi_admin.py", line 246, in pbi_admin_raw
-    load_info = pipeline.run(
-        [
-    ...<9 lines>...
-        ]
-    )
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 224, in _wrap
-    step_info = f(self, *args, **kwargs)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 272, in _wrap
-    return f(self, *args, **kwargs)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 757, in run
-    self.extract(
-    ~~~~~~~~~~~~^
-        data,
-        ^^^^^
-    ...<8 lines>...
-        loader_file_format=loader_file_format,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 224, in _wrap
-    step_info = f(self, *args, **kwargs)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 178, in _wrap
-    rv = f(self, *args, **kwargs)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 164, in _wrap
-    return f(self, *args, **kwargs)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 272, in _wrap
-    return f(self, *args, **kwargs)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 516, in extract
-    raise PipelineStepFailed(
-    ...<5 lines>...
-    ) from exc
-
-The above exception was caused by the following exception:
-dlt.extract.exceptions.ResourceExtractionError: In processing pipe `unused_artifacts`: extraction of resource `unused_artifacts` in `generator` `unused_artifacts_resource` caused an exception: 429 Client Error:  for url: https://api.powerbi.com/v1.0/myorg/admin/groups/7143171b-aa31-4194-84c2-dcc0ebf4d14a/unused
-
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 493, in extract
-    self._extract_source(
-    ~~~~~~~~~~~~~~~~~~~~^
-        extract_step,
-        ^^^^^^^^^^^^^
-    ...<3 lines>...
-        refresh=refresh or self.refresh,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/pipeline/pipeline.py", line 1388, in _extract_source
-    load_id = extract.extract(
-        source, max_parallel_items, workers, load_package_state_update=load_package_state_update
-    )
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/extract/extract.py", line 487, in extract
-    self._extract_single_source(
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        load_id,
-        ^^^^^^^^
-    ...<2 lines>...
-        workers=workers,
-        ^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/extract/extract.py", line 405, in _extract_single_source
-    for pipe_item in pipes:
-                     ^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/extract/pipe_iterator.py", line 158, in __next__
-    pipe_item = self._get_source_item()
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/extract/pipe_iterator.py", line 304, in _get_source_item
-    raise ResourceExtractionError(pipe.name, gen, str(ex), "generator") from ex
-
-The above exception was caused by the following exception:
-requests.exceptions.HTTPError: 429 Client Error:  for url: https://api.powerbi.com/v1.0/myorg/admin/groups/7143171b-aa31-4194-84c2-dcc0ebf4d14a/unused
-
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dlt/extract/pipe_iterator.py", line 274, in _get_source_item
-    pipe_item = next(gen)
-  File "/opt/my_data_platform/pipeline/assets/sources/pbi_admin.py", line 191, in unused_artifacts_resource
-    payload = _get(token, f"/groups/{group_id}/unused", params or None)
-  File "/opt/my_data_platform/pipeline/assets/sources/pbi_admin.py", line 60, in _get
-    response.raise_for_status()
-    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/requests/models.py", line 1026, in raise_for_status
-    raise HTTPError(http_error_msg, response=self)
+  File "/opt/my_data_platform/pipeline/definitions.py", line 64, in dbt_models
+    yield from dbt.cli(["run"], context=context).stream()
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_event_iterator.py", line 215, in __next__
+    return next(self._inner_iterator)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_cli_invocation.py", line 286, in _stream_asset_events
+    for event in self.stream_raw_events():
+                 ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_cli_invocation.py", line 379, in stream_raw_events
+    self._raise_on_error()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_cli_invocation.py", line 470, in _raise_on_error
+    raise error
 
