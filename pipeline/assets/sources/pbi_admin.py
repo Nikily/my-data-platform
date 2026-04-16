@@ -28,6 +28,7 @@ CREDENTIALS (set in .env):
 """
 
 import os
+import time
 from typing import Iterator
 
 import dlt
@@ -38,6 +39,8 @@ from pipeline.utils.pbi import fetch_pbi_token
 _PAGE_SIZE = 500        # used for $top/$skip endpoints
 _GROUPS_PAGE_SIZE = 5000  # groups endpoint supports up to 5000
 _TIMEOUT = 60
+_UNUSED_CALL_DELAY = 0.5   # seconds between per-workspace unused-artifacts calls
+_RATE_LIMIT_BACKOFF = 65   # seconds to wait on a 429 before retrying once
 
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
@@ -51,12 +54,22 @@ def _headers(token: str) -> dict:
 
 
 def _get(token: str, path: str, params: dict | None = None) -> dict:
+    """GET with one automatic retry on 429 (rate limit)."""
     response = requests.get(
         f"{_base_url()}{path}",
         headers=_headers(token),
         params=params,
         timeout=_TIMEOUT,
     )
+    if response.status_code == 429:
+        retry_after = int(response.headers.get("Retry-After", _RATE_LIMIT_BACKOFF))
+        time.sleep(retry_after)
+        response = requests.get(
+            f"{_base_url()}{path}",
+            headers=_headers(token),
+            params=params,
+            timeout=_TIMEOUT,
+        )
     response.raise_for_status()
     return response.json()
 
@@ -185,6 +198,7 @@ def unused_artifacts_resource(token: str, group_ids: list[str]) -> Iterator[list
     Yields records enriched with group_id so the workspace is identifiable.
     """
     for group_id in group_ids:
+        time.sleep(_UNUSED_CALL_DELAY)  # avoid bursting through the 200 req/hr limit
         params: dict = {}
         while True:
             try:
