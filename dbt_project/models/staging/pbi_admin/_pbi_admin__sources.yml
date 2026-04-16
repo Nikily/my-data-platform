@@ -1,0 +1,28 @@
+version: 2
+
+sources:
+  - name: raw_pbi_admin
+    description: >
+      Raw Power BI Admin REST API data loaded by dlt.
+      Full tenant-wide snapshots replaced on every pipeline run.
+      All tables live in the raw_pbi_admin schema in DuckDB.
+    schema: raw_pbi_admin
+    tables:
+      - name: apps
+        description: "All Power BI apps published in the tenant. Source: GET /admin/apps"
+      - name: capacities
+        description: "All Power BI Premium / Fabric capacities. Source: GET /admin/capacities"
+      - name: refreshables
+        description: "Datasets with a refresh history or active refresh schedule (last 7 days). Source: GET /admin/capacities/refreshables"
+      - name: groups
+        description: "All workspaces (groups) in the tenant. Source: GET /admin/groups"
+      - name: dashboards
+        description: "All dashboards across all workspaces. Source: GET /admin/dashboards"
+      - name: reports
+        description: "All reports across all workspaces. Source: GET /admin/reports"
+      - name: datasets
+        description: "All datasets (semantic models) across all workspaces. Source: GET /admin/datasets"
+      - name: widely_shared_artifacts
+        description: "Reports shared with the whole organisation via a link. Source: GET /admin/widelySharedArtifacts/linksSharedToWholeOrganization"
+      - name: unused_artifacts
+        description: "Datasets, reports, and dashboards not accessed in 30+ days, per workspace. Source: GET /admin/groups/{groupId}/unused"

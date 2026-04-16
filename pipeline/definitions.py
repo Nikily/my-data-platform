@@ -15,7 +15,7 @@ from dagster_duckdb import DuckDBResource
 
 from pipeline.assets.export import parquet_export
 from pipeline.assets.infra import azure_containers
-from pipeline.assets.sources import adls_delta, csv_local, csv_sftp, eight_x_eight_cdr, eight_x_eight_users, rest_api
+from pipeline.assets.sources import adls_delta, csv_local, csv_sftp, eight_x_eight_cdr, eight_x_eight_users, pbi_admin, rest_api
 from pipeline.schedules.daily_schedule import daily_schedule
 from pipeline.schedules.eight_x_eight_schedule import eight_x_eight_schedule
 
@@ -37,12 +37,20 @@ class _DbtTranslator(DagsterDbtTranslator):
     and does not run ingestion and dbt in parallel (which causes a DuckDB lock conflict)."""
 
     def get_asset_key(self, dbt_resource_props: dict) -> AssetKey:
-        if (
-            dbt_resource_props.get("resource_type") == "source"
-            and dbt_resource_props.get("source_name") == "raw_eight_x_eight"
-            and dbt_resource_props.get("name") == "call_detail_records"
-        ):
-            return AssetKey("eight_x_eight_cdr_raw")
+        resource_type = dbt_resource_props.get("resource_type")
+        source_name   = dbt_resource_props.get("source_name")
+        table_name    = dbt_resource_props.get("name")
+
+        if resource_type == "source":
+            # Map the canonical 8x8 CDR source to its Dagster asset so dbt
+            # waits for ingestion before running (prevents DuckDB lock conflicts).
+            if source_name == "raw_eight_x_eight" and table_name == "call_detail_records":
+                return AssetKey("eight_x_eight_cdr_raw")
+
+            # Map the canonical PBI Admin source to its Dagster asset.
+            if source_name == "raw_pbi_admin" and table_name == "apps":
+                return AssetKey("pbi_admin_raw")
+
         return super().get_asset_key(dbt_resource_props)
 
 
@@ -58,7 +66,7 @@ def dbt_models(context, dbt: DbtCliResource):
 
 # ── Collect all assets ────────────────────────────────────────────────────────
 infra_assets = load_assets_from_modules([azure_containers])
-ingestion_assets = load_assets_from_modules([rest_api, csv_local, csv_sftp, adls_delta, eight_x_eight_cdr, eight_x_eight_users])
+ingestion_assets = load_assets_from_modules([rest_api, csv_local, csv_sftp, adls_delta, eight_x_eight_cdr, eight_x_eight_users, pbi_admin])
 export_assets = load_assets_from_modules([parquet_export])
 
 # ── Definitions ───────────────────────────────────────────────────────────────
