@@ -1,98 +1,43 @@
 dagster_dbt.errors.DagsterDbtCliRuntimeError: The dbt CLI process with command
 
-`/opt/my_data_platform/.venv/bin/dbt run --select my_data_platform.staging.pbi_admin.stg_pbi_admin__dashboards my_data_platform.staging.pbi_admin.stg_pbi_admin__capacities my_data_platform.staging.pbi_admin.stg_pbi_admin__groups my_data_platform.staging.pbi_admin.stg_pbi_admin__apps my_data_platform.staging.pbi_admin.stg_pbi_admin__reports my_data_platform.staging.pbi_admin.stg_pbi_admin__datasets my_data_platform.staging.pbi_admin.stg_pbi_admin__refreshables my_data_platform.staging.pbi_admin.stg_pbi_admin__widely_shared_artifacts`
+`/opt/my_data_platform/.venv/bin/dbt run --select my_data_platform.staging.pbi_admin.stg_pbi_admin__refreshables my_data_platform.staging.pbi_admin.stg_pbi_admin__dashboards my_data_platform.staging.pbi_admin.stg_pbi_admin__widely_shared_artifacts my_data_platform.staging.pbi_admin.stg_pbi_admin__reports my_data_platform.staging.pbi_admin.stg_pbi_admin__apps my_data_platform.staging.pbi_admin.stg_pbi_admin__datasets my_data_platform.staging.pbi_admin.stg_pbi_admin__capacities my_data_platform.staging.pbi_admin.stg_pbi_admin__groups`
 
-failed with exit code `1`. Check the stdout in the Dagster compute logs for the full information about the error, or view the dbt debug log: /opt/my_data_platform/dbt_project/target/dbt_models-4a3c081-875409d/dbt.log.
+failed with exit code `1`. Check the stdout in the Dagster compute logs for the full information about the error, or view the dbt debug log: /opt/my_data_platform/dbt_project/target/dbt_models-72ece8e-102a819/dbt.log.
 
 Errors parsed from dbt logs:
 
-1 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__apps .......... [[31mERROR[0m in 0.11s]
+4 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__datasets ...... [[31mERROR[0m in 0.13s]
 
-3 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__dashboards .... [[31mERROR[0m in 0.11s]
-
-2 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__capacities .... [[31mERROR[0m in 0.11s]
-
-4 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__datasets ...... [[31mERROR[0m in 0.12s]
-
-5 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__groups ........ [[31mERROR[0m in 0.07s]
+2 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__capacities .... [[31mERROR[0m in 0.13s]
 
 6 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__refreshables .. [[31mERROR[0m in 0.08s]
 
-7 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__reports ....... [[31mERROR[0m in 0.08s]
+[31mFailure in model stg_pbi_admin__datasets (models/staging/pbi_admin/stg_pbi_admin__datasets.sql)[0m
 
-8 of 8 ERROR creating sql view model main_staging.stg_pbi_admin__widely_shared_artifacts  [[31mERROR[0m in 0.08s]
-
-[31mFailure in model stg_pbi_admin__apps (models/staging/pbi_admin/stg_pbi_admin__apps.sql)[0m
-
-  Runtime Error in model stg_pbi_admin__apps (models/staging/pbi_admin/stg_pbi_admin__apps.sql)
-  Binder Error: Referenced column "publishedBy" not found in FROM clause!
-  Candidate bindings: "published_by", "_dlt_id", "id", "last_update"
+  Runtime Error in model stg_pbi_admin__datasets (models/staging/pbi_admin/stg_pbi_admin__datasets.sql)
+  Binder Error: Referenced column "is_on_prem_gateway_required" not found in FROM clause!
+  Candidate bindings: "is_in_place_sharing_enabled", "query_scale_out_settings__max_read_only_replicas", "add_rows_api_enabled", "create_report_embed_url", "name"
   
-  LINE 13:     "publishedBy"                           as published_by,
-               ^
-
-[31mFailure in model stg_pbi_admin__dashboards (models/staging/pbi_admin/stg_pbi_admin__dashboards.sql)[0m
-
-  Runtime Error in model stg_pbi_admin__dashboards (models/staging/pbi_admin/stg_pbi_admin__dashboards.sql)
-  Binder Error: Referenced column "displayName" not found in FROM clause!
-  Candidate bindings: "display_name", "is_read_only", "workspace_id", "id", "_dlt_load_id"
-  
-  LINE 11:     "displayName"                           as dashboard_name,
+  LINE 16:     is_on_prem_gateway_required,
                ^
 
 [31mFailure in model stg_pbi_admin__capacities (models/staging/pbi_admin/stg_pbi_admin__capacities.sql)[0m
 
   Runtime Error in model stg_pbi_admin__capacities (models/staging/pbi_admin/stg_pbi_admin__capacities.sql)
-  Binder Error: Referenced column "displayName" not found in FROM clause!
-  Candidate bindings: "display_name", "id", "capacity_user_access_right", "state", "_dlt_load_id"
+  Binder Error: Referenced column "tenant_key_id" not found in FROM clause!
+  Candidate bindings: "state", "_dlt_load_id", "display_name", "capacity_user_access_right"
   
-  LINE 12:     "displayName"                           as capacity_name,
-               ^
-
-[31mFailure in model stg_pbi_admin__datasets (models/staging/pbi_admin/stg_pbi_admin__datasets.sql)[0m
-
-  Runtime Error in model stg_pbi_admin__datasets (models/staging/pbi_admin/stg_pbi_admin__datasets.sql)
-  Binder Error: Referenced column "configuredBy" not found in FROM clause!
-  Candidate bindings: "configured_by", "content_provider_type", "name", "workspace_id", "id"
-  
-  LINE 12:     "configuredBy"                                  as configur...
-               ^
-
-[31mFailure in model stg_pbi_admin__groups (models/staging/pbi_admin/stg_pbi_admin__groups.sql)[0m
-
-  Runtime Error in model stg_pbi_admin__groups (models/staging/pbi_admin/stg_pbi_admin__groups.sql)
-  Binder Error: Referenced column "isReadOnly" not found in FROM clause!
-  Candidate bindings: "is_read_only", "id", "state", "is_on_dedicated_capacity", "pipeline_id"
-  
-  LINE 15:     "isReadOnly"                            as is_read_only,
+  LINE 17:     tenant_key_id,
                ^
 
 [31mFailure in model stg_pbi_admin__refreshables (models/staging/pbi_admin/stg_pbi_admin__refreshables.sql)[0m
 
   Runtime Error in model stg_pbi_admin__refreshables (models/staging/pbi_admin/stg_pbi_admin__refreshables.sql)
-  Binder Error: Referenced column "startTime" not found in FROM clause!
-  Candidate bindings: "start_time", "end_time", "last_refresh__id", "last_refresh__status", "last_refresh__start_time"
+  Binder Error: Referenced column "capacity__id" not found in FROM clause!
+  Candidate bindings: "last_refresh__id", "_dlt_load_id", "_dlt_id", "last_refresh__start_time", "last_refresh__end_time"
   
-  LINE 20:     try_cast("startTime" as timestamp)              as window_start_at,
-                        ^
-
-[31mFailure in model stg_pbi_admin__reports (models/staging/pbi_admin/stg_pbi_admin__reports.sql)[0m
-
-  Runtime Error in model stg_pbi_admin__reports (models/staging/pbi_admin/stg_pbi_admin__reports.sql)
-  Binder Error: Referenced column "reportType" not found in FROM clause!
-  Candidate bindings: "report_type", "created_by", "original_report_object_id", "created_date_time", "description"
-  
-  LINE 12:     "reportType"                                    as report_type...
+  LINE 35:     capacity__id                                    as capacity_id...
                ^
-
-[31mFailure in model stg_pbi_admin__widely_shared_artifacts (models/staging/pbi_admin/stg_pbi_admin__widely_shared_artifacts.sql)[0m
-
-  Runtime Error in model stg_pbi_admin__widely_shared_artifacts (models/staging/pbi_admin/stg_pbi_admin__widely_shared_artifacts.sql)
-  Catalog Error: Table with name widely_shared_artifacts does not exist!
-  Did you mean "_dlt_pipeline_state"?
-  
-  LINE 26: from "platform"."raw_pbi_admin"."widely_shared_artifacts"
-                ^
 
   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_plan.py", line 247, in dagster_event_sequence_for_step
     yield from check.generator(step_events)
