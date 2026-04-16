@@ -10,7 +10,6 @@ select
     state,
     region,
     capacity_user_access_right      as access_right,
-    tenant_key_id,
 
     _dlt_load_id,
     _dlt_id

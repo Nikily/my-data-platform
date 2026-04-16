@@ -105,7 +105,7 @@ def refreshables_resource(token: str) -> Iterator[list]:
     """GET /capacities/refreshables — datasets with a refresh history or schedule."""
     skip = 0
     while True:
-        payload = _get(token, "/capacities/refreshables", {"$top": _PAGE_SIZE, "$skip": skip})
+        payload = _get(token, "/capacities/refreshables", {"$top": _PAGE_SIZE, "$skip": skip, "$expand": "capacity,group"})
         records = payload.get("value", [])
         if not records:
             break
