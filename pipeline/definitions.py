@@ -18,6 +18,7 @@ from pipeline.assets.infra import azure_containers
 from pipeline.assets.sources import adls_delta, csv_local, csv_sftp, eight_x_eight_cdr, eight_x_eight_users, pbi_admin, rest_api
 from pipeline.schedules.daily_schedule import daily_schedule
 from pipeline.schedules.eight_x_eight_schedule import eight_x_eight_schedule
+from pipeline.schedules.pbi_refreshes_schedule import pbi_refreshes_schedule
 
 # ── dbt project setup ─────────────────────────────────────────────────────────
 DBT_PROJECT_DIR = Path(__file__).parent.parent / "dbt_project"
@@ -51,10 +52,17 @@ class _DbtTranslator(DagsterDbtTranslator):
             if source_name == "raw_pbi_admin" and table_name == "apps":
                 return AssetKey("pbi_admin_raw")
 
-            # Map the scanner source to its Dagster asset so dbt waits for
+            # Map the scanner sources to their Dagster asset so dbt waits for
             # the scanner to finish before running scanner staging models.
-            if source_name == "raw_pbi_admin" and table_name == "scanner_workspaces":
+            if source_name == "raw_pbi_admin" and table_name in (
+                "scanner_workspaces",
+                "scanner_datasource_instances",
+            ):
                 return AssetKey("pbi_admin_scanner_raw")
+
+            # Map the refresh-status source to its Dagster asset.
+            if source_name == "raw_pbi_admin" and table_name == "dataset_refreshes":
+                return AssetKey("pbi_admin_refreshes_raw")
 
         return super().get_asset_key(dbt_resource_props)
 
@@ -95,5 +103,5 @@ defs = Definitions(
             dbt_executable=DBT_EXECUTABLE,
         ),
     },
-    schedules=[daily_schedule, eight_x_eight_schedule],
+    schedules=[daily_schedule, eight_x_eight_schedule, pbi_refreshes_schedule],
 )

@@ -40,8 +40,9 @@ import time
 from typing import Iterator
 
 import dlt
+import duckdb
 import requests
-from dagster import AssetExecutionContext, asset
+from dagster import AssetExecutionContext, RetryPolicy, asset
 from pipeline.utils.pbi import fetch_pbi_token
 
 _PAGE_SIZE = 500        # used for $top/$skip endpoints
@@ -242,27 +243,21 @@ def widely_shared_artifacts_resource(token: str) -> Iterator[list]:
         params = {"continuationToken": continuation_token}
 
 
-@dlt.resource(name="scanner_workspaces", write_disposition="replace")
-def scanner_workspaces_resource(token: str, group_ids: list[str]) -> Iterator[list]:
+def _run_scanner_batches(token: str, group_ids: list[str]) -> tuple[list, list]:
     """
-    Workspace Scanner API — 3-step async flow per batch of ≤100 workspaces:
-      1. POST /workspaces/getInfo  (trigger)
-      2. GET  /workspaces/scanStatus/{scanId}  (poll until Succeeded)
-      3. GET  /workspaces/scanResult/{scanId}  (fetch)
-    Yields workspace records including nested user access for reports,
-    datasets, dashboards, and dataflows. dlt auto-normalises nested arrays
-    into child tables (e.g. scanner_workspaces__reports__users).
+    Run all scanner batches and return (all_workspaces, all_datasource_instances).
+    Collects both top-level arrays from the scan result so a single API sweep
+    populates both the workspace tree and the datasource lookup table.
     """
+    all_workspaces: list = []
+    all_datasource_instances: list = []
     scan_params = {
         "lineage": "true",
         "datasourceDetails": "true",
         "getArtifactUsers": "true",
     }
-
     for i in range(0, len(group_ids), _SCANNER_BATCH_SIZE):
         batch = group_ids[i : i + _SCANNER_BATCH_SIZE]
-
-        # Step 1: trigger scan for this batch
         trigger = _post(
             token,
             "/workspaces/getInfo",
@@ -270,15 +265,30 @@ def scanner_workspaces_resource(token: str, group_ids: list[str]) -> Iterator[li
             json_body={"workspaces": batch},
         )
         scan_id = trigger["id"]
-
-        # Step 2: poll until scan completes
         _wait_for_scan(token, scan_id)
-
-        # Step 3: retrieve result
         result = _get(token, f"/workspaces/scanResult/{scan_id}")
-        workspaces = result.get("workspaces", [])
-        if workspaces:
-            yield workspaces
+        all_workspaces.extend(result.get("workspaces", []))
+        all_datasource_instances.extend(result.get("datasourceInstances", []))
+    return all_workspaces, all_datasource_instances
+
+
+@dlt.resource(name="scanner_workspaces", write_disposition="replace")
+def scanner_workspaces_resource(records: list) -> Iterator[list]:
+    """Workspace tree from the scanner API, pre-collected by _run_scanner_batches."""
+    if records:
+        yield records
+
+
+@dlt.resource(name="scanner_datasource_instances", write_disposition="replace")
+def scanner_datasource_instances_resource(records: list) -> Iterator[list]:
+    """
+    Top-level datasource instances from the scanner API result.
+    Contains connection details (type, server, database, path, url) for every
+    datasource referenced by datasets in the scan. Linked to datasets via
+    scanner_workspaces__datasets__datasource_usages.datasource_instance_id.
+    """
+    if records:
+        yield records
 
 
 @dlt.resource(name="unused_artifacts", write_disposition="replace")
@@ -438,13 +448,85 @@ def pbi_admin_scanner_raw(context: AssetExecutionContext) -> None:
         f"{n_batches} scan batches of up to {_SCANNER_BATCH_SIZE}."
     )
 
+    all_workspaces, all_datasource_instances = _run_scanner_batches(token, group_ids)
+    context.log.info(
+        f"Scan complete — {len(all_workspaces)} workspaces, "
+        f"{len(all_datasource_instances)} datasource instances collected."
+    )
+
     pipeline = dlt.pipeline(
         pipeline_name="pbi_admin_scanner",
         destination=dlt.destinations.duckdb(credentials=os.environ["DUCKDB_PATH"]),
         dataset_name="raw_pbi_admin",
     )
 
+    load_info = pipeline.run([
+        scanner_workspaces_resource(records=all_workspaces),
+        scanner_datasource_instances_resource(records=all_datasource_instances),
+    ])
+    context.log.info(f"Load complete: {load_info}")
+
+
+@dlt.resource(name="dataset_refreshes", write_disposition="append")
+def dataset_refreshes_resource(token: str, dataset_ids: list[str]) -> Iterator[list]:
+    """
+    GET /admin/datasets/{datasetId}/refreshes?$top=5 for each dataset.
+    Yields the last 5 refresh attempts per dataset, enriched with dataset_id.
+    Skips datasets that return 4xx (e.g. personal workspaces, inaccessible datasets).
+    write_disposition=append — each hourly run adds new rows; history is preserved.
+    """
+    for dataset_id in dataset_ids:
+        try:
+            payload = _get(
+                token, f"/datasets/{dataset_id}/refreshes", {"$top": 5}
+            )
+        except requests.exceptions.HTTPError as exc:
+            if exc.response is not None and exc.response.status_code in (400, 403, 404):
+                continue
+            raise
+        records = payload.get("value", [])
+        if records:
+            yield [{**r, "dataset_id": dataset_id} for r in records]
+
+
+@asset(
+    group_name="raw_ingestion",
+    kinds={"dlt", "duckdb"},
+    retry_policy=RetryPolicy(max_retries=1, delay=300),
+    description=(
+        "Hourly snapshot of the last 5 refresh attempts per refreshable dataset. "
+        "Calls GET /admin/datasets/{id}/refreshes for each dataset where "
+        "is_refreshable=true. Appends to dataset_refreshes in raw_pbi_admin — "
+        "history is preserved across runs. "
+        "RetryPolicy: 1 retry after 5 minutes to ride out any DuckDB write lock "
+        "from the daily pipeline."
+    ),
+)
+def pbi_admin_refreshes_raw(context: AssetExecutionContext) -> None:
+    context.log.info("Fetching Power BI Bearer token via MSAL...")
+    token = fetch_pbi_token()
+    context.log.info("Token obtained.")
+
+    # Read refreshable dataset IDs from DuckDB (written by pbi_admin_raw daily)
+    context.log.info("Reading refreshable dataset IDs from DuckDB...")
+    conn = duckdb.connect(os.environ["DUCKDB_PATH"], read_only=True)
+    try:
+        rows = conn.execute(
+            "SELECT id FROM raw_pbi_admin.datasets WHERE is_refreshable = true"
+        ).fetchall()
+    finally:
+        conn.close()
+
+    dataset_ids = [row[0] for row in rows if row[0]]
+    context.log.info(f"Found {len(dataset_ids)} refreshable datasets.")
+
+    pipeline = dlt.pipeline(
+        pipeline_name="pbi_admin_refreshes",
+        destination=dlt.destinations.duckdb(credentials=os.environ["DUCKDB_PATH"]),
+        dataset_name="raw_pbi_admin",
+    )
+
     load_info = pipeline.run(
-        scanner_workspaces_resource(token=token, group_ids=group_ids)
+        dataset_refreshes_resource(token=token, dataset_ids=dataset_ids)
     )
     context.log.info(f"Load complete: {load_info}")

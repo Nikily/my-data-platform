@@ -42,3 +42,9 @@ sources:
         description: "Dashboards nested inside scanner workspace results. dlt child table of scanner_workspaces."
       - name: scanner_workspaces__dashboards__users
         description: "Per-dashboard user access entries. dlt child table of scanner_workspaces__dashboards."
+      - name: scanner_datasource_instances
+        description: "Top-level datasource instances from the scanner result. Contains connection details (type, server, database, path, url) for every datasource referenced by any scanned dataset."
+      - name: scanner_workspaces__datasets__datasource_usages
+        description: "Links datasets to their datasource instances. dlt child table of scanner_workspaces__datasets."
+      - name: dataset_refreshes
+        description: "Last 5 refresh attempts per refreshable dataset. Append-only — one batch of rows added per hourly run. Source: GET /admin/datasets/{id}/refreshes"

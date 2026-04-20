@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: int_pbi_admin__reports
+    description: >
+      All Power BI reports enriched with workspace name and semantic model name.
+      One row per report across all scanned workspaces.
+
+  - name: int_pbi_admin__semantic_model_datasources
+    description: >
+      Semantic models joined to their data sources.
+      One row per (semantic model, datasource) pair — a model using 2 Excel
+      files and 1 Dataverse connection produces 3 rows.
+      Includes datasource type and connection details (server, database, path, url).
+
+  - name: int_pbi_admin__refresh_status
+    description: >
+      Incremental history of refresh attempts per semantic model.
+      One row per (dataset_id, refresh_id) — deduplicated across hourly runs.
+      Populated by the hourly pbi_admin_refreshes_raw asset.
+      Use status = 'Completed' / 'Failed' and started_at for monitoring.
+
+  - name: int_pbi_admin__report_access
+    description: >
+      Per-user access rights to Power BI reports.
+      One row per (report, user) pair across all scanned workspaces.
+      Includes workspace context and access right level.
+
+  - name: int_pbi_admin__semantic_model_access
+    description: >
+      Per-user access rights to Power BI semantic models (datasets).
+      One row per (dataset, user) pair across all scanned workspaces.
+      Includes workspace context and access right level.
