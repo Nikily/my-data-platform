@@ -66,6 +66,7 @@ def _export_table_to_blob(
 @asset(
     group_name="export",
     kinds={"duckdb", "azure"},
+    op_tags={"dagster/concurrency_key": "duckdb"},
     description=(
         "Exports dbt mart tables from DuckDB as Parquet files to Azure Blob Storage "
         "so Power BI Service and Desktop can connect natively."

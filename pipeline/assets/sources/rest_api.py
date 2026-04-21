@@ -76,6 +76,7 @@ def rest_api_source():
 @asset(
     group_name="raw_ingestion",
     kinds={"dlt", "duckdb"},
+    op_tags={"dagster/concurrency_key": "duckdb"},
     description="Incrementally loads data from the REST API into DuckDB (raw layer).",
 )
 def rest_api_raw(context: AssetExecutionContext) -> None:

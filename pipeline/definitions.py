@@ -71,6 +71,7 @@ class _DbtTranslator(DagsterDbtTranslator):
     manifest=dbt_project.manifest_path,
     name="dbt_models",
     dagster_dbt_translator=_DbtTranslator(),
+    op_tags={"dagster/concurrency_key": "duckdb"},
 )
 def dbt_models(context, dbt: DbtCliResource):
     """Runs all dbt models (staging → marts)."""

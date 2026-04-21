@@ -26,6 +26,7 @@ from dagster import AssetExecutionContext, asset
 @asset(
     group_name="raw_ingestion",
     kinds={"dlt", "duckdb"},
+    op_tags={"dagster/concurrency_key": "duckdb"},
     description="Loads CSV files from an SFTP server into DuckDB (raw layer).",
 )
 def csv_sftp_raw(context: AssetExecutionContext) -> None:

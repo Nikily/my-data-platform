@@ -87,6 +87,7 @@ def eight_x_eight_admin_source(token: str) -> dlt.sources.DltSource:
 @asset(
     group_name="raw_ingestion",
     kinds={"dlt", "duckdb"},
+    op_tags={"dagster/concurrency_key": "duckdb"},
     description=(
         "Loads the full 8x8 user list from the Admin Provisioning API into DuckDB. "
         "Full replace on each run. Extensions are stored in a child table by dlt."

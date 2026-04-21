@@ -76,6 +76,7 @@ def ingest_delta_table(
 @asset(
     group_name="raw_ingestion",
     kinds={"duckdb", "azure"},
+    op_tags={"dagster/concurrency_key": "duckdb"},
     description=(
         "Reads Dataverse entities from Delta tables on ADLS Gen2 / OneLake "
         "into DuckDB (raw layer) using DuckDB's native azure + delta extensions."

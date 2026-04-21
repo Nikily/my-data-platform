@@ -324,6 +324,7 @@ def unused_artifacts_resource(token: str, group_ids: list[str]) -> Iterator[list
 @asset(
     group_name="raw_ingestion",
     kinds={"dlt", "duckdb"},
+    op_tags={"dagster/concurrency_key": "duckdb"},
     description=(
         "Full snapshot of Power BI Admin REST API endpoints loaded into DuckDB. "
         "Covers apps, capacities, refreshables, groups (workspaces), dashboards, "

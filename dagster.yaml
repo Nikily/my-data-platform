@@ -6,3 +6,13 @@ storage:
   sqlite:
     base_dir:
       env: DAGSTER_HOME
+
+# Global op concurrency — any op tagged with dagster/concurrency_key defaults
+# to 1 concurrent slot unless a higher limit is explicitly configured.
+# All assets that write to (or read from) DuckDB are tagged with
+# dagster/concurrency_key: "duckdb", so at most one will run at a time
+# across all concurrent Dagster runs, preventing DuckDB write-lock conflicts.
+# To allow more concurrency for a specific key, set it explicitly in the UI
+# (Deployment → Concurrency) or via: dagster concurrency set <key> <limit>
+concurrency:
+  default_op_concurrency_limit: 1
