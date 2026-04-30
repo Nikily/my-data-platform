@@ -72,10 +72,25 @@ class _DbtTranslator(DagsterDbtTranslator):
     manifest=dbt_project.manifest_path,
     name="dbt_models",
     dagster_dbt_translator=_DbtTranslator(),
+    # Exclude the hourly refresh models — those run in dbt_hourly_refresh_models.
+    select="my_data_platform --exclude tag:hourly_pbi_refreshes",
     op_tags={"dagster/concurrency_key": "duckdb"},
 )
 def dbt_models(context, dbt: DbtCliResource):
-    """Runs all dbt models (staging → marts)."""
+    """Runs all dbt models except the hourly PBI refresh ones (staging → marts)."""
+    yield from dbt.cli(["run"], context=context).stream()
+
+
+@dbt_assets(
+    manifest=dbt_project.manifest_path,
+    name="dbt_hourly_refresh_models",
+    dagster_dbt_translator=_DbtTranslator(),
+    select="tag:hourly_pbi_refreshes",
+    op_tags={"dagster/concurrency_key": "duckdb"},
+)
+def dbt_hourly_refresh_models(context, dbt: DbtCliResource):
+    """Runs only the hourly PBI refresh models (staging + intermediate).
+    Kept separate so Dagster can enforce the pbi_admin_refreshes_raw → dbt dependency."""
     yield from dbt.cli(["run"], context=context).stream()
 
 
@@ -91,6 +106,7 @@ defs = Definitions(
         *infra_assets,
         *ingestion_assets,
         dbt_models,
+        dbt_hourly_refresh_models,
         *export_assets,
     ],
     resources={
