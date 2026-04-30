@@ -16,10 +16,8 @@ select
     dataset_id,
     id                                          as refresh_id,
     refresh_type,
+    request_id,
     try_cast(start_time as timestamp)           as started_at,
-    try_cast(end_time   as timestamp)           as ended_at,
-    status,
-    service_exception_json                      as error_details,
 
     _dlt_load_id,
     _dlt_id
@@ -32,10 +30,8 @@ select
     null::varchar       as dataset_id,
     null::varchar       as refresh_id,
     null::varchar       as refresh_type,
+    null::varchar       as request_id,
     null::timestamp     as started_at,
-    null::timestamp     as ended_at,
-    null::varchar       as status,
-    null::varchar       as error_details,
     null::varchar       as _dlt_load_id,
     null::varchar       as _dlt_id
 where 1 = 0

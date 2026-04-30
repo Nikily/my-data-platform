@@ -28,10 +28,8 @@ select
     dataset_id,
     refresh_id,
     refresh_type,
+    request_id,
     started_at,
-    ended_at,
-    status,
-    error_details,
     to_timestamp(cast(_dlt_load_id as double))  as first_seen_at,
     _dlt_load_id,
     _dlt_id
