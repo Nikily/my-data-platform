@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: stg_pbi_admin__dataset_refreshes
+    config:
+      tags: ['hourly_pbi_refreshes']
+    description: >
+      Append-only staging view over raw dataset refresh attempts.
+      One row per refresh attempt per dataset (last 5 per dataset per ingest run).
+      Source: GET /admin/datasets/{id}/refreshes via pbi_admin_refreshes_raw.

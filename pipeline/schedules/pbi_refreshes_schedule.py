@@ -17,10 +17,12 @@ pbi_refreshes_schedule = ScheduleDefinition(
     execution_timezone="Europe/Paris",
     target=AssetSelection.assets(
         "pbi_admin_refreshes_raw",
+        AssetKey(["staging", "stg_pbi_admin__dataset_refreshes"]),
         AssetKey(["intermediate", "int_pbi_admin__refresh_status"]),
     ),
     description=(
         "Fetches the latest refresh status for all refreshable semantic models "
-        "hourly and updates the incremental int_pbi_admin__refresh_status model."
+        "hourly, materialises the staging view, then updates the incremental "
+        "int_pbi_admin__refresh_status model."
     ),
 )
