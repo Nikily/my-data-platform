@@ -22,16 +22,24 @@ with source as (
     )
     {% endif %}
 
+),
+
+datasets as (
+    select dataset_id, dataset_name, workspace_id
+    from {{ ref('stg_pbi_admin__datasets') }}
 )
 
 select
-    dataset_id,
-    refresh_id,
-    refresh_type,
-    request_id,
-    started_at,
-    to_timestamp(cast(_dlt_load_id as double))  as first_seen_at,
-    _dlt_load_id,
-    _dlt_id
+    s.dataset_id,
+    d.dataset_name,
+    d.workspace_id,
+    s.refresh_id,
+    s.refresh_type,
+    s.request_id,
+    s.started_at,
+    to_timestamp(cast(s._dlt_load_id as double))  as first_seen_at,
+    s._dlt_load_id,
+    s._dlt_id
 
-from source
+from source s
+left join datasets d on d.dataset_id = s.dataset_id

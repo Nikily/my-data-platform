@@ -515,7 +515,7 @@ def pbi_admin_refreshes_raw(context: AssetExecutionContext) -> None:
     conn = duckdb.connect(os.environ["DUCKDB_PATH"], read_only=True)
     try:
         rows = conn.execute(
-            "SELECT id FROM raw_pbi_admin.datasets WHERE is_refreshable = true"
+            "SELECT id FROM raw_pbi_admin.datasets WHERE is_refreshable IS NOT FALSE"
         ).fetchall()
     finally:
         conn.close()
