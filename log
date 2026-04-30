@@ -1,21 +1,21 @@
 dagster_dbt.errors.DagsterDbtCliRuntimeError: The dbt CLI process with command
 
-`/opt/my_data_platform/.venv/bin/dbt run --select my_data_platform.intermediate.pbi_admin.int_pbi_admin__refresh_status`
+`/opt/my_data_platform/.venv/bin/dbt run --select my_data_platform.intermediate.pbi_admin.int_pbi_admin__refresh_status my_data_platform.staging.pbi_admin.stg_pbi_admin__dataset_refreshes`
 
-failed with exit code `1`. Check the stdout in the Dagster compute logs for the full information about the error, or view the dbt debug log: /opt/my_data_platform/dbt_project/target/dbt_models-4f9e351-3d4b113/dbt.log.
+failed with exit code `1`. Check the stdout in the Dagster compute logs for the full information about the error, or view the dbt debug log: /opt/my_data_platform/dbt_project/target/dbt_models-7a74a45-56867a6/dbt.log.
 
 Errors parsed from dbt logs:
 
-1 of 1 ERROR creating sql incremental model main_intermediate.int_pbi_admin__refresh_status  [[31mERROR[0m in 0.07s]
+1 of 2 ERROR creating sql view model main_staging.stg_pbi_admin__dataset_refreshes  [[31mERROR[0m in 0.07s]
 
-[31mFailure in model int_pbi_admin__refresh_status (models/intermediate/pbi_admin/int_pbi_admin__refresh_status.sql)[0m
+[31mFailure in model stg_pbi_admin__dataset_refreshes (models/staging/pbi_admin/stg_pbi_admin__dataset_refreshes.sql)[0m
 
-  Runtime Error in model int_pbi_admin__refresh_status (models/intermediate/pbi_admin/int_pbi_admin__refresh_status.sql)
-  Catalog Error: Table with name stg_pbi_admin__dataset_refreshes does not exist!
-  Did you mean "stg_pbi_admin__datasets"?
+  Runtime Error in model stg_pbi_admin__dataset_refreshes (models/staging/pbi_admin/stg_pbi_admin__dataset_refreshes.sql)
+  Binder Error: Referenced column "service_exception_json" not found in FROM clause!
+  Candidate bindings: "refresh_type", "request_id", "id", "start_time", "dataset_id"
   
-  LINE 22:     select * from "platform"."main_staging"."stg_pbi_admin__dataset_refreshes...
-                             ^
+  LINE 22:     service_exception_json                      as error_details...
+               ^
 
   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_plan.py", line 247, in dagster_event_sequence_for_step
     yield from check.generator(step_events)
