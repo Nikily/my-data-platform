@@ -2,11 +2,15 @@ version: 2
 
 models:
   - name: int_pbi_admin__reports
+    config:
+      tags: ['daily_pbi_intermediate']
     description: >
       All Power BI reports enriched with workspace name and semantic model name.
       One row per report across all scanned workspaces.
 
   - name: int_pbi_admin__semantic_model_datasources
+    config:
+      tags: ['daily_pbi_intermediate']
     description: >
       Semantic models joined to their data sources.
       One row per (semantic model, datasource) pair — a model using 2 Excel
@@ -14,6 +18,8 @@ models:
       Includes datasource type and connection details (server, database, path, url).
 
   - name: int_pbi_admin__refresh_status
+    config:
+      tags: ['daily_pbi_intermediate', 'hourly_pbi_refreshes']
     description: >
       Incremental history of refresh attempts per semantic model.
       One row per (dataset_id, refresh_id) — deduplicated across hourly runs.
@@ -21,12 +27,16 @@ models:
       Use status = 'Completed' / 'Failed' and started_at for monitoring.
 
   - name: int_pbi_admin__report_access
+    config:
+      tags: ['daily_pbi_intermediate']
     description: >
       Per-user access rights to Power BI reports.
       One row per (report, user) pair across all scanned workspaces.
       Includes workspace context and access right level.
 
   - name: int_pbi_admin__semantic_model_access
+    config:
+      tags: ['daily_pbi_intermediate']
     description: >
       Per-user access rights to Power BI semantic models (datasets).
       One row per (dataset, user) pair across all scanned workspaces.

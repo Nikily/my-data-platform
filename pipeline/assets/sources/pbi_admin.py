@@ -493,6 +493,8 @@ def dataset_refreshes_resource(token: str, dataset_ids: list[str]) -> Iterator[l
 @asset(
     group_name="raw_ingestion",
     kinds={"dlt", "duckdb"},
+    op_tags={"dagster/concurrency_key": "duckdb"},
+    tags={"hourly_pbi_refreshes": ""},
     retry_policy=RetryPolicy(max_retries=1, delay=300),
     description=(
         "Hourly snapshot of the last 5 refresh attempts per refreshable dataset. "
