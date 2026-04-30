@@ -1,26 +1,64 @@
-root        1645  0.0  0.0 124836 31340 ?        Ssl  Mar25   0:00 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
-ilic       10151  0.0  0.0  64516 40516 ?        S    Mar25   0:00 /usr/bin/python3 /usr/share/system-config-printer/applet.py
-gorantla   33496  0.0  0.0  64516 40128 ?        S    Mar25   0:00 /usr/bin/python3 /usr/share/system-config-printer/applet.py
-ilic      280087  0.0  0.0  39220 30792 ?        S    Mar26   0:28 python3 /usr/bin/wsdd --no-host --discovery --listen /run/user/1004/gvfsd/wsdd
-gorantla  333408  0.0  0.0  39220 30800 ?        S    Mar26   0:29 python3 /usr/bin/wsdd --no-host --discovery --listen /run/user/1003/gvfsd/wsdd
-gorantla  691070  0.0  0.2 725256 170472 ?       SNl  Apr16   0:01 /usr/bin/python3 /usr/bin/update-manager --no-update --no-focus-on-map
-ilic     1101903  0.7  0.2 2402748 178384 ?      Ssl  11:25   0:27 /opt/my_data_platform/.venv/bin/python3.13 /opt/my_data_platform/.venv/bin/dagster-webserver --host 127.0.0.1 --port 3000
-ilic     1101931  1.0  0.2 2337668 152724 ?      Ssl  11:25   0:39 /opt/my_data_platform/.venv/bin/python3.13 /opt/my_data_platform/.venv/bin/dagster-daemon run
-ilic     1101939  0.3  0.4 3509296 312352 ?      Sl   11:25   0:12 /opt/my_data_platform/.venv/bin/python3.13 -m dagster api grpc --lazy-load-user-code --socket /tmp/tmp77vcps70 --heartbeat --heartbeat-timeout 45 --log-level info --inject-env-vars-from-instance --instance-ref {"__class__": "InstanceRef", "compute_logs_data": {"__class__": "ConfigurableClassData", "class_name": "LocalComputeLogManager", "config_yaml": "base_dir: /opt/my_data_platform/dagster_home/storage\n", "module_name": "dagster.core.storage.local_compute_log_manager"}, "custom_instance_class_data": null, "defs_state_storage_data": null, "event_storage_data": null, "local_artifact_storage_data": {"__class__": "ConfigurableClassData", "class_name": "LocalArtifactStorage", "config_yaml": "base_dir: /opt/my_data_platform/dagster_home\n", "module_name": "dagster.core.storage.root"}, "run_coordinator_data": {"__class__": "ConfigurableClassData", "class_name": "QueuedRunCoordinator", "config_yaml": "{}\n", "module_name": "dagster.core.run_coordinator"}, "run_launcher_data": {"__class__": "ConfigurableClassData", "class_name": "DefaultRunLauncher", "config_yaml": "{}\n", "module_name": "dagster"}, "run_storage_data": null, "schedule_storage_data": null, "scheduler_data": {"__class__": "ConfigurableClassData", "class_name": "DagsterDaemonScheduler", "config_yaml": "{}\n", "module_name": "dagster.core.scheduler"}, "secrets_loader_data": null, "settings": {}, "storage_data": {"__class__": "ConfigurableClassData", "class_name": "DagsterSqliteStorage", "config_yaml": "base_dir:\n  env: DAGSTER_HOME\n", "module_name": "dagster.core.storage.sqlite_storage"}} --location-name pipeline.definitions -m pipeline.definitions -d /opt/my_data_platform
-ilic     1102027  0.0  0.0  17840 12996 ?        S    11:25   0:00 /opt/my_data_platform/.venv/bin/python3.13 -c from multiprocessing.resource_tracker import main;main(3)
-ilic     1247235  3.4  0.4 3508272 311248 ?      Sl   12:27   0:03 /opt/my_data_platform/.venv/bin/python3.13 -m dagster api grpc --lazy-load-user-code --socket /tmp/tmp8il48m3u --heartbeat --heartbeat-timeout 20 --log-level warning --inject-env-vars-from-instance --instance-ref {"__class__": "InstanceRef", "compute_logs_data": {"__class__": "ConfigurableClassData", "class_name": "LocalComputeLogManager", "config_yaml": "base_dir: /opt/my_data_platform/dagster_home/storage\n", "module_name": "dagster.core.storage.local_compute_log_manager"}, "custom_instance_class_data": null, "defs_state_storage_data": null, "event_storage_data": null, "local_artifact_storage_data": {"__class__": "ConfigurableClassData", "class_name": "LocalArtifactStorage", "config_yaml": "base_dir: /opt/my_data_platform/dagster_home\n", "module_name": "dagster.core.storage.root"}, "run_coordinator_data": {"__class__": "ConfigurableClassData", "class_name": "QueuedRunCoordinator", "config_yaml": "{}\n", "module_name": "dagster.core.run_coordinator"}, "run_launcher_data": {"__class__": "ConfigurableClassData", "class_name": "DefaultRunLauncher", "config_yaml": "{}\n", "module_name": "dagster"}, "run_storage_data": null, "schedule_storage_data": null, "scheduler_data": {"__class__": "ConfigurableClassData", "class_name": "DagsterDaemonScheduler", "config_yaml": "{}\n", "module_name": "dagster.core.scheduler"}, "secrets_loader_data": null, "settings": {}, "storage_data": {"__class__": "ConfigurableClassData", "class_name": "DagsterSqliteStorage", "config_yaml": "base_dir:\n  env: DAGSTER_HOME\n", "module_name": "dagster.core.storage.sqlite_storage"}} --location-name pipeline.definitions -m pipeline.definitions -d /opt/my_data_platform
-ilic     1247329  0.0  0.0  17840 12932 ?        S    12:27   0:00 /opt/my_data_platform/.venv/bin/python3.13 -c from multiprocessing.resource_tracker import main;main(3)
-ilic     1249615 10.5  0.4 3509300 310548 ?      Sl   12:28   0:03 /opt/my_data_platform/.venv/bin/python3.13 -m dagster api grpc --lazy-load-user-code --socket /tmp/tmppvf8n2y7 --heartbeat --heartbeat-timeout 20 --log-level warning --inject-env-vars-from-instance --instance-ref {"__class__": "InstanceRef", "compute_logs_data": {"__class__": "ConfigurableClassData", "class_name": "LocalComputeLogManager", "config_yaml": "base_dir: /opt/my_data_platform/dagster_home/storage\n", "module_name": "dagster.core.storage.local_compute_log_manager"}, "custom_instance_class_data": null, "defs_state_storage_data": null, "event_storage_data": null, "local_artifact_storage_data": {"__class__": "ConfigurableClassData", "class_name": "LocalArtifactStorage", "config_yaml": "base_dir: /opt/my_data_platform/dagster_home\n", "module_name": "dagster.core.storage.root"}, "run_coordinator_data": {"__class__": "ConfigurableClassData", "class_name": "QueuedRunCoordinator", "config_yaml": "{}\n", "module_name": "dagster.core.run_coordinator"}, "run_launcher_data": {"__class__": "ConfigurableClassData", "class_name": "DefaultRunLauncher", "config_yaml": "{}\n", "module_name": "dagster"}, "run_storage_data": null, "schedule_storage_data": null, "scheduler_data": {"__class__": "ConfigurableClassData", "class_name": "DagsterDaemonScheduler", "config_yaml": "{}\n", "module_name": "dagster.core.scheduler"}, "secrets_loader_data": null, "settings": {}, "storage_data": {"__class__": "ConfigurableClassData", "class_name": "DagsterSqliteStorage", "config_yaml": "base_dir:\n  env: DAGSTER_HOME\n", "module_name": "dagster.core.storage.sqlite_storage"}} --location-name pipeline.definitions -m pipeline.definitions -d /opt/my_data_platform
-ilic     1249709  0.0  0.0  17840 12964 ?        S    12:28   0:00 /opt/my_data_platform/.venv/bin/python3.13 -c from multiprocessing.resource_tracker import main;main(3)
-ilic     1250731  0.0  0.0   4308  2252 pts/1    S+   12:29   0:00 grep --color=auto python
-root     1933866  0.0  0.0 367576 52908 ?        Sl   Apr20   0:13 /opt/traps/python/payload/pyxd -config /opt/traps/python/scripts/service_main.json -type 2
-cortexu+ 1933869  0.0  0.1 194380 66132 ?        S    Apr20   0:00 /opt/traps/python/payload/lted -type 2 -config /opt/traps/ltee/ltee_decryptor.json
-cortexu+ 1933931  0.0  0.0 194380 54440 ?        S    Apr20   0:00 /opt/traps/python/payload/lted -type 2 -config /opt/traps/ltee/ltee_decryptor.json
-cortexu+ 1933932  0.0  0.0 194380 54440 ?        S    Apr20   0:00 /opt/traps/python/payload/lted -type 2 -config /opt/traps/ltee/ltee_decryptor.json
-cortexu+ 1933933  0.0  0.0 194380 54440 ?        S    Apr20   0:00 /opt/traps/python/payload/lted -type 2 -config /opt/traps/ltee/ltee_decryptor.json
-cortexu+ 1933934  0.0  0.0 194380 54444 ?        S    Apr20   0:00 /opt/traps/python/payload/lted -type 2 -config /opt/traps/ltee/ltee_decryptor.json
-root     2165817  0.0  0.0  39164 33164 ?        Ss   Apr15   0:00 /usr/bin/python3 -u /usr/sbin/waagent -daemon
-root     2235770  0.0  0.0 417172 48292 ?        Sl   Apr15   5:08 /usr/bin/python3 -u bin/WALinuxAgent-2.15.1.3-py3.12.egg -run-exthandlers
-ilic     4130147  0.0  0.0  41068  7116 ?        Sl   Apr14   0:00 /home/ilic/.vscode/extensions/ms-python.python-2026.4.0-linux-x64/python-env-tools/bin/pet server
-ilic     4130361  0.0  0.0  40160  6204 ?        Sl   Apr14   0:00 /home/ilic/.vscode/extensions/ms-python.vscode-python-envs-1.26.0-linux-x64/python-env-tools/bin/pet server
-ilic     4130797  0.0  1.0 1483133008 689700 ?   Sl   Apr14   3:30 /usr/share/code/code /home/ilic/.vscode/extensions/ms-python.vscode-pylance-2026.2.1/dist/server.bundle.js --cancellationReceive=file:f547b5de0c469caa37f21d82b739f20ae2a1ad70c5 --node-ipc --clientProcessId=4129956
+dagster_dbt.errors.DagsterDbtCliRuntimeError: The dbt CLI process with command
+
+`/opt/my_data_platform/.venv/bin/dbt run --select my_data_platform.intermediate.pbi_admin.int_pbi_admin__refresh_status`
+
+failed with exit code `1`. Check the stdout in the Dagster compute logs for the full information about the error, or view the dbt debug log: /opt/my_data_platform/dbt_project/target/dbt_models-4f9e351-3d4b113/dbt.log.
+
+Errors parsed from dbt logs:
+
+1 of 1 ERROR creating sql incremental model main_intermediate.int_pbi_admin__refresh_status  [[31mERROR[0m in 0.07s]
+
+[31mFailure in model int_pbi_admin__refresh_status (models/intermediate/pbi_admin/int_pbi_admin__refresh_status.sql)[0m
+
+  Runtime Error in model int_pbi_admin__refresh_status (models/intermediate/pbi_admin/int_pbi_admin__refresh_status.sql)
+  Catalog Error: Table with name stg_pbi_admin__dataset_refreshes does not exist!
+  Did you mean "stg_pbi_admin__datasets"?
+  
+  LINE 22:     select * from "platform"."main_staging"."stg_pbi_admin__dataset_refreshes...
+                             ^
+
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_plan.py", line 247, in dagster_event_sequence_for_step
+    yield from check.generator(step_events)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 505, in core_dagster_event_sequence_for_step
+    for user_event in _step_output_error_checked_user_event_sequence(
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        step_context,
+        ^^^^^^^^^^^^^
+        _process_asset_results_to_events(step_context, user_event_sequence),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 184, in _step_output_error_checked_user_event_sequence
+    for user_event in user_event_sequence:
+                      ^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 88, in _process_asset_results_to_events
+    for user_event in user_event_sequence:
+                      ^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute.py", line 188, in execute_core_compute
+    for step_output in _yield_compute_results(step_context, inputs, compute_fn, compute_context):
+                       ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute.py", line 157, in _yield_compute_results
+    for event in iterate_with_context(
+                 ~~~~~~~~~~~~~~~~~~~~^
+        lambda: op_execution_error_boundary(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+        user_event_generator,
+        ^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_utils/__init__.py", line 394, in iterate_with_context
+    next_output = next(iterator)
+  File "/opt/my_data_platform/pipeline/definitions.py", line 79, in dbt_models
+    yield from dbt.cli(["run"], context=context).stream()
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_event_iterator.py", line 215, in __next__
+    return next(self._inner_iterator)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_cli_invocation.py", line 286, in _stream_asset_events
+    for event in self.stream_raw_events():
+                 ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_cli_invocation.py", line 379, in stream_raw_events
+    self._raise_on_error()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_cli_invocation.py", line 470, in _raise_on_error
+    raise error
+
