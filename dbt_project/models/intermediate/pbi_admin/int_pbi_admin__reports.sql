@@ -37,7 +37,6 @@ select
     r.dataset_workspace_id,
 
     -- dlt metadata
-    r._dlt_load_id,
     r._dlt_id
 
 from reports r
