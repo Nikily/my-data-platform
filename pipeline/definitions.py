@@ -73,7 +73,8 @@ class _DbtTranslator(DagsterDbtTranslator):
     name="dbt_models",
     dagster_dbt_translator=_DbtTranslator(),
     # Exclude the hourly refresh models — those run in dbt_hourly_refresh_models.
-    select="my_data_platform --exclude tag:hourly_pbi_refreshes",
+    select="my_data_platform",
+    exclude="tag:hourly_pbi_refreshes",
     op_tags={"dagster/concurrency_key": "duckdb"},
 )
 def dbt_models(context, dbt: DbtCliResource):
