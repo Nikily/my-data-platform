@@ -1,64 +1,57 @@
-dagster_dbt.errors.DagsterDbtCliRuntimeError: The dbt CLI process with command
+dagster._core.errors.DagsterInvalidDefinitionError: Duplicate asset key: AssetKey(['intermediate', 'int_pbi_admin__refresh_status'])
 
-`/opt/my_data_platform/.venv/bin/dbt run --select my_data_platform.intermediate.pbi_admin.int_pbi_admin__refresh_status my_data_platform.staging.pbi_admin.stg_pbi_admin__dataset_refreshes`
-
-failed with exit code `1`. Check the stdout in the Dagster compute logs for the full information about the error, or view the dbt debug log: /opt/my_data_platform/dbt_project/target/dbt_models-7a74a45-56867a6/dbt.log.
-
-Errors parsed from dbt logs:
-
-1 of 2 ERROR creating sql view model main_staging.stg_pbi_admin__dataset_refreshes  [[31mERROR[0m in 0.07s]
-
-[31mFailure in model stg_pbi_admin__dataset_refreshes (models/staging/pbi_admin/stg_pbi_admin__dataset_refreshes.sql)[0m
-
-  Runtime Error in model stg_pbi_admin__dataset_refreshes (models/staging/pbi_admin/stg_pbi_admin__dataset_refreshes.sql)
-  Binder Error: Referenced column "service_exception_json" not found in FROM clause!
-  Candidate bindings: "refresh_type", "request_id", "id", "start_time", "dataset_id"
-  
-  LINE 22:     service_exception_json                      as error_details...
-               ^
-
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_plan.py", line 247, in dagster_event_sequence_for_step
-    yield from check.generator(step_events)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 505, in core_dagster_event_sequence_for_step
-    for user_event in _step_output_error_checked_user_event_sequence(
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        step_context,
-        ^^^^^^^^^^^^^
-        _process_asset_results_to_events(step_context, user_event_sequence),
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ):
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_grpc/server.py", line 465, in __init__
+    self._loaded_repositories: LoadedRepositories | None = LoadedRepositories(
+                                                           ~~~~~~~~~~~~~~~~~~^
+        loadable_target_origin,
+        ^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        defs_state_info=self._defs_state_info,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
     ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 184, in _step_output_error_checked_user_event_sequence
-    for user_event in user_event_sequence:
-                      ^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 88, in _process_asset_results_to_events
-    for user_event in user_event_sequence:
-                      ^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute.py", line 188, in execute_core_compute
-    for step_output in _yield_compute_results(step_context, inputs, compute_fn, compute_context):
-                       ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute.py", line 157, in _yield_compute_results
-    for event in iterate_with_context(
-                 ~~~~~~~~~~~~~~~~~~~~^
-        lambda: op_execution_error_boundary(
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ...<7 lines>...
-        user_event_generator,
-        ^^^^^^^^^^^^^^^^^^^^^
-    ):
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_grpc/server.py", line 302, in __init__
+    repo_def = recon_repo.get_definition()
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/definitions/reconstruct.py", line 111, in get_definition
+    return reconstruct_repository_def_from_pointer(self.pointer, self.repository_load_data)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/definitions/reconstruct.py", line 823, in reconstruct_repository_def_from_pointer
+    repo_def = _repository_def_from_target_def_inner(
+        target,
+        repository_load_data,
+    )
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/definitions/reconstruct.py", line 703, in _repository_def_from_target_def_inner
+    return target.get_repository_def()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_shared/utils/cached_method.py", line 140, in _cached_method_wrapper
+    result = method(self, *args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/definitions/definitions_class.py", line 700, in get_repository_def
+    return _create_repository_using_definitions_args(
+        name=SINGLETON_REPOSITORY_NAME,
+    ...<9 lines>...
+        component_tree=self.component_tree,
+    )
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/definitions/definitions_class.py", line 276, in _create_repository_using_definitions_args
+    @repository(
+     ~~~~~~~~~~^
+        name=name,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _component_tree=component_tree,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
     ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_utils/__init__.py", line 394, in iterate_with_context
-    next_output = next(iterator)
-  File "/opt/my_data_platform/pipeline/definitions.py", line 79, in dbt_models
-    yield from dbt.cli(["run"], context=context).stream()
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_event_iterator.py", line 215, in __next__
-    return next(self._inner_iterator)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_cli_invocation.py", line 286, in _stream_asset_events
-    for event in self.stream_raw_events():
-                 ~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_cli_invocation.py", line 379, in stream_raw_events
-    self._raise_on_error()
-    ~~~~~~~~~~~~~~~~~~~~^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_cli_invocation.py", line 470, in _raise_on_error
-    raise error
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/definitions/decorators/repository_decorator.py", line 149, in __call__
+    repository_data = CachingRepositoryData.from_list(
+        repository_defns,
+    ...<3 lines>...
+        component_tree=self.component_tree,
+    )
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/definitions/repository_definition/repository_data.py", line 380, in from_list
+    return build_caching_repository_data_from_list(
+        repository_definitions=repository_definitions,
+    ...<3 lines>...
+        component_tree=component_tree,
+    )
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/definitions/repository_definition/repository_data_builder.py", line 255, in build_caching_repository_data_from_list
+    raise DagsterInvalidDefinitionError(f"Duplicate asset key: {spec.key}")
 
