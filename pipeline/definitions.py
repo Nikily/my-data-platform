@@ -9,7 +9,7 @@ via the `[tool.dagster] module_name` setting.
 import sys
 from pathlib import Path
 
-from dagster import AssetKey, Definitions, EnvVar, load_assets_from_modules
+from dagster import AssetKey, Definitions, EnvVar, RetryPolicy, load_assets_from_modules
 from dagster_dbt import DagsterDbtTranslator, DbtCliResource, DbtProject, dbt_assets
 from dagster_duckdb import DuckDBResource
 
@@ -76,6 +76,7 @@ class _DbtTranslator(DagsterDbtTranslator):
     select="my_data_platform",
     exclude="tag:hourly_pbi_refreshes",
     op_tags={"dagster/concurrency_key": "duckdb"},
+    retry_policy=RetryPolicy(max_retries=1, delay=60),
 )
 def dbt_models(context, dbt: DbtCliResource):
     """Runs all dbt models except the hourly PBI refresh ones (staging → marts)."""
@@ -88,6 +89,7 @@ def dbt_models(context, dbt: DbtCliResource):
     dagster_dbt_translator=_DbtTranslator(),
     select="tag:hourly_pbi_refreshes",
     op_tags={"dagster/concurrency_key": "duckdb"},
+    retry_policy=RetryPolicy(max_retries=1, delay=60),
 )
 def dbt_hourly_refresh_models(context, dbt: DbtCliResource):
     """Runs only the hourly PBI refresh models (staging + intermediate).

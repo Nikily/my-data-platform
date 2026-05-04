@@ -13,7 +13,7 @@ from dagster import AssetKey, AssetSelection, ScheduleDefinition
 
 pbi_refreshes_schedule = ScheduleDefinition(
     name="hourly_pbi_refreshes",
-    cron_schedule="0 * * * *",              # top of every hour
+    cron_schedule="30 * * * *",             # 30 minutes past every hour
     execution_timezone="Europe/Paris",
     target=AssetSelection.assets(
         "pbi_admin_refreshes_raw",
