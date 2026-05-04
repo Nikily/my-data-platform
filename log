@@ -1,63 +1,124 @@
-dagster_dbt.errors.DagsterDbtCliRuntimeError: The dbt CLI process with command
-
-`/opt/my_data_platform/.venv/bin/dbt run --select my_data_platform.intermediate.pbi_admin.int_pbi_admin__reports my_data_platform.intermediate.pbi_admin.int_pbi_admin__report_access my_data_platform.intermediate.pbi_admin.int_pbi_admin__semantic_model_datasources my_data_platform.intermediate.pbi_admin.int_pbi_admin__semantic_model_access`
-
-failed with exit code `1`. Check the stdout in the Dagster compute logs for the full information about the error, or view the dbt debug log: /opt/my_data_platform/dbt_project/target/dbt_models-30e8c56-35673de/dbt.log.
-
-Errors parsed from dbt logs:
-
-4 of 4 ERROR creating sql view model main_intermediate.int_pbi_admin__semantic_model_datasources  [[31mERROR[0m in 0.15s]
-
-[31mFailure in model int_pbi_admin__semantic_model_datasources (models/intermediate/pbi_admin/int_pbi_admin__semantic_model_datasources.sql)[0m
-
-  Runtime Error in model int_pbi_admin__semantic_model_datasources (models/intermediate/pbi_admin/int_pbi_admin__semantic_model_datasources.sql)
-  Catalog Error: Table with name stg_pbi_admin__scanner_datasource_instances does not exist!
-  Did you mean "stg_pbi_admin__scanner_dataset_users"?
+[0m12:51:06  Running with dbt=1.11.7
+[0m12:51:07  Registered adapter: duckdb=1.10.1
+[0m12:51:07  Found 32 models, 2 seeds, 15 data tests, 27 sources, 590 macros
+[0m12:51:07  
+[0m12:51:07  Concurrency: 4 threads (target='prod')
+[0m12:51:07  
+[0m12:51:07  4 of 20 START sql view model main_staging.stg_pbi_admin__dataset_refreshes ..... [RUN]
+[0m12:51:07  1 of 20 START sql view model main_staging.stg_pbi_admin__apps .................. [RUN]
+[0m12:51:07  3 of 20 START sql view model main_staging.stg_pbi_admin__dashboards ............ [RUN]
+[0m12:51:07  2 of 20 START sql view model main_staging.stg_pbi_admin__capacities ............ [RUN]
+[0m12:51:07  3 of 20 ERROR creating sql view model main_staging.stg_pbi_admin__dashboards ... [[31mERROR[0m in 0.10s]
+[0m12:51:07  2 of 20 ERROR creating sql view model main_staging.stg_pbi_admin__capacities ... [[31mERROR[0m in 0.11s]
+[0m12:51:07  1 of 20 ERROR creating sql view model main_staging.stg_pbi_admin__apps ......... [[31mERROR[0m in 0.11s]
+[0m12:51:07  5 of 20 START sql view model main_staging.stg_pbi_admin__datasets .............. [RUN]
+[0m12:51:07  6 of 20 START sql view model main_staging.stg_pbi_admin__groups ................ [RUN]
+[0m12:51:07  7 of 20 START sql view model main_staging.stg_pbi_admin__refreshables .......... [RUN]
+[0m12:51:07  4 of 20 OK created sql view model main_staging.stg_pbi_admin__dataset_refreshes  [[32mOK[0m in 0.17s]
+[0m12:51:07  8 of 20 START sql view model main_staging.stg_pbi_admin__reports ............... [RUN]
+[0m12:51:07  5 of 20 ERROR creating sql view model main_staging.stg_pbi_admin__datasets ..... [[31mERROR[0m in 0.07s]
+[0m12:51:07  6 of 20 ERROR creating sql view model main_staging.stg_pbi_admin__groups ....... [[31mERROR[0m in 0.07s]
+[0m12:51:07  7 of 20 ERROR creating sql view model main_staging.stg_pbi_admin__refreshables . [[31mERROR[0m in 0.07s]
+[0m12:51:07  9 of 20 START sql view model main_staging.stg_pbi_admin__scanner_dashboard_users  [RUN]
+[0m12:51:07  10 of 20 START sql view model main_staging.stg_pbi_admin__scanner_dashboards ... [RUN]
+[0m12:51:07  11 of 20 START sql view model main_staging.stg_pbi_admin__scanner_dataset_users  [RUN]
+[0m12:51:07  8 of 20 ERROR creating sql view model main_staging.stg_pbi_admin__reports ...... [[31mERROR[0m in 0.07s]
+[0m12:51:07  12 of 20 START sql view model main_staging.stg_pbi_admin__scanner_datasets ..... [RUN]
+[0m12:51:07  9 of 20 OK created sql view model main_staging.stg_pbi_admin__scanner_dashboard_users  [[32mOK[0m in 0.10s]
+[0m12:51:07  10 of 20 OK created sql view model main_staging.stg_pbi_admin__scanner_dashboards  [[32mOK[0m in 0.10s]
+[0m12:51:07  11 of 20 OK created sql view model main_staging.stg_pbi_admin__scanner_dataset_users  [[32mOK[0m in 0.09s]
+[0m12:51:07  13 of 20 START sql view model main_staging.stg_pbi_admin__scanner_datasets__datasource_usages  [RUN]
+[0m12:51:07  14 of 20 START sql view model main_staging.stg_pbi_admin__scanner_datasource_instances  [RUN]
+[0m12:51:07  15 of 20 START sql view model main_staging.stg_pbi_admin__scanner_report_users . [RUN]
+[0m12:51:07  12 of 20 OK created sql view model main_staging.stg_pbi_admin__scanner_datasets  [[32mOK[0m in 0.11s]
+[0m12:51:07  16 of 20 START sql view model main_staging.stg_pbi_admin__scanner_reports ...... [RUN]
+[0m12:51:07  13 of 20 OK created sql view model main_staging.stg_pbi_admin__scanner_datasets__datasource_usages  [[32mOK[0m in 0.10s]
+[0m12:51:07  15 of 20 OK created sql view model main_staging.stg_pbi_admin__scanner_report_users  [[32mOK[0m in 0.10s]
+[0m12:51:07  17 of 20 START sql view model main_staging.stg_pbi_admin__scanner_workspace_users  [RUN]
+[0m12:51:07  14 of 20 OK created sql view model main_staging.stg_pbi_admin__scanner_datasource_instances  [[32mOK[0m in 0.11s]
+[0m12:51:07  18 of 20 START sql view model main_staging.stg_pbi_admin__scanner_workspaces ... [RUN]
+[0m12:51:07  19 of 20 START sql view model main_staging.stg_pbi_admin__unused_artifacts ..... [RUN]
+[0m12:51:08  16 of 20 OK created sql view model main_staging.stg_pbi_admin__scanner_reports . [[32mOK[0m in 0.11s]
+[0m12:51:08  20 of 20 START sql view model main_staging.stg_pbi_admin__widely_shared_artifacts  [RUN]
+[0m12:51:08  19 of 20 ERROR creating sql view model main_staging.stg_pbi_admin__unused_artifacts  [[31mERROR[0m in 0.07s]
+[0m12:51:08  17 of 20 OK created sql view model main_staging.stg_pbi_admin__scanner_workspace_users  [[32mOK[0m in 0.09s]
+[0m12:51:08  18 of 20 OK created sql view model main_staging.stg_pbi_admin__scanner_workspaces  [[32mOK[0m in 0.09s]
+[0m12:51:08  20 of 20 OK created sql view model main_staging.stg_pbi_admin__widely_shared_artifacts  [[32mOK[0m in 0.05s]
+[0m12:51:08  
+[0m12:51:08  Finished running 20 view models in 0 hours 0 minutes and 0.67 seconds (0.67s).
+[0m12:51:08  
+[0m12:51:08  [31mCompleted with 8 errors, 0 partial successes, and 0 warnings:[0m
+[0m12:51:08  
+[0m12:51:08  [31mFailure in model stg_pbi_admin__dashboards (models/staging/pbi_admin/stg_pbi_admin__dashboards.sql)[0m
+[0m12:51:08    Runtime Error in model stg_pbi_admin__dashboards (models/staging/pbi_admin/stg_pbi_admin__dashboards.sql)
+  Catalog Error: Table with name "raw_pbi_admin.dashboards" does not exist because schema "raw_pbi_admin" does not exist.
   
-  LINE 23:     select * from "platform"."main_staging"."stg_pbi_admin__scanner_datasourc...
-                             ^
-
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_plan.py", line 247, in dagster_event_sequence_for_step
-    yield from check.generator(step_events)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 505, in core_dagster_event_sequence_for_step
-    for user_event in _step_output_error_checked_user_event_sequence(
-                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        step_context,
-        ^^^^^^^^^^^^^
-        _process_asset_results_to_events(step_context, user_event_sequence),
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ):
-    ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 184, in _step_output_error_checked_user_event_sequence
-    for user_event in user_event_sequence:
-                      ^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/execute_step.py", line 88, in _process_asset_results_to_events
-    for user_event in user_event_sequence:
-                      ^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute.py", line 188, in execute_core_compute
-    for step_output in _yield_compute_results(step_context, inputs, compute_fn, compute_context):
-                       ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/compute.py", line 157, in _yield_compute_results
-    for event in iterate_with_context(
-                 ~~~~~~~~~~~~~~~~~~~~^
-        lambda: op_execution_error_boundary(
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ...<7 lines>...
-        user_event_generator,
-        ^^^^^^^^^^^^^^^^^^^^^
-    ):
-    ^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_utils/__init__.py", line 394, in iterate_with_context
-    next_output = next(iterator)
-  File "/opt/my_data_platform/pipeline/definitions.py", line 82, in dbt_models
-    yield from dbt.cli(["run"], context=context).stream()
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_event_iterator.py", line 215, in __next__
-    return next(self._inner_iterator)
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_cli_invocation.py", line 286, in _stream_asset_events
-    for event in self.stream_raw_events():
-                 ~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_cli_invocation.py", line 379, in stream_raw_events
-    self._raise_on_error()
-    ~~~~~~~~~~~~~~~~~~~~^^
-  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster_dbt/core/dbt_cli_invocation.py", line 470, in _raise_on_error
-    raise error
+  LINE 22: from "platform"."raw_pbi_admin"."dashboards"
+                ^
+[0m12:51:08  
+[0m12:51:08    compiled code at target/compiled/my_data_platform/models/staging/pbi_admin/stg_pbi_admin__dashboards.sql
+[0m12:51:08  
+[0m12:51:08  [31mFailure in model stg_pbi_admin__capacities (models/staging/pbi_admin/stg_pbi_admin__capacities.sql)[0m
+[0m12:51:08    Runtime Error in model stg_pbi_admin__capacities (models/staging/pbi_admin/stg_pbi_admin__capacities.sql)
+  Catalog Error: Table with name "raw_pbi_admin.capacities" does not exist because schema "raw_pbi_admin" does not exist.
+  
+  LINE 21: from "platform"."raw_pbi_admin"."capacities"
+                ^
+[0m12:51:08  
+[0m12:51:08    compiled code at target/compiled/my_data_platform/models/staging/pbi_admin/stg_pbi_admin__capacities.sql
+[0m12:51:08  
+[0m12:51:08  [31mFailure in model stg_pbi_admin__apps (models/staging/pbi_admin/stg_pbi_admin__apps.sql)[0m
+[0m12:51:08    Runtime Error in model stg_pbi_admin__apps (models/staging/pbi_admin/stg_pbi_admin__apps.sql)
+  Catalog Error: Table with name "raw_pbi_admin.apps" does not exist because schema "raw_pbi_admin" does not exist.
+  
+  LINE 21: from "platform"."raw_pbi_admin"."apps"
+                ^
+[0m12:51:08  
+[0m12:51:08    compiled code at target/compiled/my_data_platform/models/staging/pbi_admin/stg_pbi_admin__apps.sql
+[0m12:51:08  
+[0m12:51:08  [31mFailure in model stg_pbi_admin__datasets (models/staging/pbi_admin/stg_pbi_admin__datasets.sql)[0m
+[0m12:51:08    Runtime Error in model stg_pbi_admin__datasets (models/staging/pbi_admin/stg_pbi_admin__datasets.sql)
+  Catalog Error: Table with name "raw_pbi_admin.datasets" does not exist because schema "raw_pbi_admin" does not exist.
+  
+  LINE 26: from "platform"."raw_pbi_admin"."datasets"
+                ^
+[0m12:51:08  
+[0m12:51:08    compiled code at target/compiled/my_data_platform/models/staging/pbi_admin/stg_pbi_admin__datasets.sql
+[0m12:51:08  
+[0m12:51:08  [31mFailure in model stg_pbi_admin__groups (models/staging/pbi_admin/stg_pbi_admin__groups.sql)[0m
+[0m12:51:08    Runtime Error in model stg_pbi_admin__groups (models/staging/pbi_admin/stg_pbi_admin__groups.sql)
+  Catalog Error: Table with name "raw_pbi_admin.groups" does not exist because schema "raw_pbi_admin" does not exist.
+  
+  LINE 26: from "platform"."raw_pbi_admin"."groups"
+                ^
+[0m12:51:08  
+[0m12:51:08    compiled code at target/compiled/my_data_platform/models/staging/pbi_admin/stg_pbi_admin__groups.sql
+[0m12:51:08  
+[0m12:51:08  [31mFailure in model stg_pbi_admin__refreshables (models/staging/pbi_admin/stg_pbi_admin__refreshables.sql)[0m
+[0m12:51:08    Runtime Error in model stg_pbi_admin__refreshables (models/staging/pbi_admin/stg_pbi_admin__refreshables.sql)
+  Catalog Error: Table with name "raw_pbi_admin.refreshables" does not exist because schema "raw_pbi_admin" does not exist.
+  
+  LINE 46: from "platform"."raw_pbi_admin"."refreshables"
+                ^
+[0m12:51:08  
+[0m12:51:08    compiled code at target/compiled/my_data_platform/models/staging/pbi_admin/stg_pbi_admin__refreshables.sql
+[0m12:51:08  
+[0m12:51:08  [31mFailure in model stg_pbi_admin__reports (models/staging/pbi_admin/stg_pbi_admin__reports.sql)[0m
+[0m12:51:08    Runtime Error in model stg_pbi_admin__reports (models/staging/pbi_admin/stg_pbi_admin__reports.sql)
+  Catalog Error: Table with name "raw_pbi_admin.reports" does not exist because schema "raw_pbi_admin" does not exist.
+  
+  LINE 29: from "platform"."raw_pbi_admin"."reports"
+                ^
+[0m12:51:08  
+[0m12:51:08    compiled code at target/compiled/my_data_platform/models/staging/pbi_admin/stg_pbi_admin__reports.sql
+[0m12:51:08  
+[0m12:51:08  [31mFailure in model stg_pbi_admin__unused_artifacts (models/staging/pbi_admin/stg_pbi_admin__unused_artifacts.sql)[0m
+[0m12:51:08    Runtime Error in model stg_pbi_admin__unused_artifacts (models/staging/pbi_admin/stg_pbi_admin__unused_artifacts.sql)
+  Catalog Error: Table with name "raw_pbi_admin.unused_artifacts" does not exist because schema "raw_pbi_admin" does not exist.
+  
+  LINE 22: from "platform"."raw_pbi_admin"."unused_artifacts"
+                ^
+[0m12:51:08  
+[0m12:51:08    compiled code at target/compiled/my_data_platform/models/staging/pbi_admin/stg_pbi_admin__unused_artifacts.sql
+[0m12:51:08  
+[0m12:51:08  Done. PASS=12 WARN=0 ERROR=8 SKIP=0 NO-OP=0 TOTAL=20
