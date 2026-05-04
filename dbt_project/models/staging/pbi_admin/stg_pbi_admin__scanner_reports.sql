@@ -24,7 +24,6 @@ select
     app_id,
     description,
 
-    _dlt_load_id,
     _dlt_id
 
 from {{ source('raw_pbi_admin', 'scanner_workspaces__reports') }}
@@ -43,7 +42,6 @@ select
     null::varchar       as modified_by,
     null::varchar       as app_id,
     null::varchar       as description,
-    null::varchar       as _dlt_load_id,
     null::varchar       as _dlt_id
 where 1 = 0
 

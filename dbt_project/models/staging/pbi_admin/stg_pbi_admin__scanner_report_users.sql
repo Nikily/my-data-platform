@@ -21,7 +21,6 @@ select
     report_user_access_right        as access_right,
     user_type,
 
-    _dlt_load_id,
     _dlt_id
 
 from {{ source('raw_pbi_admin', 'scanner_workspaces__reports__users') }}
@@ -37,7 +36,6 @@ select
     null::varchar   as principal_type,
     null::varchar   as access_right,
     null::varchar   as user_type,
-    null::varchar   as _dlt_load_id,
     null::varchar   as _dlt_id
 where 1 = 0
 

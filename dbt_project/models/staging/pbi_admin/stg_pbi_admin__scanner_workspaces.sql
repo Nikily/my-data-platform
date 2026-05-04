@@ -21,7 +21,6 @@ select
     capacity_id,
     default_dataset_storage_format,
     description,
-    data_retrieval_state,
 
     _dlt_load_id,
     _dlt_id
@@ -39,7 +38,6 @@ select
     null::varchar   as capacity_id,
     null::varchar   as default_dataset_storage_format,
     null::varchar   as description,
-    null::varchar   as data_retrieval_state,
     null::varchar   as _dlt_load_id,
     null::varchar   as _dlt_id
 where 1 = 0

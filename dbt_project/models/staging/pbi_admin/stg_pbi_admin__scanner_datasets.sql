@@ -21,7 +21,6 @@ select
     try_cast(created_date as timestamp)             as created_at,
     description,
 
-    _dlt_load_id,
     _dlt_id
 
 from {{ source('raw_pbi_admin', 'scanner_workspaces__datasets') }}
@@ -37,7 +36,6 @@ select
     null::varchar       as content_provider_type,
     null::timestamp     as created_at,
     null::varchar       as description,
-    null::varchar       as _dlt_load_id,
     null::varchar       as _dlt_id
 where 1 = 0
 

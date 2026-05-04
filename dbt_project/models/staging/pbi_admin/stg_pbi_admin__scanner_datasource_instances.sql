@@ -30,7 +30,6 @@ select
     -- Other connection detail fields (present for some source types)
     connection_details__account     as account,
     connection_details__domain      as domain,
-    connection_details__kind        as kind,
 
     _dlt_load_id,
     _dlt_id
@@ -49,7 +48,6 @@ select
     null::varchar   as url,
     null::varchar   as account,
     null::varchar   as domain,
-    null::varchar   as kind,
     null::varchar   as _dlt_load_id,
     null::varchar   as _dlt_id
 where 1 = 0
