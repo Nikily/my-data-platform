@@ -3,6 +3,14 @@
 -- One row per Power BI Premium / Fabric capacity in the tenant.
 -- Note: dlt normalises all column names to snake_case.
 
+{% set relation = adapter.get_relation(
+    database   = 'platform',
+    schema     = 'raw_pbi_admin',
+    identifier = 'capacities'
+) %}
+
+{% if relation %}
+
 select
     id                              as capacity_id,
     display_name                    as capacity_name,
@@ -15,3 +23,18 @@ select
     _dlt_id
 
 from {{ source('raw_pbi_admin', 'capacities') }}
+
+{% else %}
+
+select
+    null::varchar as capacity_id,
+    null::varchar as capacity_name,
+    null::varchar as sku,
+    null::varchar as state,
+    null::varchar as region,
+    null::varchar as access_right,
+    null::varchar as _dlt_load_id,
+    null::varchar as _dlt_id
+where 1 = 0
+
+{% endif %}

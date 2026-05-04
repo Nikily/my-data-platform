@@ -4,6 +4,14 @@
 -- Note: dlt normalises all column names to snake_case and flattens nested
 --       objects with __ separator (e.g. last_refresh__status).
 
+{% set relation = adapter.get_relation(
+    database   = 'platform',
+    schema     = 'raw_pbi_admin',
+    identifier = 'refreshables'
+) %}
+
+{% if relation %}
+
 select
     id                                              as refreshable_id,
     name                                            as refreshable_name,
@@ -40,3 +48,32 @@ select
     _dlt_id
 
 from {{ source('raw_pbi_admin', 'refreshables') }}
+
+{% else %}
+
+select
+    null::varchar   as refreshable_id,
+    null::varchar   as refreshable_name,
+    null::varchar   as kind,
+    null::timestamp as window_start_at,
+    null::timestamp as window_end_at,
+    null::bigint    as refresh_count,
+    null::bigint    as refresh_failure_count,
+    null::double    as avg_duration_seconds,
+    null::double    as median_duration_seconds,
+    null::double    as refreshes_per_day,
+    null::varchar   as last_refresh_type,
+    null::timestamp as last_refresh_started_at,
+    null::timestamp as last_refresh_ended_at,
+    null::varchar   as last_refresh_status,
+    null::varchar   as last_refresh_request_id,
+    null::varchar   as capacity_id,
+    null::varchar   as capacity_name,
+    null::varchar   as capacity_sku,
+    null::varchar   as group_id,
+    null::varchar   as group_name,
+    null::varchar   as _dlt_load_id,
+    null::varchar   as _dlt_id
+where 1 = 0
+
+{% endif %}
