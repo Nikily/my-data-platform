@@ -20,6 +20,7 @@ select
     content_provider_type,
     try_cast(created_date as timestamp)             as created_at,
     description,
+    refresh_schedule__local_time_zone_id    as refresh_schedule_timezone,
 
     _dlt_id
 
@@ -36,6 +37,7 @@ select
     null::varchar       as content_provider_type,
     null::timestamp     as created_at,
     null::varchar       as description,
+    null::varchar       as refresh_schedule_timezone,
     null::varchar       as _dlt_id
 where 1 = 0
 

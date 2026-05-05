@@ -46,5 +46,7 @@ sources:
         description: "Top-level datasource instances from the scanner result. Contains connection details (type, server, database, path, url) for every datasource referenced by any scanned dataset."
       - name: scanner_workspaces__datasets__datasource_usages
         description: "Links datasets to their datasource instances. dlt child table of scanner_workspaces__datasets."
+      - name: scanner_workspaces__datasets__refresh_schedule__times
+        description: "Refresh schedule time slots per dataset. dlt child table of scanner_workspaces__datasets. One row per scheduled time (e.g. '08:00', '20:00')."
       - name: dataset_refreshes
         description: "Last 5 refresh attempts per refreshable dataset. Append-only — one batch of rows added per hourly run. Source: GET /admin/datasets/{id}/refreshes"
