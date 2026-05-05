@@ -48,6 +48,9 @@ pbi_intermediate_schedule = ScheduleDefinition(
         AssetKey(["intermediate", "int_pbi_admin__refresh_status"]),
         AssetKey(["intermediate", "int_pbi_admin__report_access"]),
         AssetKey(["intermediate", "int_pbi_admin__semantic_model_access"]),
+        # Export layer — container provisioning then Parquet upload.
+        "azure_container_pbi_intermediate",
+        "pbi_intermediate_export",
     ),
     description=(
         "Materialises scanner staging views then all Power BI intermediate dbt models "

@@ -13,7 +13,7 @@ from dagster import AssetKey, Definitions, EnvVar, RetryPolicy, load_assets_from
 from dagster_dbt import DagsterDbtTranslator, DbtCliResource, DbtProject, dbt_assets
 from dagster_duckdb import DuckDBResource
 
-from pipeline.assets.export import parquet_export
+from pipeline.assets.export import parquet_export, pbi_intermediate_export
 from pipeline.assets.infra import azure_containers
 from pipeline.assets.sources import adls_delta, csv_local, csv_sftp, eight_x_eight_cdr, eight_x_eight_users, pbi_admin, rest_api
 from pipeline.schedules.daily_schedule import daily_schedule
@@ -101,7 +101,7 @@ def dbt_hourly_refresh_models(context, dbt: DbtCliResource):
 infra_assets = load_assets_from_modules([azure_containers])
 ingestion_assets = load_assets_from_modules([rest_api, csv_local, csv_sftp, adls_delta, eight_x_eight_cdr, eight_x_eight_users, pbi_admin])
 # pbi_admin exports both pbi_admin_raw and pbi_admin_unused_artifacts_raw
-export_assets = load_assets_from_modules([parquet_export])
+export_assets = load_assets_from_modules([parquet_export, pbi_intermediate_export])
 
 # ── Definitions ───────────────────────────────────────────────────────────────
 defs = Definitions(
