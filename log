@@ -44,21 +44,219 @@ dagster._core.execution.plan.utils.RetryRequestedFromPolicy
 The above exception was caused by the following exception:
 dagster_dbt.errors.DagsterDbtCliRuntimeError: The dbt CLI process with command
 
-`/opt/my_data_platform/.venv/bin/dbt run --select my_data_platform.staging.pbi_admin.stg_pbi_admin__scanner_datasets__datasource_usages my_data_platform.intermediate.pbi_admin.int_pbi_admin__semantic_model_datasources my_data_platform.staging.pbi_admin.stg_pbi_admin__scanner_dataset_users my_data_platform.staging.pbi_admin.stg_pbi_admin__scanner_datasource_instances my_data_platform.staging.pbi_admin.stg_pbi_admin__scanner_reports my_data_platform.staging.pbi_admin.stg_pbi_admin__scanner_workspaces my_data_platform.intermediate.pbi_admin.int_pbi_admin__semantic_model_access my_data_platform.staging.pbi_admin.stg_pbi_admin__scanner_report_users my_data_platform.staging.pbi_admin.stg_pbi_admin__scanner_datasets my_data_platform.intermediate.pbi_admin.int_pbi_admin__reports my_data_platform.intermediate.pbi_admin.int_pbi_admin__report_access`
+`/opt/my_data_platform/.venv/bin/dbt run --select my_data_platform.staging.pbi_admin.stg_pbi_admin__scanner_datasets my_data_platform.staging.pbi_admin.stg_pbi_admin__scanner_dataset_users my_data_platform.staging.pbi_admin.stg_pbi_admin__scanner_datasource_instances my_data_platform.staging.pbi_admin.stg_pbi_admin__scanner_workspaces my_data_platform.staging.pbi_admin.stg_pbi_admin__scanner_report_users my_data_platform.intermediate.pbi_admin.int_pbi_admin__reports my_data_platform.intermediate.pbi_admin.int_pbi_admin__report_access my_data_platform.staging.pbi_admin.stg_pbi_admin__scanner_reports my_data_platform.intermediate.pbi_admin.int_pbi_admin__semantic_model_datasources my_data_platform.intermediate.pbi_admin.int_pbi_admin__semantic_model_access my_data_platform.staging.pbi_admin.stg_pbi_admin__scanner_datasets__datasource_usages`
 
-failed with exit code `1`. Check the stdout in the Dagster compute logs for the full information about the error, or view the dbt debug log: /opt/my_data_platform/dbt_project/target/dbt_models-bc1f980-d4466ff/dbt.log.
+failed with exit code `2`. Check the stdout in the Dagster compute logs for the full information about the error, or view the dbt debug log: /opt/my_data_platform/dbt_project/target/dbt_models-77c2eaa-85d39fd/dbt.log.
 
 Errors parsed from dbt logs:
 
-9 of 11 ERROR creating sql view model main_intermediate.int_pbi_admin__reports . [[31mERROR[0m in 0.10s]
+Encountered an error:
+IO Error: Could not set lock on file "/opt/my_data_platform/data/platform.duckdb": Conflicting lock is held in /usr/bin/python3.13 (PID 2681504). See also https://duckdb.org/docs/stable/connect/concurrency
 
-[31mFailure in model int_pbi_admin__reports (models/intermediate/pbi_admin/int_pbi_admin__reports.sql)[0m
+Traceback (most recent call last):
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/duckdb/connections.py", line 95, in exception_handler
+    yield
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/sql/connections.py", line 147, in add_query
+    cursor = connection.handle.cursor()
+             ^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/contracts/connection.py", line 96, in handle
+    self._handle.resolve(self)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/contracts/connection.py", line 120, in resolve
+    return self.opener(connection)
+           ~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/duckdb/connections.py", line 53, in open
+    connection.handle = cls._ENV.handle()
+                        ~~~~~~~~~~~~~~~^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/duckdb/environments/local.py", line 75, in handle
+    self.conn = self.initialize_db(self.creds, self._plugins)
+                ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/duckdb/environments/__init__.py", line 159, in initialize_db
+    conn = duckdb.connect(creds.path, read_only=False, config=config)
+_duckdb.IOException: IO Error: Could not set lock on file "/opt/my_data_platform/data/platform.duckdb": Conflicting lock is held in /usr/bin/python3.13 (PID 2681504). See also https://duckdb.org/docs/stable/connect/concurrency
 
-  Runtime Error in model int_pbi_admin__reports (models/intermediate/pbi_admin/int_pbi_admin__reports.sql)
-  Binder Error: Values list "r" does not have a column named "_dlt_load_id"
-  
-  LINE 44:     r._dlt_load_id,
-               ^
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/duckdb/connections.py", line 95, in exception_handler
+    yield
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/base/impl.py", line 1320, in execute_macro
+    result = macro_function(**kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt_common/clients/jinja.py", line 427, in __call__
+    return self.call_macro(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt_common/clients/jinja.py", line 395, in call_macro
+    return macro(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/runtime.py", line 770, in __call__
+    return self._invoke(arguments, autoescape)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/runtime.py", line 784, in _invoke
+    rv = self._func(*arguments)
+  File "<template>", line 20, in macro
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/sandbox.py", line 401, in call
+    return __context.call(__obj, *args, **kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/runtime.py", line 303, in call
+    return __obj(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/clients/jinja.py", line 82, in __call__
+    return self.call_macro(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt_common/clients/jinja.py", line 395, in call_macro
+    return macro(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/runtime.py", line 770, in __call__
+    return self._invoke(arguments, autoescape)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/runtime.py", line 784, in _invoke
+    rv = self._func(*arguments)
+  File "<template>", line 50, in macro
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/sandbox.py", line 401, in call
+    return __context.call(__obj, *args, **kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/runtime.py", line 303, in call
+    return __obj(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/clients/jinja.py", line 82, in __call__
+    return self.call_macro(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt_common/clients/jinja.py", line 395, in call_macro
+    return macro(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/runtime.py", line 770, in __call__
+    return self._invoke(arguments, autoescape)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/runtime.py", line 784, in _invoke
+    rv = self._func(*arguments)
+  File "<template>", line 33, in macro
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/sandbox.py", line 401, in call
+    return __context.call(__obj, *args, **kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/runtime.py", line 303, in call
+    return __obj(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/clients/jinja.py", line 82, in __call__
+    return self.call_macro(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt_common/clients/jinja.py", line 395, in call_macro
+    return macro(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/runtime.py", line 770, in __call__
+    return self._invoke(arguments, autoescape)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/runtime.py", line 784, in _invoke
+    rv = self._func(*arguments)
+  File "<template>", line 52, in macro
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/sandbox.py", line 401, in call
+    return __context.call(__obj, *args, **kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/jinja2/runtime.py", line 303, in call
+    return __obj(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt_common/record.py", line 538, in record_replay_wrapper
+    return func_to_record(*call_args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/base/impl.py", line 471, in execute
+    return self.connections.execute(sql=sql, auto_begin=auto_begin, fetch=fetch, limit=limit)
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/duckdb/connections.py", line 130, in execute
+    return super().execute(sql, auto_begin, fetch, limit)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/sql/connections.py", line 219, in execute
+    _, cursor = self.add_query(sql, auto_begin)
+                ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/sql/connections.py", line 131, in add_query
+    with self.exception_handler(sql):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/duckdb/connections.py", line 102, in exception_handler
+    self.rollback_if_open()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/base/connections.py", line 125, in rollback_if_open
+    if conn is not None and conn.handle and conn.transaction_open:
+                            ^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/contracts/connection.py", line 96, in handle
+    self._handle.resolve(self)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/contracts/connection.py", line 120, in resolve
+    return self.opener(connection)
+           ~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/duckdb/connections.py", line 53, in open
+    connection.handle = cls._ENV.handle()
+                        ~~~~~~~~~~~~~~~^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/duckdb/environments/local.py", line 75, in handle
+    self.conn = self.initialize_db(self.creds, self._plugins)
+                ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/duckdb/environments/__init__.py", line 159, in initialize_db
+    conn = duckdb.connect(creds.path, read_only=False, config=config)
+_duckdb.IOException: IO Error: Could not set lock on file "/opt/my_data_platform/data/platform.duckdb": Conflicting lock is held in /usr/bin/python3.13 (PID 2681504). See also https://duckdb.org/docs/stable/connect/concurrency
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/cli/requires.py", line 182, in wrapper
+    result, success = func(*args, **kwargs)
+                      ~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/cli/requires.py", line 128, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/cli/requires.py", line 276, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/cli/requires.py", line 321, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/cli/requires.py", line 391, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/cli/requires.py", line 368, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/cli/requires.py", line 408, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/cli/main.py", line 587, in run
+    results = task.run()
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/task/runnable.py", line 626, in run
+    result = self.execute_with_hooks(selected_uids)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/task/runnable.py", line 559, in execute_with_hooks
+    before_run_status = self.before_run(adapter, selected_uids)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/task/run.py", line 1124, in before_run
+    self.create_schemas(adapter, required_schemas)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/task/runnable.py", line 734, in create_schemas
+    existing_schemas_lowered.update(ls_future.result())
+                                    ~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/usr/lib/python3.13/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt_common/utils/executor.py", line 16, in connected
+    return func(*args, **kwargs)
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/task/runnable.py", line 709, in list_schemas
+    for s in adapter.list_schemas(database_quoted)
+             ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/sql/impl.py", line 218, in list_schemas
+    results = self.execute_macro(LIST_SCHEMAS_MACRO_NAME, kwargs={"database": database})
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/base/impl.py", line 1319, in execute_macro
+    with self.connections.exception_handler(f"macro {macro_name}"):
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/duckdb/connections.py", line 102, in exception_handler
+    self.rollback_if_open()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/base/connections.py", line 125, in rollback_if_open
+    if conn is not None and conn.handle and conn.transaction_open:
+                            ^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/contracts/connection.py", line 96, in handle
+    self._handle.resolve(self)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/contracts/connection.py", line 120, in resolve
+    return self.opener(connection)
+           ~~~~~~~~~~~^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/duckdb/connections.py", line 53, in open
+    connection.handle = cls._ENV.handle()
+                        ~~~~~~~~~~~~~~~^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/duckdb/environments/local.py", line 75, in handle
+    self.conn = self.initialize_db(self.creds, self._plugins)
+                ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dbt/adapters/duckdb/environments/__init__.py", line 159, in initialize_db
+    conn = duckdb.connect(creds.path, read_only=False, config=config)
+_duckdb.IOException: IO Error: Could not set lock on file "/opt/my_data_platform/data/platform.duckdb": Conflicting lock is held in /usr/bin/python3.13 (PID 2681504). See also https://duckdb.org/docs/stable/connect/concurrency
+
 
   File "/opt/my_data_platform/.venv/lib/python3.13/site-packages/dagster/_core/execution/plan/utils.py", line 57, in op_execution_error_boundary
     yield
