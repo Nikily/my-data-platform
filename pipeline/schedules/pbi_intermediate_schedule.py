@@ -29,7 +29,7 @@ from dagster import AssetKey, AssetSelection, ScheduleDefinition
 
 pbi_intermediate_schedule = ScheduleDefinition(
     name="daily_pbi_intermediate",
-    cron_schedule="0 10 * * *",             # 10:00 Europe/Paris every day
+    cron_schedule="0 5 * * *",             # 05:00 Europe/Paris every day
     execution_timezone="Europe/Paris",
     target=AssetSelection.assets(
         # Scanner staging views — dependencies of the intermediate models.
