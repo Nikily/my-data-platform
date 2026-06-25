@@ -1,26 +1,34 @@
-command: apt-cache policy policy python3.12 python3.13 2>&1
-output:
-N: Unable to locate package policy
-N: Unable to locate package python3.12
-N: Couldn't find any package by glob 'python3.12'
-N: Couldn't find any package by regex 'python3.12'
-N: Unable to locate package python3.13
-N: Couldn't find any package by glob 'python3.13'
-N: Couldn't find any package by regex 'python3.13'
-command: apt list -a 2>/dev/null | grep -E '^python3\.(1[0-3])[^0-9]'
-output: no output
-command: cat /etc/os-release
-output:
-PRETTY_NAME="Ubuntu 26.04 LTS"
-NAME="Ubuntu"
-VERSION_ID="26.04"
-VERSION="26.04 LTS (Resolute Raccoon)"
-VERSION_CODENAME=resolute
-ID=ubuntu
-ID_LIKE=debian
-HOME_URL="https://www.ubuntu.com/"
-SUPPORT_URL="https://help.ubuntu.com/"
-BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
-PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
-UBUNTU_CODENAME=resolute
-LOGO=ubuntu-logo
+# Install uv (one-time, manages isolated Python builds)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source ~/.bashrc
+
+# Get Python 3.12 (matches what the whole dagster-* ecosystem currently targets)
+uv python install 3.12
+
+# Rebuild the venv against 3.12 instead of system python3 (3.14)
+rm -rf /opt/my_data_platform/.venv
+uv venv /opt/my_data_platform/.venv --python 3.12
+
+cd /opt/my_data_platform
+source .venv/bin/activate
+pip install --upgrade pip setuptools
+pip install -e .
+python scripts/install_duckdb_extensions.py
+
+cd dbt_project
+dbt deps --profiles-dir . --project-dir .
+set -a; source ../.env; set +a
+export DUCKDB_PATH="${DUCKDB_PATH:-$PWD/../data/platform.duckdb}"
+dbt parse --profiles-dir . --project-dir .
+cd ..
+
+sudo systemctl start dagster-webserver dagster-daemon
+sudo systemctl status dagster-webserver dagster-daemon
+
+This mirrors setup.sh's steps 3–5 manually (skipping its system-Python auto-detection, which would otherwise just find python3 → 3.14 again). Your requirements.txt's frozen snapshot (dagster==1.12.20 etc.) is proof this exact package family resolves cleanly on an older interpreter — we're just giving pip a Python version where that combination actually has wheels.
+
+Paste the output back into the log and I'll check it. Once dagster-webserver eventually catches up to the 1.13.x line, you could revisit 3.14 — not worth chasing now.
+
+Sources:
+- dagster · PyPI (https://pypi.org/project/dagster/)
+- Support Python 3.14 · Issue #32577 · dagster-io/dagster (https://github.com/dagster-io/dagster/issues/32577)
