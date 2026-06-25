@@ -1,34 +1,20 @@
-# Install uv (one-time, manages isolated Python builds)
-curl -LsSf https://astral.sh/uv/install.sh | sh
-source ~/.bashrc
+error: externally-managed-environment
 
-# Get Python 3.12 (matches what the whole dagster-* ecosystem currently targets)
-uv python install 3.12
+× This environment is externally managed
+╰─> To install Python packages system-wide, try apt install
+    python3-xyz, where xyz is the package you are trying to
+    install.
+    
+    If you wish to install a non-Debian-packaged Python package,
+    create a virtual environment using python3 -m venv path/to/venv.
+    Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make
+    sure you have python3-full installed.
+    
+    If you wish to install a non-Debian packaged Python application,
+    it may be easiest to use pipx install xyz, which will manage a
+    virtual environment for you. Make sure you have pipx installed.
+    
+    See /usr/share/doc/python3.14/README.venv for more information.
 
-# Rebuild the venv against 3.12 instead of system python3 (3.14)
-rm -rf /opt/my_data_platform/.venv
-uv venv /opt/my_data_platform/.venv --python 3.12
-
-cd /opt/my_data_platform
-source .venv/bin/activate
-pip install --upgrade pip setuptools
-pip install -e .
-python scripts/install_duckdb_extensions.py
-
-cd dbt_project
-dbt deps --profiles-dir . --project-dir .
-set -a; source ../.env; set +a
-export DUCKDB_PATH="${DUCKDB_PATH:-$PWD/../data/platform.duckdb}"
-dbt parse --profiles-dir . --project-dir .
-cd ..
-
-sudo systemctl start dagster-webserver dagster-daemon
-sudo systemctl status dagster-webserver dagster-daemon
-
-This mirrors setup.sh's steps 3–5 manually (skipping its system-Python auto-detection, which would otherwise just find python3 → 3.14 again). Your requirements.txt's frozen snapshot (dagster==1.12.20 etc.) is proof this exact package family resolves cleanly on an older interpreter — we're just giving pip a Python version where that combination actually has wheels.
-
-Paste the output back into the log and I'll check it. Once dagster-webserver eventually catches up to the 1.13.x line, you could revisit 3.14 — not worth chasing now.
-
-Sources:
-- dagster · PyPI (https://pypi.org/project/dagster/)
-- Support Python 3.14 · Issue #32577 · dagster-io/dagster (https://github.com/dagster-io/dagster/issues/32577)
+note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
+hint: See PEP 668 for the detailed specification.
