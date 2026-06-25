@@ -1,59 +1,12 @@
-command: ExecStart=/opt/my_data_platform/.venv/bin/python /opt/my_data_platform/.venv/bin/dagster-webserver --host 127.0.0.1 --port 3000
+command: ls -la .venv/bin/python3.13
+output:.venv/bin/python3.13 -> /usr/bin/python3.13
+command:/opt/my_data_platform/.venv/bin/python3.13 --version
+output: bash: /opt/my_data_platform/.venv/bin/python3.13: No such file or directory
+command:ls -la /usr/bin/python3*
 output: 
--rwxrwxr-x 1 ilic ilic 191 Mar 25 13:55 /opt/my_data_platform/.venv/bin/dagster-daemon
--rwxrwxr-x 1 ilic ilic 194 Mar 25 13:55 /opt/my_data_platform/.venv/bin/dagster-webserver
-lrwxrwxrwx 1 ilic ilic  10 Mar 25 13:54 /opt/my_data_platform/.venv/bin/python -> python3.13
-command:head -1 /opt/my_data_platform/.venv/bin/dagster-webserver
-output:
-#!/opt/my_data_platform/.venv/bin/python3.13
-command:sudo systemctl cat dagster-webserver
-output:
- dagster-webserver.service - Dagster Webserver (Dagit UI)
-     Loaded: loaded (/etc/systemd/system/dagster-webserver.service; enabled; preset: enabled)
-     Active: activating (auto-restart) (Result: exit-code) since Thu 2026-06-25 09:09:52 CEST; 1s ago
- Invocation: 78ebf628e1c946ee86ce572be026c2d4
-       Docs: https://docs.dagster.io
-    Process: 226873 ExecStart=/opt/my_data_platform/.venv/bin/dagster-webserver --host 127.0.0.1 --port 3000 (code=exited, status=203/EXEC)
-   Main PID: 226873 (code=exited, status=203/EXEC)
-   Mem peak: 1.9M
-        CPU: 5ms
-
-● dagster-daemon.service - Dagster Daemon (scheduler and sensor runner)
-     Loaded: loaded (/etc/systemd/system/dagster-daemon.service; enabled; preset: enabled)
-     Active: activating (auto-restart) (Result: exit-code) since Thu 2026-06-25 09:09:52 CEST; 1s ago
- Invocation: 61732a31cdd644c684d39f803fe087d0
-       Docs: https://docs.dagster.io
-    Process: 226872 ExecStart=/opt/my_data_platform/.venv/bin/dagster-daemon run (code=exited, status=203/EXEC)
-   Main PID: 226872 (code=exited, status=203/EXEC)
-   Mem peak: 1.9M
-        CPU: 6ms
-# /etc/systemd/system/dagster-webserver.service
-[Unit]
-Description=Dagster Webserver (Dagit UI)
-Documentation=https://docs.dagster.io
-After=network.target
-Wants=network-online.target
-
-[Service]
-Type=simple
-# Replace 'ubuntu' with the user that owns /opt/my_data_platform
-User=ilic
-Group=ilic
-
-WorkingDirectory=/opt/my_data_platform
-EnvironmentFile=/opt/my_data_platform/.env
-
-ExecStart=/opt/my_data_platform/.venv/bin/dagster-webserver \
-    --host 127.0.0.1 \
-    --port 3000
-
-Restart=on-failure
-RestartSec=5
-StandardOutput=journal
-StandardError=journal
-SyslogIdentifier=dagster-webserver
-
-[Install]
-WantedBy=multi-user.target
-command:stat -c '%J:%G %a' /opt/my_data_platform/
-output:?:ilic 775
+lrwxrwxrwx 1 root root      10 Mar 21 10:46 /usr/bin/python3 -> python3.14
+lrwxrwxrwx 1 root root      17 Mar 21 10:46 /usr/bin/python3-config -> python3.14-config
+-rwxr-xr-x 1 root root 7477096 Apr  8 06:02 /usr/bin/python3.14
+lrwxrwxrwx 1 root root      34 Apr  8 06:02 /usr/bin/python3.14-config -> x86_64-linux-gnu-python3.14-config
+command: which python3.13
+output: no output
