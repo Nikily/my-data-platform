@@ -1,12 +1,7 @@
-command: ls -la .venv/bin/python3.13
-output:.venv/bin/python3.13 -> /usr/bin/python3.13
-command:/opt/my_data_platform/.venv/bin/python3.13 --version
-output: bash: /opt/my_data_platform/.venv/bin/python3.13: No such file or directory
-command:ls -la /usr/bin/python3*
-output: 
-lrwxrwxrwx 1 root root      10 Mar 21 10:46 /usr/bin/python3 -> python3.14
-lrwxrwxrwx 1 root root      17 Mar 21 10:46 /usr/bin/python3-config -> python3.14-config
--rwxr-xr-x 1 root root 7477096 Apr  8 06:02 /usr/bin/python3.14
-lrwxrwxrwx 1 root root      34 Apr  8 06:02 /usr/bin/python3.14-config -> x86_64-linux-gnu-python3.14-config
-command: which python3.13
-output: no output
+[0;32m[INFO][0m  Found suitable Python: python3 (3.14.4)
+[0;32m[INFO][0m  git, curl, and pip already installed — skipping apt.
+[0;32m[INFO][0m  Virtual environment already exists, skipping creation.
+[0;32m[INFO][0m  Installing Python dependencies (this may take a few minutes)...
+
+ERROR: Cannot install my-data-platform==0.1.0 and my_data_platform because these package versions have conflicting dependencies.
+ERROR: ResolutionImpossible: for help visit https://pip.pypa.io/en/latest/topics/dependency-resolution/#dealing-with-dependency-conflicts
