@@ -15,7 +15,7 @@ from dagster import AssetKey, AssetSelection, ScheduleDefinition
 
 eight_x_eight_schedule = ScheduleDefinition(
     name="daily_eight_x_eight",
-    cron_schedule="0 7 * * *",          # 07:00 Europe/Paris every day
+    cron_schedule="0 7,14 * * *",          # 07:00 Europe/Paris every day
     execution_timezone="Europe/Paris",
     target=AssetSelection.assets(
         "azure_container_8x8",
@@ -27,6 +27,6 @@ eight_x_eight_schedule = ScheduleDefinition(
     ),
     description=(
         "Runs the 8x8 CDR ingestion, dbt transformation, and Parquet export "
-        "daily at 07:00 CET/CEST."
+        "daily at 07:00 and 14:00 CET/CEST."
     ),
 )
